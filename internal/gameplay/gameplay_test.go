@@ -36,3 +36,14 @@ func TestDoneCalledAfterInitialize(t *testing.T) {
 		t.Errorf("Done() not called from MainLoop()")
 	}
 }
+
+func TestGetValidMoveIsCalled(t *testing.T) {
+	var m mockGame
+	m.doneReturnValues = []bool{false}
+
+	gameplay.MainLoop(&m)
+
+	if !m.calledHandleValidMoveFromPlayer {
+		t.Errorf("MainLoop() did not call HandleValidMoveFromPlayer()")
+	}
+}

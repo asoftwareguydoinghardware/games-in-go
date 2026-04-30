@@ -7,6 +7,9 @@ type mockGame struct {
 	calledDone       bool
 	doneReturnValues []bool
 	doneCount        int
+
+	havePlayerForMove               []int
+	calledHandleValidMoveFromPlayer bool
 }
 
 func (m *mockGame) InitializeGame(player int) {
@@ -25,4 +28,8 @@ func (m *mockGame) Done() bool {
 		return true
 	}
 	return m.doneReturnValues[i]
+}
+
+func (m *mockGame) HandleValidMoveFromPlayer(player int) {
+	m.calledHandleValidMoveFromPlayer = true
 }
