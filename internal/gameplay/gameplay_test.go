@@ -5,8 +5,12 @@ import (
 	"testing"
 )
 
-func TestMainLoopExists(t *testing.T) {
+func TestMainLoopCallsInitializeGame(t *testing.T) {
 	var m mockGame
 
 	gameplay.MainLoop(&m)
+
+	if m.initializeGameCount != 1 {
+		t.Errorf("MainLoop(m) did not call m.InitializalizeGame")
+	}
 }
