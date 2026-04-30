@@ -108,4 +108,5 @@ func testGamePlayStopsAfterDone(t *testing.T, turnsUntilDone int) {
 
 func TestGamePlayStopsAfterDone(t *testing.T) {
 	testGamePlayStopsAfterDone(t, 0)
+	testGamePlayStopsAfterDone(t, 3)
 }
