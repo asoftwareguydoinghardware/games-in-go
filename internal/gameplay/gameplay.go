@@ -12,6 +12,9 @@ func MainLoop(g game) {
 	g.HandleValidMoveFromPlayer(0)
 	for !g.Done() {
 		g.HandleValidMoveFromPlayer(1)
+		if !g.Done() {
+			g.HandleValidMoveFromPlayer(0)
+		}
 	}
 	/* want something like:
 		done := false

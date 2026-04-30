@@ -110,3 +110,39 @@ func TestGamePlayStopsAfterDone(t *testing.T) {
 	testGamePlayStopsAfterDone(t, 0)
 	testGamePlayStopsAfterDone(t, 3)
 }
+
+func testGamePlayAlternatesBetweenPlayers(t *testing.T, turnsUntilDone int) {
+	const badPlayer = 20
+	const badMoveNumber = -1
+
+	var m mockGame
+	m.doneReturnValues = make([]bool, turnsUntilDone)
+	m.havePlayerForMove = make([]int, turnsUntilDone)
+
+	for i := 0; i < len(m.havePlayerForMove); i++ {
+		m.havePlayerForMove[i] = badPlayer
+	}
+
+	gameplay.MainLoop(&m)
+
+	good := true
+	firstBad := badMoveNumber
+	for i := 0; i < turnsUntilDone; i++ {
+		want := i % 2
+		have := m.havePlayerForMove[i]
+		if have != want {
+			good = false
+			if firstBad == badMoveNumber {
+				firstBad = i
+			}
+		}
+	}
+
+	if !good {
+		t.Errorf("Players do not alternate at index %d, move order: %v\n", firstBad, m.havePlayerForMove)
+	}
+}
+
+func TestGayPlayAlternatesBetweenPlayers(t *testing.T) {
+	testGamePlayAlternatesBetweenPlayers(t, 3)
+}
