@@ -62,3 +62,18 @@ func TestFirstMoveRequestedFromPlayerZero(t *testing.T) {
 		t.Errorf("Player %d was asked for the first move, want %d", have, want)
 	}
 }
+
+func TestSecondMoveRequestedFromPlayerOne(t *testing.T) {
+	var m mockGame
+	m.doneReturnValues = []bool{false, false}
+	m.havePlayerForMove = make([]int, 2)
+
+	gameplay.MainLoop(&m)
+
+	want := 1
+	have := m.havePlayerForMove[1]
+
+	if have != want {
+		t.Errorf("Player %d was asked for the second move, want %d", have, want)
+	}
+}
