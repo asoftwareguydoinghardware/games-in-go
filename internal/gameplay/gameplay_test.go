@@ -25,3 +25,14 @@ func TestFirstCallToInitializeTestHasPlayerParamAsZero(t *testing.T) {
 		t.Errorf("First call to m.InitializalizeGame() initial call's argument is %d want %d", m.firstPlayerParameter, want)
 	}
 }
+
+func TestDoneCalledAfterInitialize(t *testing.T) {
+	var m mockGame
+	m.doneReturnValues = []bool{true}
+
+	gameplay.MainLoop(&m)
+
+	if !m.calledDone {
+		t.Errorf("Done() not called from MainLoop()")
+	}
+}

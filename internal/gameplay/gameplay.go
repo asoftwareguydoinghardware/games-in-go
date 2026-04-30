@@ -2,10 +2,12 @@ package gameplay
 
 type game interface {
 	InitializeGame(initialPlayer int)
+	Done() bool
 }
 
 func MainLoop(g game) {
 	g.InitializeGame(0)
+	g.Done()
 	/* want something like:
 		done := false
 		startingPlayer := 1
