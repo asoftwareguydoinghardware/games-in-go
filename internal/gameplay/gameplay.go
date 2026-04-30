@@ -10,7 +10,9 @@ func MainLoop(g game) {
 	g.InitializeGame(0)
 	g.Done()
 	g.HandleValidMoveFromPlayer(0)
-	g.HandleValidMoveFromPlayer(1)
+	if !g.Done() {
+		g.HandleValidMoveFromPlayer(1)
+	}
 	/* want something like:
 		done := false
 		startingPlayer := 1

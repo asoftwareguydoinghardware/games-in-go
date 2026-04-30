@@ -77,3 +77,35 @@ func TestSecondMoveRequestedFromPlayerOne(t *testing.T) {
 		t.Errorf("Player %d was asked for the second move, want %d", have, want)
 	}
 }
+
+func testGamePlayStopsAfterDone(t *testing.T, turnsUntilDone int) {
+	const badPlayer = 20
+
+	var m mockGame
+	m.doneReturnValues = make([]bool, turnsUntilDone)
+	m.havePlayerForMove = make([]int, turnsUntilDone+1)
+
+	for i := 0; i < len(m.havePlayerForMove); i++ {
+		m.havePlayerForMove[i] = badPlayer
+	}
+
+	gameplay.MainLoop(&m)
+
+	underRun := false
+	for i := 0; i < turnsUntilDone; i++ {
+		if m.havePlayerForMove[i] == badPlayer {
+			underRun = true
+		}
+	}
+	if underRun {
+		t.Errorf("Game finished before Done() returned true")
+	}
+
+	if m.overflowedHavePlayerForMove {
+		t.Errorf("Game continued after Done() returned true")
+	}
+}
+
+func TestGamePlayStopsAfterDone(t *testing.T) {
+	testGamePlayStopsAfterDone(t, 0)
+}
