@@ -47,3 +47,18 @@ func TestGetValidMoveIsCalled(t *testing.T) {
 		t.Errorf("MainLoop() did not call HandleValidMoveFromPlayer()")
 	}
 }
+
+func TestFirstMoveRequestedFromPlayerZero(t *testing.T) {
+	var m mockGame
+	m.doneReturnValues = []bool{false}
+	m.havePlayerForMove = make([]int, 1)
+
+	gameplay.MainLoop(&m)
+
+	want := 0
+	have := m.havePlayerForMove[0]
+
+	if have != want {
+		t.Errorf("Player %d was asked for the first move, want %d", have, want)
+	}
+}

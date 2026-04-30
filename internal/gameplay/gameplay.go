@@ -9,7 +9,7 @@ type game interface {
 func MainLoop(g game) {
 	g.InitializeGame(0)
 	g.Done()
-	g.HandleValidMoveFromPlayer(43)
+	g.HandleValidMoveFromPlayer(0)
 	/* want something like:
 		done := false
 		startingPlayer := 1
