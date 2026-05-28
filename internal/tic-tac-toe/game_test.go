@@ -35,3 +35,22 @@ func TestInitializeGameNotifiesBothPlayers(t *testing.T) {
 		t.Errorf("Player 1 not notified of game start")
 	}
 }
+
+func testHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t *testing.T, player int) {
+	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+	g := ttt.New()
+	g.SetPlayerIO(0, players[0])
+	g.SetPlayerIO(1, players[1])
+	players[player].moves = []string{"1"}
+	g.InitializeGame(0)
+
+	g.HandleValidMoveFromPlayer(player)
+
+	if players[player].currentMove != 1 {
+		t.Errorf("HandleValidMoveFromPlayer() did not call RequestMove() for player %d", player)
+	}
+}
+
+func TestHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t *testing.T) {
+	testHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t, 0)
+}
