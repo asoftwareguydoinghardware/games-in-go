@@ -11,7 +11,7 @@ func (game *Game) InitializeGame(initialPlayer int) {
 }
 
 func (game *Game) Done() bool {
-	return true
+	return false
 }
 
 func (game *Game) HandleValidMoveFromPlayer(player int) {
