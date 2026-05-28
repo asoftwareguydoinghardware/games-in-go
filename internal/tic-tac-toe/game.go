@@ -6,3 +6,6 @@ type Game struct {
 func New() *Game {
 	return nil
 }
+
+func (game *Game) InitializeGame(initialPlayer int) {
+}
