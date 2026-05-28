@@ -13,3 +13,6 @@ func (game *Game) InitializeGame(initialPlayer int) {
 func (game *Game) Done() bool {
 	return true
 }
+
+func (game *Game) HandleValidMoveFromPlayer(player int) {
+}

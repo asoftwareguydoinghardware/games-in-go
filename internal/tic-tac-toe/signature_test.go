@@ -24,3 +24,9 @@ func TestDoneMethodExists(t *testing.T) {
 	done = game.Done()
 	_ = done
 }
+
+func TestHandleValidMoveFromPlayerExists(t *testing.T) {
+	game := ttt.New()
+
+	game.HandleValidMoveFromPlayer(0)
+}
