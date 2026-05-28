@@ -25,7 +25,7 @@ func (game *Game) Done() bool {
 }
 
 func (game *Game) HandleValidMoveFromPlayer(player int) {
-	game.player[0].RequestMove()
+	game.player[player].RequestMove()
 }
 
 func (game *Game) SetPlayerIO(player int, io PlayerIO) {

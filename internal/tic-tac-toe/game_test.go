@@ -53,4 +53,5 @@ func testHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t *testing.T,
 
 func TestHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t *testing.T) {
 	testHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t, 0)
+	testHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t, 1)
 }
