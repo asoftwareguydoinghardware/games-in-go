@@ -16,3 +16,11 @@ func TestInitializeGameMethodExists(t *testing.T) {
 	game := ttt.New()
 	game.InitializeGame(0)
 }
+
+func TestDoneMethodExists(t *testing.T) {
+	var done bool
+
+	game := ttt.New()
+	done = game.Done()
+	_ = done
+}

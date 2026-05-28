@@ -9,3 +9,7 @@ func New() *Game {
 
 func (game *Game) InitializeGame(initialPlayer int) {
 }
+
+func (game *Game) Done() bool {
+	return true
+}
