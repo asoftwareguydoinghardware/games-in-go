@@ -3,6 +3,9 @@ package tic_tac_toe
 type Game struct {
 }
 
+type PlayerIO interface {
+}
+
 func New() *Game {
 	return nil
 }
@@ -15,4 +18,7 @@ func (game *Game) Done() bool {
 }
 
 func (game *Game) HandleValidMoveFromPlayer(player int) {
+}
+
+func (game *Game) SetPlayerIO(player int, io PlayerIO) {
 }

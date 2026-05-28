@@ -30,3 +30,11 @@ func TestHandleValidMoveFromPlayerExists(t *testing.T) {
 
 	game.HandleValidMoveFromPlayer(0)
 }
+
+func TestSetPlayerIOMethodExists(t *testing.T) {
+	var playerIo ttt.PlayerIO
+
+	game := ttt.New()
+
+	game.SetPlayerIO(0, playerIo)
+}
