@@ -78,4 +78,5 @@ func testHandleValidMoveFromPlayerCallsShareStateChange(t *testing.T, player int
 
 func TestHandleValidMoveFromPlayerCallsShareStateChange(t *testing.T) {
 	testHandleValidMoveFromPlayerCallsShareStateChange(t, 0)
+	testHandleValidMoveFromPlayerCallsShareStateChange(t, 1)
 }

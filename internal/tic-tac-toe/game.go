@@ -26,8 +26,16 @@ func (game *Game) Done() bool {
 }
 
 func (game *Game) HandleValidMoveFromPlayer(player int) {
+	var otherPlayer int
+
+	if player == 0 {
+		otherPlayer = 1
+	} else {
+		otherPlayer = 0
+	}
+
 	game.player[player].RequestMove()
-	game.player[1].ShareStateChange("")
+	game.player[otherPlayer].ShareStateChange("")
 }
 
 func (game *Game) SetPlayerIO(player int, io PlayerIO) {
