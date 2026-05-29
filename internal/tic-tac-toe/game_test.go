@@ -55,3 +55,27 @@ func TestHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t *testing.T)
 	testHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t, 0)
 	testHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t, 1)
 }
+
+func testHandleValidMoveFromPlayerCallsShareStateChange(t *testing.T, player int) {
+	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+	g := ttt.New()
+	g.SetPlayerIO(0, players[0])
+	g.SetPlayerIO(1, players[1])
+	players[player].moves = []string{"1"}
+	g.InitializeGame(0)
+
+	otherPlayer := 0
+	if player == 0 {
+		otherPlayer = 1
+	}
+
+	g.HandleValidMoveFromPlayer(player)
+
+	if !players[otherPlayer].sharedStateChange {
+		t.Errorf("HandleValidMoveFromPlayer(%d) did not call ShareStateChange() for player %d", player, otherPlayer)
+	}
+}
+
+func TestHandleValidMoveFromPlayerCallsShareStateChange(t *testing.T) {
+	testHandleValidMoveFromPlayerCallsShareStateChange(t, 0)
+}

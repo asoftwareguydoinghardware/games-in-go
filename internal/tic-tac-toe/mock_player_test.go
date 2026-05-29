@@ -2,8 +2,11 @@ package tic_tac_toe_test
 
 type mockPlayer struct {
 	notifiedOfGameStart bool
-	moves               []string
-	currentMove         int
+
+	moves       []string
+	currentMove int
+
+	sharedStateChange bool
 }
 
 func newMockPlayerIO() *mockPlayer {
@@ -24,4 +27,8 @@ func (m *mockPlayer) RequestMove() (move string) {
 	move = m.moves[m.currentMove]
 	m.currentMove++
 	return move
+}
+
+func (m *mockPlayer) ShareStateChange(state string) {
+	m.sharedStateChange = true
 }

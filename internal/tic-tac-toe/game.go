@@ -7,6 +7,7 @@ type Game struct {
 type PlayerIO interface {
 	NotifyGameStart()
 	RequestMove() string
+	ShareStateChange(stateChange string)
 }
 
 func New() *Game {
@@ -26,6 +27,7 @@ func (game *Game) Done() bool {
 
 func (game *Game) HandleValidMoveFromPlayer(player int) {
 	game.player[player].RequestMove()
+	game.player[1].ShareStateChange("")
 }
 
 func (game *Game) SetPlayerIO(player int, io PlayerIO) {
