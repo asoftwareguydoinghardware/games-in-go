@@ -38,7 +38,7 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 	}
 
 	move := g.player[player].RequestMove()
-	if !unicode.IsDigit(rune(move[0])) {
+	if !unicode.IsDigit(rune(move[0])) || move[0] == '9' {
 		g.player[player].ReportBadMoveSelection(0, "")
 	}
 	g.player[otherPlayer].ShareStateChange("")
