@@ -81,17 +81,21 @@ func TestHandleValidMoveFromPlayerCallsShareStateChange(t *testing.T) {
 	testHandleValidMoveFromPlayerCallsShareStateChange(t, 1)
 }
 
-func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t *testing.T) {
+func testHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t *testing.T, player int) {
 	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
 	g := ttt.New()
 	g.SetPlayerIO(0, players[0])
 	g.SetPlayerIO(1, players[1])
-	players[0].moves = []string{"-1", "0"}
+	players[player].moves = []string{"-1", "0"}
 	g.InitializeGame(0)
 
-	g.HandleValidMoveFromPlayer(0)
+	g.HandleValidMoveFromPlayer(player)
 
-	if len(players[0].badMoveMsgs) == 0 {
-		t.Errorf("Bad move sequence: %v did not call ReportBadMoveSelection()", players[0].moves)
+	if len(players[player].badMoveMsgs) == 0 {
+		t.Errorf("Bad move sequence: %v did not call ReportBadMoveSelection()", players[player].moves)
 	}
+}
+
+func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t *testing.T) {
+	testHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t, 0)
 }
