@@ -17,16 +17,16 @@ func New() *Game {
 	return &g
 }
 
-func (game *Game) InitializeGame(initialPlayer int) {
-	game.player[0].NotifyGameStart()
-	game.player[1].NotifyGameStart()
+func (g *Game) InitializeGame(initialPlayer int) {
+	g.player[0].NotifyGameStart()
+	g.player[1].NotifyGameStart()
 }
 
-func (game *Game) Done() bool {
+func (g *Game) Done() bool {
 	return false
 }
 
-func (game *Game) HandleValidMoveFromPlayer(player int) {
+func (g *Game) HandleValidMoveFromPlayer(player int) {
 	var otherPlayer int
 
 	if player == 0 {
@@ -35,11 +35,11 @@ func (game *Game) HandleValidMoveFromPlayer(player int) {
 		otherPlayer = 0
 	}
 
-	game.player[player].RequestMove()
-	game.player[0].ReportBadMoveSelection(0, "")
-	game.player[otherPlayer].ShareStateChange("")
+	g.player[player].RequestMove()
+	g.player[0].ReportBadMoveSelection(0, "")
+	g.player[otherPlayer].ShareStateChange("")
 }
 
-func (game *Game) SetPlayerIO(player int, io PlayerIO) {
-	game.player[player] = io
+func (g *Game) SetPlayerIO(player int, io PlayerIO) {
+	g.player[player] = io
 }
