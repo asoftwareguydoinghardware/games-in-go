@@ -51,7 +51,7 @@ func isValidMove(move string) (valid bool) {
 	var num int
 	var junk byte
 
-	matched, err := fmt.Sscanf(move, "%d %c", &num, &junk)
+	matched, err := fmt.Sscanf(move, "%v %c", &num, &junk)
 	if matched != 1 {
 		return false
 	}
