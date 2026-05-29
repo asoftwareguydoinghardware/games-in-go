@@ -1,6 +1,9 @@
 package tictactoe
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+)
 
 type Game struct {
 	player [2]PlayerIO
@@ -48,8 +51,11 @@ func isValidMove(move string) (valid bool) {
 	var num int
 	var junk byte
 
-	matched, _ := fmt.Sscanf(move, "%d%c", &num, &junk)
+	matched, err := fmt.Sscanf(move, "%d %c", &num, &junk)
 	if matched != 1 {
+		return false
+	}
+	if err != nil && err != io.EOF {
 		return false
 	}
 	if num < 0 {
