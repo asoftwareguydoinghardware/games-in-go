@@ -36,7 +36,7 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 	}
 
 	move := g.player[player].RequestMove()
-	if move != "0" {
+	if move != "0" && move != "1" {
 		g.player[player].ReportBadMoveSelection(0, "")
 	}
 	g.player[otherPlayer].ShareStateChange("")
