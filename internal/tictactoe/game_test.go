@@ -117,3 +117,36 @@ func TestHandleValidMoveFromPlayerDoesNotCallReportBadMoveSelectionForGoodMove(t
 		t.Errorf("Good move sequence: %v called ReportBadMoveSelection()", players[player].moves)
 	}
 }
+
+func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMoveApropriately(t *testing.T) {
+	type testCase struct {
+		move   string
+		isGood bool
+	}
+	testCases := []testCase{
+		{"fred", false},
+	}
+
+	for _, tc := range testCases {
+		const player = 0
+
+		players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+		g := ttt.New()
+		g.SetPlayerIO(0, players[0])
+		g.SetPlayerIO(1, players[1])
+		players[player].moves = []string{tc.move, "0"}
+		g.InitializeGame(0)
+
+		g.HandleValidMoveFromPlayer(player)
+
+		if tc.isGood {
+			if len(players[player].badMoveMsgs) != 0 {
+				t.Errorf("Good move sequence: %v called ReportBadMoveSelection()", players[player].moves)
+			}
+		} else {
+			if len(players[player].badMoveMsgs) != 1 {
+				t.Errorf("Bad move sequence: %v did not call ReportBadMoveSelection()", players[player].moves)
+			}
+		}
+	}
+}
