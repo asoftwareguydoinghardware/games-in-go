@@ -38,10 +38,24 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 	}
 
 	move := g.player[player].RequestMove()
-	if len(move) != 1 || !unicode.IsDigit(rune(move[0])) || move[0] == '9' {
+	if !isValidMove(move) {
 		g.player[player].ReportBadMoveSelection(0, "")
 	}
 	g.player[otherPlayer].ShareStateChange("")
+}
+
+func isValidMove(move string) (valid bool) {
+	if len(move) != 1 {
+		return false
+	}
+	if !unicode.IsDigit(rune(move[0])) {
+		return false
+	}
+	if move[0] == '9' {
+		return false
+	}
+
+	return true
 }
 
 func (g *Game) SetPlayerIO(player int, io PlayerIO) {
