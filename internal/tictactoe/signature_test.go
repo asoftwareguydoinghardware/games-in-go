@@ -33,6 +33,7 @@ func TestDoneMethodExists(t *testing.T) {
 func TestHandleValidMoveFromPlayerExists(t *testing.T) {
 	game := ttt.New()
 	player0 := newMockPlayerIO()
+	player0.moves = []string{"0"}
 	player1 := newMockPlayerIO()
 	game.SetPlayerIO(0, player0)
 	game.SetPlayerIO(1, player1)

@@ -1,5 +1,7 @@
 package tictactoe
 
+import "unicode"
+
 type Game struct {
 	player [2]PlayerIO
 }
@@ -36,7 +38,7 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 	}
 
 	move := g.player[player].RequestMove()
-	if move != "0" && move != "1" {
+	if !unicode.IsDigit(rune(move[0])) {
 		g.player[player].ReportBadMoveSelection(0, "")
 	}
 	g.player[otherPlayer].ShareStateChange("")
