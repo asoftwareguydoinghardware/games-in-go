@@ -1,6 +1,6 @@
 package tictactoe
 
-import "unicode"
+import "fmt"
 
 type Game struct {
 	player [2]PlayerIO
@@ -45,13 +45,16 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 }
 
 func isValidMove(move string) (valid bool) {
-	if len(move) != 1 {
+	var num int
+
+	matched, _ := fmt.Sscanf(move, "%d", &num)
+	if matched != 1 {
 		return false
 	}
-	if !unicode.IsDigit(rune(move[0])) {
+	if num == -1 {
 		return false
 	}
-	if move[0] == '9' {
+	if num == 9 {
 		return false
 	}
 

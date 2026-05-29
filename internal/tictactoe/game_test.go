@@ -129,6 +129,7 @@ func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMoveApropria
 		{"5", true},
 		{"9", false},
 		{"", false},
+		{" 0", true},
 	}
 
 	for _, tc := range testCases {
