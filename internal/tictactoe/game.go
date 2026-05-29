@@ -46,8 +46,9 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 
 func isValidMove(move string) (valid bool) {
 	var num int
+	var junk byte
 
-	matched, _ := fmt.Sscanf(move, "%d", &num)
+	matched, _ := fmt.Sscanf(move, "%d%c", &num, &junk)
 	if matched != 1 {
 		return false
 	}
