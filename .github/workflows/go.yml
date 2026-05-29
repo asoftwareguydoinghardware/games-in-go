@@ -26,4 +26,4 @@ jobs:
 
     - name: Test
       run: go test -v ./internal/gameplay
-      run: go test -v ./internal/tic-tac-toe
+      run: go test -v ./internal/tictactoe

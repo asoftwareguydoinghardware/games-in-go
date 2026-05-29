@@ -1,7 +1,7 @@
-package tic_tac_toe_test
+package tictactoe_test
 
 import (
-	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tic-tac-toe"
+	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
 	"testing"
 )
 

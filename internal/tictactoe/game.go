@@ -1,4 +1,4 @@
-package tic_tac_toe
+package tictactoe
 
 type Game struct {
 	player [2]PlayerIO

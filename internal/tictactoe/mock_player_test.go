@@ -1,4 +1,4 @@
-package tic_tac_toe_test
+package tictactoe_test
 
 type msgPair struct {
 	code int
