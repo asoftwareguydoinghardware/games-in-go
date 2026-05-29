@@ -1,5 +1,9 @@
 package tic_tac_toe_test
 
+type msgPair struct {
+	code int
+	msg  string
+}
 type mockPlayer struct {
 	notifiedOfGameStart bool
 
@@ -7,6 +11,8 @@ type mockPlayer struct {
 	currentMove int
 
 	sharedStateChange bool
+
+	badMoveMsgs []msgPair
 }
 
 func newMockPlayerIO() *mockPlayer {
@@ -31,4 +37,9 @@ func (m *mockPlayer) RequestMove() (move string) {
 
 func (m *mockPlayer) ShareStateChange(state string) {
 	m.sharedStateChange = true
+}
+
+func (m *mockPlayer) ReportBadMoveSelection(code int, msg string) {
+	pair := msgPair{code, msg}
+	m.badMoveMsgs = append(m.badMoveMsgs, pair)
 }

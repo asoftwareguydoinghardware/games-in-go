@@ -8,6 +8,7 @@ type PlayerIO interface {
 	NotifyGameStart()
 	RequestMove() string
 	ShareStateChange(stateChange string)
+	ReportBadMoveSelection(code int, msg string)
 }
 
 func New() *Game {
@@ -35,6 +36,7 @@ func (game *Game) HandleValidMoveFromPlayer(player int) {
 	}
 
 	game.player[player].RequestMove()
+	game.player[0].ReportBadMoveSelection(0, "")
 	game.player[otherPlayer].ShareStateChange("")
 }
 
