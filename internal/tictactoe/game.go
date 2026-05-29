@@ -54,7 +54,7 @@ func isValidMove(move string) (valid bool) {
 	if num < 0 {
 		return false
 	}
-	if num == 9 {
+	if num >= 9 {
 		return false
 	}
 
