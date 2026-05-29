@@ -98,4 +98,5 @@ func testHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t *testi
 
 func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t *testing.T) {
 	testHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t, 0)
+	testHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t, 1)
 }
