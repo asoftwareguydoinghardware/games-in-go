@@ -26,6 +26,7 @@ jobs:
 #    - name: Build
 #      run: go build -C ./asm8080 -v
 
-    - name: Test
+    - name: Test Gameplay
       run: go test -v ./internal/gameplay
+    - name: Test tic tac toe
       run: go test -v ./internal/tictactoe
