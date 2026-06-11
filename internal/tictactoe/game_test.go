@@ -118,7 +118,7 @@ func TestHandleValidMoveFromPlayerDoesNotCallReportBadMoveSelectionForGoodMove(t
 	}
 }
 
-func disabledTestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMoveApropriately(t *testing.T) {
+func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMoveApropriately(t *testing.T) {
 	type testCase struct {
 		move   string
 		isGood bool
@@ -154,8 +154,9 @@ func disabledTestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMove
 				t.Errorf("Good move sequence: %v called ReportBadMoveSelection()", players[player].moves)
 			}
 		} else {
-			if len(players[player].badMoveMsgs) != 1 {
-				t.Errorf("Bad move sequence: %v did not call ReportBadMoveSelection()", players[player].moves)
+			have, want := len(players[player].badMoveMsgs), 1
+			if have != want {
+				t.Errorf("Bad move sequence: %v called ReportBadMoveSelection() %d times, want %d calls", players[player].moves, have, want)
 			}
 		}
 	}
