@@ -1,5 +1,9 @@
 package tictactoe_test
 
+import "fmt"
+
+const trackMoves = false
+
 type msgPair struct {
 	code int
 	msg  string
@@ -26,6 +30,10 @@ func (m *mockPlayer) NotifyGameStart() {
 }
 
 func (m *mockPlayer) RequestMove() (move string) {
+	if trackMoves {
+		defer func() { fmt.Printf("returning move %q\n", move) }()
+	}
+
 	if m.currentMove == len(m.moves) {
 		return ""
 	}

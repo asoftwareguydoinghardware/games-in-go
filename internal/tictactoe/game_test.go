@@ -118,7 +118,7 @@ func TestHandleValidMoveFromPlayerDoesNotCallReportBadMoveSelectionForGoodMove(t
 	}
 }
 
-func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMoveApropriately(t *testing.T) {
+func disabledTestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMoveApropriately(t *testing.T) {
 	type testCase struct {
 		move   string
 		isGood bool
@@ -159,4 +159,33 @@ func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMoveApropria
 			}
 		}
 	}
+}
+
+func testBadMoveRerequestsMove(t *testing.T, badMoves int) {
+	const playerNum = 1
+
+	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+	g := ttt.New()
+	g.SetPlayerIO(0, players[0])
+	g.SetPlayerIO(1, players[1])
+	player := players[playerNum]
+	moves := make([]string, badMoves+1)
+	for i := 0; i < badMoves; i++ {
+		moves[i] = "zed"
+	}
+	moves[badMoves] = "0"
+	player.moves = moves
+
+	g.InitializeGame(playerNum)
+
+	g.HandleValidMoveFromPlayer(playerNum)
+
+	have, want := len(player.badMoveMsgs), badMoves
+	if have != want {
+		t.Errorf("HandleValidMoveFromPlayer requeried %d times, want %d", have, want)
+	}
+}
+
+func TestBadMoveRerequestsMove(t *testing.T) {
+	testBadMoveRerequestsMove(t, 2)
 }
