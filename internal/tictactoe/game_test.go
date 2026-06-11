@@ -223,4 +223,5 @@ func testBadMoveResponse(t *testing.T, initialMove string, wantCode int, wantSub
 
 func TestBadMoveResponse(t *testing.T) {
 	testBadMoveResponse(t, "zed", 500, "nvalid number")
+	testBadMoveResponse(t, "zed", 500, "zed")
 }
