@@ -42,7 +42,8 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 
 	move := g.player[player].RequestMove()
 	for !isValidMove(move) {
-		g.player[player].ReportBadMoveSelection(500, "Invalid number: zed")
+		msg := fmt.Sprintf("Invalid number: %q", move)
+		g.player[player].ReportBadMoveSelection(500, msg)
 		move = g.player[player].RequestMove()
 	}
 	g.player[otherPlayer].ShareStateChange("")
