@@ -2,6 +2,7 @@ package tictactoe_test
 
 import (
 	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
+	"strings"
 	"testing"
 )
 
@@ -190,4 +191,36 @@ func testBadMoveRerequestsMove(t *testing.T, badMoves int) {
 func TestBadMoveRerequestsMove(t *testing.T) {
 	testBadMoveRerequestsMove(t, 2)
 	testBadMoveRerequestsMove(t, 20)
+}
+
+func testBadMoveResponse(t *testing.T, initialMove string, wantCode int, wantSubstring string) {
+	const playerNum = 0
+
+	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+	g := ttt.New()
+	g.SetPlayerIO(0, players[0])
+	g.SetPlayerIO(1, players[1])
+	player := players[playerNum]
+	moves := make([]string, 2)
+	moves[0] = initialMove
+	moves[1] = "0"
+	player.moves = moves
+
+	g.InitializeGame(playerNum)
+	g.HandleValidMoveFromPlayer(playerNum)
+
+	badMove := player.badMoveMsgs[0]
+	haveCode := badMove.code
+	haveString := badMove.msg
+
+	if haveCode != wantCode {
+		t.Errorf("for move sequence %v initial move have code %03d, want %03d", moves, haveCode, wantCode)
+	}
+	if !strings.Contains(haveString, wantSubstring) {
+		t.Errorf("for move sequence %v initial move have error string %q want to contain %q", moves, haveString, wantSubstring)
+	}
+}
+
+func TestBadMoveResponse(t *testing.T) {
+	testBadMoveResponse(t, "zed", 500, "nvalid number")
 }
