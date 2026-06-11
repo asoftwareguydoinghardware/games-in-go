@@ -189,4 +189,5 @@ func testBadMoveRerequestsMove(t *testing.T, badMoves int) {
 
 func TestBadMoveRerequestsMove(t *testing.T) {
 	testBadMoveRerequestsMove(t, 2)
+	testBadMoveRerequestsMove(t, 20)
 }
