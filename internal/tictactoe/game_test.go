@@ -226,5 +226,6 @@ func TestBadMoveResponse(t *testing.T) {
 	testBadMoveResponse(t, "zed", 500, "zed")
 	testBadMoveResponse(t, "aaron", 500, "aaron")
 	testBadMoveResponse(t, "-1", 501, "nvalid move, must be in range 0-8")
+	testBadMoveResponse(t, "9", 501, "nvalid move, must be in range 0-8")
 
 }

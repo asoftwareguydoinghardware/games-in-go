@@ -70,12 +70,9 @@ func (g *Game) isValidMove(move string) (valid bool) {
 	if err != nil && err != io.EOF {
 		return false
 	}
-	if num < 0 {
+	if num < 0 || num >= 9 {
 		g.lastError = rangeError
 		g.lastMsg = rangeErrorMsg
-		return false
-	}
-	if num >= 9 {
 		return false
 	}
 
