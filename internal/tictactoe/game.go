@@ -68,6 +68,8 @@ func (g *Game) isValidMove(move string) (valid bool) {
 		return false
 	}
 	if err != nil && err != io.EOF {
+		g.lastError = badInt
+		g.lastMsg = fmt.Sprintf(badIntMsg, move)
 		return false
 	}
 	if num < 0 || num >= 9 {
