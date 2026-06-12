@@ -6,7 +6,9 @@ import (
 )
 
 type Game struct {
-	player [2]PlayerIO
+	player    [2]PlayerIO
+	lastError int
+	lastMsg   string
 }
 
 type PlayerIO interface {
@@ -41,30 +43,36 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 	}
 
 	move := g.player[player].RequestMove()
-	for !isValidMove(move) {
-		if move == "-1" {
-			g.player[player].ReportBadMoveSelection(501, "Invalid move, must be in range 0-8")
-		} else {
-			msg := fmt.Sprintf("Invalid number: %q", move)
-			g.player[player].ReportBadMoveSelection(500, msg)
-		}
+	for !g.isValidMove(move) {
+		code := g.lastError
+		msg := g.lastMsg
+		g.player[player].ReportBadMoveSelection(code, msg)
 		move = g.player[player].RequestMove()
 	}
 	g.player[otherPlayer].ShareStateChange("")
 }
 
-func isValidMove(move string) (valid bool) {
+func (g *Game) isValidMove(move string) (valid bool) {
 	var num int
 	var junk byte
 
+	const badIntMsg = "Invalid number %q"
+	const badInt = 500
+	const rangeErrorMsg = "Invalid move, must be in range 0-8"
+	const rangeError = 501
+
 	matched, err := fmt.Sscanf(move, "%v %c", &num, &junk)
 	if matched != 1 {
+		g.lastError = badInt
+		g.lastMsg = fmt.Sprintf(badIntMsg, move)
 		return false
 	}
 	if err != nil && err != io.EOF {
 		return false
 	}
 	if num < 0 {
+		g.lastError = rangeError
+		g.lastMsg = rangeErrorMsg
 		return false
 	}
 	if num >= 9 {
