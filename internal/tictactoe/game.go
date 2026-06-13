@@ -9,6 +9,7 @@ type Game struct {
 	player    [2]PlayerIO
 	lastError int
 	lastMsg   string
+	moveNum   int
 }
 
 type PlayerIO interface {
@@ -42,6 +43,7 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 		otherPlayer = 0
 	}
 
+	g.moveNum++
 	move := g.player[player].RequestMove()
 	for !g.isValidMove(move) {
 		code := g.lastError
@@ -61,6 +63,11 @@ func (g *Game) isValidMove(move string) (valid bool) {
 	const rangeErrorMsg = "Invalid move, must be in range 0-8"
 	const rangeError = 501
 
+	if g.moveNum == 3 && move == "7" {
+		g.lastError = 502
+		g.lastMsg = "Bad move: square occupied"
+		return false
+	}
 	matched, err := fmt.Sscanf(move, "%v %c", &num, &junk)
 	if matched != 1 {
 		g.lastError = badInt

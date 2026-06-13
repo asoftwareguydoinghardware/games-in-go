@@ -1,6 +1,7 @@
 package tictactoe_test
 
 import (
+	"fmt"
 	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
 	"strings"
 	"testing"
@@ -229,4 +230,76 @@ func TestBadMoveResponse(t *testing.T) {
 	testBadMoveResponse(t, "9", 501, "nvalid move, must be in range 0-8")
 	testBadMoveResponse(t, "1a", 500, "nvalid number")
 
+}
+
+func TestDuplicateMoveReportsError(t *testing.T) {
+	testDuplicateMoveReportsError(t, 7)
+}
+
+func testDuplicateMoveReportsError(t *testing.T, move int) {
+	const (
+		playerNum      = 0 // baked into diagnostic messages, do not change
+		otherPlayerNum = iota
+	)
+	var usedMoves [9]bool
+
+	findMove := func() int {
+		for i := 0; i < len(usedMoves); i++ {
+			if !usedMoves[i] {
+				return i
+			}
+		}
+
+		return -1
+	}
+
+	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+	g := ttt.New()
+	g.SetPlayerIO(0, players[0])
+	g.SetPlayerIO(1, players[1])
+	player := players[playerNum]
+	otherPlayer := players[otherPlayerNum]
+
+	moves := make([]string, 3)
+	moves[0] = fmt.Sprintf("%d", move)
+	usedMoves[move] = true
+	moves[1] = moves[0]
+	freeMove := findMove()
+	usedMoves[freeMove] = true
+	moves[2] = fmt.Sprintf("%d", freeMove)
+	player.moves = moves
+
+	otherMoves := make([]string, 1)
+	freeMove = findMove()
+	otherMoves[0] = fmt.Sprintf("%d", freeMove)
+	otherPlayer.moves = otherMoves
+
+	g.InitializeGame(playerNum)
+	g.HandleValidMoveFromPlayer(playerNum)
+	g.HandleValidMoveFromPlayer(otherPlayerNum)
+	g.HandleValidMoveFromPlayer(playerNum)
+
+	have, want := len(player.badMoveMsgs), 1
+	if have != want {
+		t.Errorf("For player %d moves %v have %d bad moves want %d", playerNum, moves, have, want)
+		if have < want {
+			return
+		}
+	}
+
+	badMoveMsg := player.badMoveMsgs[0]
+	haveCode, wantCode := badMoveMsg.code, 502
+	if haveCode != wantCode {
+		t.Errorf("For player %d moves %v have code %d want %d", playerNum, moves, haveCode, wantCode)
+	}
+
+	haveMove, wantMove := badMoveMsg.moveNum, 1
+	if haveMove != wantMove {
+		t.Errorf("For player %d moves %v; have bad move on query %d want %d", playerNum, moves, haveMove, wantMove)
+	}
+
+	haveMsg, wantMsg := badMoveMsg.msg, "quare occupied"
+	if !strings.Contains(haveMsg, wantMsg) {
+		t.Errorf("For player %d moves %v; have msg %q want to contain %q", playerNum, moves, haveMsg, wantMsg)
+	}
 }

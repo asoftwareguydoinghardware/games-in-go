@@ -5,8 +5,9 @@ import "fmt"
 const trackMoves = false
 
 type msgPair struct {
-	code int
-	msg  string
+	moveNum int
+	code    int
+	msg     string
 }
 type mockPlayer struct {
 	notifiedOfGameStart bool
@@ -31,6 +32,7 @@ func (m *mockPlayer) NotifyGameStart() {
 
 func (m *mockPlayer) RequestMove() (move string) {
 	if trackMoves {
+		fmt.Printf("requested move number %d ", m.currentMove)
 		defer func() { fmt.Printf("returning move %q\n", move) }()
 	}
 
@@ -48,6 +50,6 @@ func (m *mockPlayer) ShareStateChange(state string) {
 }
 
 func (m *mockPlayer) ReportBadMoveSelection(code int, msg string) {
-	pair := msgPair{code, msg}
-	m.badMoveMsgs = append(m.badMoveMsgs, pair)
+	tuple := msgPair{m.currentMove - 1, code, msg}
+	m.badMoveMsgs = append(m.badMoveMsgs, tuple)
 }
