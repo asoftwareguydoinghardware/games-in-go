@@ -78,20 +78,20 @@ func (g *Game) moveAsNumber(move string) (num int, err error) {
 	matched, err := fmt.Sscanf(move, "%v %c", &num, &junk)
 	if matched != 1 {
 		g.lastError = badInt
-		err = fmt.Errorf("%d", g.lastError)
 		g.lastMsg = fmt.Sprintf(badIntMsg, move)
+		err = fmt.Errorf("%d", g.lastError)
 		return -1, err
 	}
 	if err != nil && err != io.EOF {
 		g.lastError = badInt
-		err = fmt.Errorf("%d", g.lastError)
 		g.lastMsg = fmt.Sprintf(badIntMsg, move)
+		err = fmt.Errorf("%d", g.lastError)
 		return -1, err
 	}
 	if num < 0 || num >= 9 {
 		g.lastError = rangeError
-		err = fmt.Errorf("%d", g.lastError)
 		g.lastMsg = rangeErrorMsg
+		err = fmt.Errorf("%d", g.lastError)
 		return -1, err
 	}
 
