@@ -63,11 +63,6 @@ func (g *Game) isValidMove(move string) (valid bool) {
 	const rangeErrorMsg = "Invalid move, must be in range 0-8"
 	const rangeError = 501
 
-	if g.moveNum == 3 && (move == "7" || move == "8") {
-		g.lastError = 502
-		g.lastMsg = "Bad move: square occupied"
-		return false
-	}
 	matched, err := fmt.Sscanf(move, "%v %c", &num, &junk)
 	if matched != 1 {
 		g.lastError = badInt
@@ -82,6 +77,11 @@ func (g *Game) isValidMove(move string) (valid bool) {
 	if num < 0 || num >= 9 {
 		g.lastError = rangeError
 		g.lastMsg = rangeErrorMsg
+		return false
+	}
+	if g.moveNum == 3 && (move == "7" || move == "8") {
+		g.lastError = 502
+		g.lastMsg = "Bad move: square occupied"
 		return false
 	}
 
