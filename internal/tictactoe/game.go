@@ -63,7 +63,7 @@ func (g *Game) isValidMove(move string) (valid bool) {
 	const rangeErrorMsg = "Invalid move, must be in range 0-8"
 	const rangeError = 501
 
-	if g.moveNum == 3 && move == "7" {
+	if g.moveNum == 3 && (move == "7" || move == "8") {
 		g.lastError = 502
 		g.lastMsg = "Bad move: square occupied"
 		return false
