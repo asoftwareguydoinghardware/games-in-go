@@ -55,7 +55,19 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 }
 
 func (g *Game) isValidMove(move string) (valid bool) {
-	var num int
+	if _, err := g.moveAsNumber(move); err != nil {
+		return false
+	}
+	if g.moveNum == 3 && (move == "7" || move == "8") {
+		g.lastError = 502
+		g.lastMsg = "Bad move: square occupied"
+		return false
+	}
+
+	return true
+}
+
+func (g *Game) moveAsNumber(move string) (num int, err error) {
 	var junk byte
 
 	const badIntMsg = "Invalid number %q"
@@ -66,26 +78,24 @@ func (g *Game) isValidMove(move string) (valid bool) {
 	matched, err := fmt.Sscanf(move, "%v %c", &num, &junk)
 	if matched != 1 {
 		g.lastError = badInt
+		err = fmt.Errorf("%d", g.lastError)
 		g.lastMsg = fmt.Sprintf(badIntMsg, move)
-		return false
+		return -1, err
 	}
 	if err != nil && err != io.EOF {
 		g.lastError = badInt
+		err = fmt.Errorf("%d", g.lastError)
 		g.lastMsg = fmt.Sprintf(badIntMsg, move)
-		return false
+		return -1, err
 	}
 	if num < 0 || num >= 9 {
 		g.lastError = rangeError
+		err = fmt.Errorf("%d", g.lastError)
 		g.lastMsg = rangeErrorMsg
-		return false
-	}
-	if g.moveNum == 3 && (move == "7" || move == "8") {
-		g.lastError = 502
-		g.lastMsg = "Bad move: square occupied"
-		return false
+		return -1, err
 	}
 
-	return true
+	return num, nil
 }
 
 func (g *Game) SetPlayerIO(player int, io PlayerIO) {
