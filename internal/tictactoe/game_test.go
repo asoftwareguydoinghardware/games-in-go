@@ -305,3 +305,72 @@ func testDuplicateMoveReportsError(t *testing.T, move int) {
 		t.Errorf("For player %d moves %v; have msg %q want to contain %q", playerNum, moves, haveMsg, wantMsg)
 	}
 }
+
+func TestSecondPlayerCannotUseSquareChosenByOponent(t *testing.T) {
+	testSecondPlayerCannotUseSquareChosenByOponent(t, 3)
+}
+
+func testSecondPlayerCannotUseSquareChosenByOponent(t *testing.T, move int) {
+	const (
+		playerNum      = 0 // baked into diagnostic messages, do not change
+		otherPlayerNum = iota
+	)
+	var usedMoves [9]bool
+
+	findMove := func() int {
+		for i := 0; i < len(usedMoves); i++ {
+			if !usedMoves[i] {
+				return i
+			}
+		}
+
+		return -1
+	}
+
+	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+	g := ttt.New()
+	g.SetPlayerIO(0, players[0])
+	g.SetPlayerIO(1, players[1])
+	player := players[playerNum]
+	otherPlayer := players[otherPlayerNum]
+
+	moves := make([]string, 1)
+	moves[0] = fmt.Sprintf("%d", move)
+	usedMoves[move] = true
+	player.moves = moves
+
+	otherMoves := make([]string, 2)
+	otherMoves[0] = fmt.Sprintf("%d", move)
+	freeMove := findMove()
+	otherMoves[1] = fmt.Sprintf("%d", freeMove)
+
+	otherPlayer.moves = otherMoves
+
+	g.InitializeGame(playerNum)
+	g.HandleValidMoveFromPlayer(playerNum)
+	g.HandleValidMoveFromPlayer(otherPlayerNum)
+
+	have, want := len(otherPlayer.badMoveMsgs), 1
+	if have != want {
+		t.Errorf("For player %d moves %v have %d bad moves want %d", otherPlayerNum, otherMoves, have, want)
+		if have < want {
+			return
+		}
+	}
+
+	badMoveMsg := otherPlayer.badMoveMsgs[0]
+	haveCode, wantCode := badMoveMsg.code, 502
+	if haveCode != wantCode {
+		t.Errorf("For player %d moves %v have code %d want %d", otherPlayerNum, otherMoves, haveCode, wantCode)
+	}
+
+	haveMove, wantMove := badMoveMsg.moveNum, 0
+	if haveMove != wantMove {
+		t.Errorf("For player %d moves %v; have bad move on query %d want %d", otherPlayerNum, otherMoves, haveMove, wantMove)
+	}
+
+	haveMsg, wantMsg := badMoveMsg.msg, "quare occupied"
+	if !strings.Contains(haveMsg, wantMsg) {
+		t.Errorf("For player %d moves %v; have msg %q want to contain %q", otherPlayerNum, otherMoves, haveMsg, wantMsg)
+	}
+}

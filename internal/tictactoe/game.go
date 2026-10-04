@@ -60,7 +60,7 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 func (g *Game) isValidMove(move string) (valid bool) {
 	if square, err := g.moveAsNumber(move); err != nil {
 		return false
-	} else if g.moveNum == 3 && g.squareOccupied[square] {
+	} else if (g.moveNum == 3 || g.moveNum ==2) && g.squareOccupied[square] {
 		g.lastError = 502
 		g.lastMsg = "Bad move: square occupied"
 		return false
