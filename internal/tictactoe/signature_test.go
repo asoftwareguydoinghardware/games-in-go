@@ -12,14 +12,14 @@ func TestNewExists(t *testing.T) {
 	_ = game
 }
 
-func TestInitializeGameMethodExists(t *testing.T) {
+func TestInitializeMethodExists(t *testing.T) {
 	game := ttt.New()
 	player0 := newMockPlayerIO()
 	player1 := newMockPlayerIO()
 	game.SetPlayerIO(0, player0)
 	game.SetPlayerIO(1, player1)
 
-	game.InitializeGame(0)
+	game.Initialize(0)
 }
 
 func TestDoneMethodExists(t *testing.T) {

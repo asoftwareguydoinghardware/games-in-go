@@ -26,7 +26,7 @@ func New() *Game {
 	return &g
 }
 
-func (g *Game) InitializeGame(initialPlayer int) {
+func (g *Game) Initialize(initialPlayer int) {
 	g.player[0].NotifyGameStart()
 	g.player[1].NotifyGameStart()
 }

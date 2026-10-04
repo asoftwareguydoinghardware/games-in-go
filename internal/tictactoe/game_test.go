@@ -13,7 +13,7 @@ func TestInitialCallToDoneReturnsFalse(t *testing.T) {
 	g := ttt.New()
 	g.SetPlayerIO(0, player0)
 	g.SetPlayerIO(1, player1)
-	g.InitializeGame(0)
+	g.Initialize(0)
 
 	have, want := g.Done(), false
 
@@ -22,13 +22,13 @@ func TestInitialCallToDoneReturnsFalse(t *testing.T) {
 	}
 }
 
-func TestInitializeGameNotifiesBothPlayers(t *testing.T) {
+func TestInitializeNotifiesBothPlayers(t *testing.T) {
 	player0 := newMockPlayerIO()
 	player1 := newMockPlayerIO()
 	g := ttt.New()
 	g.SetPlayerIO(0, player0)
 	g.SetPlayerIO(1, player1)
-	g.InitializeGame(0)
+	g.Initialize(0)
 
 	if !player0.notifiedOfGameStart {
 		t.Errorf("Player 0 not notified of game start")
@@ -44,7 +44,7 @@ func testHandleValidMoveFromPlayerCallsRequestMoveForCorrectPlayer(t *testing.T,
 	g.SetPlayerIO(0, players[0])
 	g.SetPlayerIO(1, players[1])
 	players[player].moves = []string{"1"}
-	g.InitializeGame(0)
+	g.Initialize(0)
 
 	g.HandleValidMoveFromPlayer(player)
 
@@ -64,7 +64,7 @@ func testHandleValidMoveFromPlayerCallsShareStateChange(t *testing.T, player int
 	g.SetPlayerIO(0, players[0])
 	g.SetPlayerIO(1, players[1])
 	players[player].moves = []string{"1"}
-	g.InitializeGame(0)
+	g.Initialize(0)
 
 	otherPlayer := 0
 	if player == 0 {
@@ -89,7 +89,7 @@ func testHandleValidMoveFromPlayerCallsReportBadMoveSelectionForBadMove(t *testi
 	g.SetPlayerIO(0, players[0])
 	g.SetPlayerIO(1, players[1])
 	players[player].moves = []string{"-1", "0"}
-	g.InitializeGame(0)
+	g.Initialize(0)
 
 	g.HandleValidMoveFromPlayer(player)
 
@@ -111,7 +111,7 @@ func TestHandleValidMoveFromPlayerDoesNotCallReportBadMoveSelectionForGoodMove(t
 	g.SetPlayerIO(0, players[0])
 	g.SetPlayerIO(1, players[1])
 	players[player].moves = []string{"0"}
-	g.InitializeGame(0)
+	g.Initialize(0)
 
 	g.HandleValidMoveFromPlayer(player)
 
@@ -147,7 +147,7 @@ func TestHandleValidMoveFromPlayerCallsReportBadMoveSelectionForGoodMoveApropria
 		g.SetPlayerIO(0, players[0])
 		g.SetPlayerIO(1, players[1])
 		players[player].moves = []string{tc.move, "0"}
-		g.InitializeGame(0)
+		g.Initialize(0)
 
 		g.HandleValidMoveFromPlayer(player)
 
@@ -179,7 +179,7 @@ func testBadMoveRerequestsMove(t *testing.T, badMoves int) {
 	moves[badMoves] = "0"
 	player.moves = moves
 
-	g.InitializeGame(playerNum)
+	g.Initialize(playerNum)
 
 	g.HandleValidMoveFromPlayer(playerNum)
 
@@ -207,7 +207,7 @@ func testBadMoveResponse(t *testing.T, initialMove string, wantCode int, wantSub
 	moves[1] = "0"
 	player.moves = moves
 
-	g.InitializeGame(playerNum)
+	g.Initialize(playerNum)
 	g.HandleValidMoveFromPlayer(playerNum)
 
 	badMove := player.badMoveMsgs[0]
@@ -276,7 +276,7 @@ func testDuplicateMoveReportsError(t *testing.T, move int) {
 	otherMoves[0] = fmt.Sprintf("%d", freeMove)
 	otherPlayer.moves = otherMoves
 
-	g.InitializeGame(playerNum)
+	g.Initialize(playerNum)
 	g.HandleValidMoveFromPlayer(playerNum)
 	g.HandleValidMoveFromPlayer(otherPlayerNum)
 	g.HandleValidMoveFromPlayer(playerNum)
@@ -346,7 +346,7 @@ func testSecondPlayerCannotUseSquareChosenByOponent(t *testing.T, move int) {
 
 	otherPlayer.moves = otherMoves
 
-	g.InitializeGame(playerNum)
+	g.Initialize(playerNum)
 	g.HandleValidMoveFromPlayer(playerNum)
 	g.HandleValidMoveFromPlayer(otherPlayerNum)
 
@@ -406,7 +406,7 @@ func TestFirstPlayerCannotChooseSquareSelectedByOpponent(t *testing.T) {
 	player.moves = playerMoves
 	otherPlayer.moves = otherMoves
 
-	g.InitializeGame(firstPlayer)
+	g.Initialize(firstPlayer)
 
 	for i := 0; i < len(player.moves)-1; i++ {
 		g.HandleValidMoveFromPlayer(firstPlayer)
