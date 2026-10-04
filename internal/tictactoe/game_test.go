@@ -428,11 +428,11 @@ func TestDoneReturnsTrueForWin(t *testing.T) {
 	}
 
 	for i := 0; i < len(winningConfigs); i++ {
-		testDoneReturnsTrueForWin(t, winningConfigs[i], 0)
+		testDoneReturnsCorrectValue(t, winningConfigs[i], 0, true)
 	}
 }
 
-func testDoneReturnsTrueForWin(t *testing.T, config [3]int, playerNum int) {
+func testDoneReturnsCorrectValue(t *testing.T, config [3]int, playerNum int, finalVal bool) {
 	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
 	g := ttt.New()
 	g.SetPlayerIO(0, players[0])
@@ -458,7 +458,7 @@ func testDoneReturnsTrueForWin(t *testing.T, config [3]int, playerNum int) {
 	}
 
 	g.HandleValidMoveFromPlayer(playerNum)
-	have, want := g.Done(), true
+	have, want := g.Done(), finalVal
 	if have != want {
 		t.Errorf("For move %d of sequence %v Done() returned %v", moveNum, moves, have)
 	}
