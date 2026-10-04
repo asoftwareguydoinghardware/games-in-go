@@ -463,3 +463,13 @@ func testDoneReturnsCorrectValue(t *testing.T, config [3]int, playerNum int, fin
 		t.Errorf("For move %d of sequence %v Done() returned %v", moveNum, moves, have)
 	}
 }
+
+func TestDoneReturnsFalseWhenMovesStillPossible(t *testing.T) {
+	configs := [][3]int{
+		{0, 1, 3},
+	}
+
+	for i := 0; i < len(configs); i++ {
+		testDoneReturnsCorrectValue(t, configs[i], 0, false)
+	}
+}
