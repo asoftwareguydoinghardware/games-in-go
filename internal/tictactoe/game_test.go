@@ -374,3 +374,50 @@ func testSecondPlayerCannotUseSquareChosenByOponent(t *testing.T, move int) {
 		t.Errorf("For player %d moves %v; have msg %q want to contain %q", otherPlayerNum, otherMoves, haveMsg, wantMsg)
 	}
 }
+
+func TestFirstPlayerCannotChooseSquareSelectedByOpponent(t *testing.T) {
+	const (
+		firstPlayer  = 0
+		secondPlayer = iota
+	)
+
+	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+	g := ttt.New()
+	g.SetPlayerIO(0, players[0])
+	g.SetPlayerIO(1, players[1])
+	player := players[firstPlayer]
+	otherPlayer := players[secondPlayer]
+
+	playerMoves := make([]string, 0)
+	otherMoves := make([]string, 0)
+
+	pMoves := []int{1, 2, 3, 6}
+	oMoves := []int{3, 4, 5, 7}
+
+	for i := 0; i < len(pMoves); i++ {
+		m := fmt.Sprintf("%d", pMoves[i])
+		playerMoves = append(playerMoves, m)
+	}
+	for i := 0; i < len(oMoves); i++ {
+		m := fmt.Sprintf("%d", oMoves[i])
+		otherMoves = append(otherMoves, m)
+	}
+
+	player.moves = playerMoves
+	otherPlayer.moves = otherMoves
+
+	g.InitializeGame(firstPlayer)
+
+	for i := 0; i < len(player.moves)-1; i++ {
+		g.HandleValidMoveFromPlayer(firstPlayer)
+		g.HandleValidMoveFromPlayer(secondPlayer)
+	}
+
+	have, want := len(player.badMoveMsgs), 1
+	if have != want {
+		t.Errorf("For player %d moves %v (opponent moves %v) have %d bad moves want %d", firstPlayer, pMoves, oMoves, have, want)
+		if have < want {
+			return
+		}
+	}
+}
