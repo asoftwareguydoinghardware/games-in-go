@@ -421,3 +421,45 @@ func TestFirstPlayerCannotChooseSquareSelectedByOpponent(t *testing.T) {
 		}
 	}
 }
+
+func TestDoneReturnsTrueForWin(t *testing.T) {
+	winningConfigs := [][3]int{
+		{0, 1, 2},
+	}
+
+	for i := 0; i < len(winningConfigs); i++ {
+		testDoneReturnsTrueForWin(t, winningConfigs[i], 0)
+	}
+}
+
+func testDoneReturnsTrueForWin(t *testing.T, config [3]int, playerNum int) {
+	players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+	g := ttt.New()
+	g.SetPlayerIO(0, players[0])
+	g.SetPlayerIO(1, players[1])
+	player := players[playerNum]
+
+	moves := make([]string, 3)
+	for i := 0; i < len(config); i++ {
+		m := fmt.Sprintf("%d", config[i])
+		moves = append(moves, m)
+	}
+	player.moves = moves
+
+	g.Initialize(playerNum)
+
+	var moveNum int
+	for moveNum = 0; moveNum < len(config)-1; moveNum++ {
+		g.HandleValidMoveFromPlayer(playerNum)
+		have, want := g.Done(), false
+		if have != want {
+			t.Errorf("For move %d of sequence %v Done() returned %v", moveNum, moves, have)
+		}
+	}
+
+	g.HandleValidMoveFromPlayer(playerNum)
+	have, want := g.Done(), true
+	if have != want {
+		t.Errorf("For move %d of sequence %v Done() returned %v", moveNum, moves, have)
+	}
+}

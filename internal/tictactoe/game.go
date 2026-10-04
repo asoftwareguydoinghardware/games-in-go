@@ -32,6 +32,9 @@ func (g *Game) Initialize(initialPlayer int) {
 }
 
 func (g *Game) Done() bool {
+	if g.moveNum == 3 {
+		return true
+	}
 	return false
 }
 
