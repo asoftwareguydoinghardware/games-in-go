@@ -6,10 +6,11 @@ import (
 )
 
 type Game struct {
-	player    [2]PlayerIO
-	lastError int
-	lastMsg   string
-	moveNum   int
+	player         [2]PlayerIO
+	lastError      int
+	lastMsg        string
+	moveNum        int
+	squareOccupied [9]bool
 }
 
 type PlayerIO interface {
@@ -51,14 +52,15 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 		g.player[player].ReportBadMoveSelection(code, msg)
 		move = g.player[player].RequestMove()
 	}
+	square, _ := g.moveAsNumber(move)
+	g.squareOccupied[square] = true
 	g.player[otherPlayer].ShareStateChange("")
 }
 
 func (g *Game) isValidMove(move string) (valid bool) {
-	if _, err := g.moveAsNumber(move); err != nil {
+	if square, err := g.moveAsNumber(move); err != nil {
 		return false
-	}
-	if g.moveNum == 3 && (move == "7" || move == "8") {
+	} else if g.moveNum == 3 && g.squareOccupied[square] {
 		g.lastError = 502
 		g.lastMsg = "Bad move: square occupied"
 		return false

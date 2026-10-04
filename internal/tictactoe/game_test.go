@@ -235,6 +235,7 @@ func TestBadMoveResponse(t *testing.T) {
 func TestDuplicateMoveReportsError(t *testing.T) {
 	testDuplicateMoveReportsError(t, 7)
 	testDuplicateMoveReportsError(t, 8)
+	testDuplicateMoveReportsError(t, 3)
 }
 
 func testDuplicateMoveReportsError(t *testing.T, move int) {
