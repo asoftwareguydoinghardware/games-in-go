@@ -50,10 +50,7 @@ func (g *Game) Done() bool {
 	if g.row2Owned() {
 		return true
 	}
-	if g.row3OwnedByPlayer(0) {
-		return true
-	}
-	if g.row3OwnedByPlayer(1) {
+	if g.row3Owned() {
 		return true
 	}
 
@@ -88,10 +85,14 @@ func (g *Game) row2Owned() bool {
 	return false
 }
 
-func (g *Game) row3OwnedByPlayer(player owner) (owned bool) {
+func (g *Game) row3Owned() bool {
 	owners := g.squareOwners
 
-	if owners[6] == player && owners[7] == player && owners[8] == player {
+	if owners[6] == neither {
+		return false
+	}
+
+	if owners[6] == owners[7] && owners[7] == owners[8] {
 		return true
 	}
 
