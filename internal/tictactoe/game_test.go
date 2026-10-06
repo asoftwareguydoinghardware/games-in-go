@@ -521,5 +521,7 @@ func TestDoneProperlyTracksSquareOwners(t *testing.T) {
 
 	for i := 0; i < len(tcs); i++ {
 		testDoneProperlyTracksSquareOwners(t, &tcs[i])
+		tcs[i].moves[0], tcs[i].moves[1] = tcs[i].moves[1], tcs[i].moves[0]
+		testDoneProperlyTracksSquareOwners(t, &tcs[i])
 	}
 }

@@ -53,6 +53,9 @@ func (g *Game) Done() bool {
 	if g.row2OwnedByPlayer(0) {
 		return true
 	}
+	if g.row2OwnedByPlayer(1) {
+		return true
+	}
 
 	return false
 }
