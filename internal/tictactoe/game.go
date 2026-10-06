@@ -44,10 +44,7 @@ func (g *Game) Initialize(initialPlayer int) {
 }
 
 func (g *Game) Done() bool {
-	if g.row1OwnedByPlayer(0) {
-		return true
-	}
-	if g.row1OwnedByPlayer(1) {
+	if g.row1Owned() {
 		return true
 	}
 	if g.row2OwnedByPlayer(0) {
@@ -66,10 +63,14 @@ func (g *Game) Done() bool {
 	return false
 }
 
-func (g *Game) row1OwnedByPlayer(player owner) (owned bool) {
+func (g *Game) row1Owned() bool {
 	owners := g.squareOwners
 
-	if owners[0] == player && owners[1] == player && owners[2] == player {
+	if owners[0] == neither {
+		return false
+	}
+
+	if owners[0] == owners[1] && owners[1] == owners[2] {
 		return true
 	}
 
