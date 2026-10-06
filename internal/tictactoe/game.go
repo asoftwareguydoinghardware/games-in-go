@@ -33,7 +33,7 @@ func (g *Game) Initialize(initialPlayer int) {
 
 func (g *Game) Done() bool {
 	occupied := g.squareOccupied
-	if occupied[0] && occupied[1] && occupied[2] {
+	if occupied[0] && occupied[1] && occupied[2] && !occupied[3] {
 		return true
 	}
 	return false

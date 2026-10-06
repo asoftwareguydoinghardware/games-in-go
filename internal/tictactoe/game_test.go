@@ -473,3 +473,50 @@ func TestDoneReturnsFalseWhenMovesStillPossible(t *testing.T) {
 		testDoneReturnsCorrectValue(t, configs[i], 0, false)
 	}
 }
+
+func TestDoneProperlyTracksSquareOwners(t *testing.T) {
+	type tc struct {
+		moves    [2][3]int
+		wantDone bool
+	}
+	tcs := []tc{
+		{[2][3]int{{0, 1, 3}, {2, 4, 5}}, false},
+	}
+
+	testDoneProperlyTracksSquareOwners := func(t *testing.T, tc *tc) {
+		players := [2]*mockPlayer{newMockPlayerIO(), newMockPlayerIO()}
+		g := ttt.New()
+		g.SetPlayerIO(0, players[0])
+		g.SetPlayerIO(1, players[1])
+		g.Initialize(0)
+
+		pMoves := []string{}
+		for i := 0; i < len(tc.moves[0]); i++ {
+			move := fmt.Sprintf("%d", tc.moves[0][i])
+			pMoves = append(pMoves, move)
+		}
+		players[0].moves = pMoves
+
+		oMoves := []string{}
+		for i := 0; i < len(tc.moves[1]); i++ {
+			move := fmt.Sprintf("%d", tc.moves[1][i])
+			oMoves = append(oMoves, move)
+		}
+		players[1].moves = oMoves
+
+		for i := 0; i < len(tc.moves[0]); i++ {
+			g.HandleValidMoveFromPlayer(0)
+			g.HandleValidMoveFromPlayer(1)
+		}
+
+		have, want := g.Done(), tc.wantDone
+
+		if have != want {
+			t.Errorf("For move sequences %v and %v Done() returned %v", tc.moves[0], tc.moves[1], have)
+		}
+	}
+
+	for i := 0; i < len(tcs); i++ {
+		testDoneProperlyTracksSquareOwners(t, &tcs[i])
+	}
+}
