@@ -44,55 +44,24 @@ func (g *Game) Initialize(initialPlayer int) {
 }
 
 func (g *Game) Done() bool {
-	if g.row1Owned() {
-		return true
-	}
-	if g.row2Owned() {
-		return true
-	}
-	if g.row3Owned() {
-		return true
+	for row := 0; row < 3; row++ {
+		if g.rowOwned(row) {
+			return true
+		}
 	}
 
 	return false
 }
 
-func (g *Game) row1Owned() bool {
+func (g *Game) rowOwned(row int) bool {
 	owners := g.squareOwners
 
-	if owners[0] == neither {
+	first := row * 3
+	if owners[first] == neither {
 		return false
 	}
 
-	if owners[0] == owners[1] && owners[1] == owners[2] {
-		return true
-	}
-
-	return false
-}
-
-func (g *Game) row2Owned() bool {
-	owners := g.squareOwners
-
-	if owners[3] == neither {
-		return false
-	}
-
-	if owners[3] == owners[4] && owners[4] == owners[5] {
-		return true
-	}
-
-	return false
-}
-
-func (g *Game) row3Owned() bool {
-	owners := g.squareOwners
-
-	if owners[6] == neither {
-		return false
-	}
-
-	if owners[6] == owners[7] && owners[7] == owners[8] {
+	if owners[first] == owners[first+1] && owners[first+1] == owners[first+2] {
 		return true
 	}
 
