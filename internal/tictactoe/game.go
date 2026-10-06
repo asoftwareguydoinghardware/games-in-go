@@ -48,6 +48,10 @@ func (g *Game) Done() bool {
 	if owners[0] == player1 && owners[1] == player1 && owners[2] == player1 {
 		return true
 	}
+	if owners[0] == player2 && owners[1] == player2 && owners[2] == player2 {
+		return true
+	}
+
 	return false
 }
 
