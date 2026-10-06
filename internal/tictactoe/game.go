@@ -53,6 +53,9 @@ func (g *Game) Done() bool {
 	if g.columnOwned(0) {
 		return true
 	}
+	if g.columnOwned(1) {
+		return true
+	}
 
 	return false
 }
@@ -75,11 +78,21 @@ func (g *Game) rowOwned(row int) bool {
 func (g *Game) columnOwned(column int) bool {
 	owners := g.squareOwners
 
-	if owners[0] == neither {
-		return false
-	}
-	if owners[0] == owners[3] && owners[3] == owners[6] {
-		return true
+	switch column {
+	case 0:
+		if owners[0] == neither {
+			return false
+		}
+		if owners[0] == owners[3] && owners[3] == owners[6] {
+			return true
+		}
+	case 1:
+		if owners[2] == neither {
+			return false
+		}
+		if owners[1] == owners[4] && owners[4] == owners[7] {
+			return true
+		}
 	}
 
 	return false
