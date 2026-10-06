@@ -5,12 +5,20 @@ import (
 	"io"
 )
 
+type owner int
+
+const (
+	player1 = owner(0)
+	player2 = iota
+	neither = iota
+)
+
 type Game struct {
-	player         [2]PlayerIO
-	lastError      int
-	lastMsg        string
-	moveNum        int
-	squareOccupied [9]bool
+	player       [2]PlayerIO
+	lastError    int
+	lastMsg      string
+	moveNum      int
+	squareOwners [9]owner
 }
 
 type PlayerIO interface {
@@ -23,6 +31,10 @@ type PlayerIO interface {
 func New() *Game {
 	var g Game
 
+	for i := 0; i < len(g.squareOwners); i++ {
+		g.squareOwners[i] = neither
+	}
+
 	return &g
 }
 
@@ -32,8 +44,8 @@ func (g *Game) Initialize(initialPlayer int) {
 }
 
 func (g *Game) Done() bool {
-	occupied := g.squareOccupied
-	if occupied[0] && occupied[1] && occupied[2] && !occupied[3] {
+	owners := g.squareOwners
+	if owners[0] == player1 && owners[1] == player1 && owners[2] == player1 {
 		return true
 	}
 	return false
@@ -57,14 +69,14 @@ func (g *Game) HandleValidMoveFromPlayer(player int) {
 		move = g.player[player].RequestMove()
 	}
 	square, _ := g.moveAsNumber(move)
-	g.squareOccupied[square] = true
+	g.squareOwners[square] = owner(player)
 	g.player[otherPlayer].ShareStateChange("")
 }
 
 func (g *Game) isValidMove(move string) (valid bool) {
 	if square, err := g.moveAsNumber(move); err != nil {
 		return false
-	} else if g.squareOccupied[square] {
+	} else if g.squareOwners[square] != neither {
 		g.lastError = 502
 		g.lastMsg = "Bad move: square occupied"
 		return false

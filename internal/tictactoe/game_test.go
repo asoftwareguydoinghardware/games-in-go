@@ -481,6 +481,7 @@ func TestDoneProperlyTracksSquareOwners(t *testing.T) {
 	}
 	tcs := []tc{
 		{[2][3]int{{0, 1, 3}, {2, 4, 5}}, false},
+		{[2][3]int{{0, 1, 8}, {2, 4, 5}}, false},
 	}
 
 	testDoneProperlyTracksSquareOwners := func(t *testing.T, tc *tc) {
