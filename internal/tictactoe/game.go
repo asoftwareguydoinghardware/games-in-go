@@ -35,6 +35,6 @@ func (g *Game) Play() {
 	player := g.initialPlayer
 
 	g.players[player].Move()
-	g.players[1].Move()
-	g.players[0].Move()
+	player = (player + 1) % 2
+	g.players[player].Move()
 }

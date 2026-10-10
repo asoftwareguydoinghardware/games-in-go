@@ -129,3 +129,20 @@ func testPlayCallsMoveForInitialPlayer(t *testing.T, initialPlayer int) {
 		t.Errorf("Have first move by player %d, want %d", mockPlayerForFirstMove, initialPlayer)
 	}
 }
+
+func TestPlayAlternatesPlayers(t *testing.T) {
+	testPlayAlternatesPlayers(t, 1)
+}
+
+func testPlayAlternatesPlayers(t *testing.T, initialPlayer int) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	if !mockPlayersAlternated {
+		t.Errorf("Play() did not alternate between players")
+	}
+}
