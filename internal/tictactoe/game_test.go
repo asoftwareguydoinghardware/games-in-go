@@ -13,3 +13,12 @@ func TestNewReturnsNonNilValue(t *testing.T) {
 		t.Errorf("New() returns nil")
 	}
 }
+
+func TestDoneReturnsFalseByDefault(t *testing.T) {
+	g := ttt.New()
+	done := g.Done()
+	if done {
+		t.Errorf("Done() returns true on initial call")
+	}
+}
+

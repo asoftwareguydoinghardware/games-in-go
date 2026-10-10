@@ -10,5 +10,5 @@ func New() (game *Game) {
 }
 
 func (g *Game) Done() bool {
-	return true
+	return false
 }
