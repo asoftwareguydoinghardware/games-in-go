@@ -33,4 +33,5 @@ func (g *Game) Play() {
 	g.players[1].AnnounceInitialPlayer(g.initialPlayer)
 
 	g.players[0].Move()
+	g.players[1].Move()
 }
