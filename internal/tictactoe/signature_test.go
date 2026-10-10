@@ -35,8 +35,8 @@ func TestInitialPlayerExists(t *testing.T) {
 
 func TestPlayExists(t *testing.T) {
 	g := ttt.New()
-	g.AssignPlayer(0, newMockPlayer)
-	g.AssignPlayer(1, newMockPlayer)
+	g.AssignPlayer(0, newMockPlayer())
+	g.AssignPlayer(1, newMockPlayer())
 	g.InitialPlayer(0)
 	g.Play()
 }
