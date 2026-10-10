@@ -73,3 +73,17 @@ func failIfDidNotAnnounceCorrectPlayer(t *testing.T, m *mockPlayer, want int) {
 		t.Errorf("Play() announced wrong initial player to player %d, have %d, want %d", m.playerNum, m.initialPlayer, want)
 	}
 }
+
+func TestDefaultInitialPlayerIsPlayer0(t *testing.T) {
+	const defaultInitialPlayer = 0
+
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+	// no assignment of initial player
+	g.Play()
+
+	failIfDidNotAnnounceCorrectPlayer(t, p0, defaultInitialPlayer)
+	failIfDidNotAnnounceCorrectPlayer(t, p1, defaultInitialPlayer)
+}

@@ -12,7 +12,6 @@ type Player interface {
 func New() (game *Game) {
 	var g Game
 
-	g.initialPlayer = 1
 	return &g
 }
 
