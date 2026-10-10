@@ -11,3 +11,11 @@ func TestNewExists(t *testing.T) {
 	game = ttt.New()
 	_ = game
 }
+
+func TestDoneExists(t *testing.T) {
+	var done bool
+
+	g := ttt.New()
+	done = g.Done()
+	_ = done
+}

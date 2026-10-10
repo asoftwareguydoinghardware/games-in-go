@@ -8,3 +8,7 @@ func New() (game *Game) {
 
 	return &g
 }
+
+func (g *Game) Done() bool {
+	return true
+}
