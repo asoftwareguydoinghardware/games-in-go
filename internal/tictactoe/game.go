@@ -21,3 +21,6 @@ func (g *Game) AssignPlayer(playerNum int, player Player) {
 
 func (g *Game) InitialPlayer(player int) {
 }
+
+func (g *Game) Play() {
+}
