@@ -32,6 +32,9 @@ func (g *Game) Play() {
 	g.players[0].AnnounceInitialPlayer(g.initialPlayer)
 	g.players[1].AnnounceInitialPlayer(g.initialPlayer)
 
+	player := g.initialPlayer
+
+	g.players[player].Move()
 	g.players[1].Move()
 	g.players[0].Move()
 }

@@ -114,6 +114,7 @@ func TestPlayCallsMoveForPlayer1(t *testing.T) {
 
 func TestPlayCallsMoveForInitialPlayer(t *testing.T) {
 	testPlayCallsMoveForInitialPlayer(t, 1)
+	testPlayCallsMoveForInitialPlayer(t, 0)
 }
 
 func testPlayCallsMoveForInitialPlayer(t *testing.T, initialPlayer int) {
