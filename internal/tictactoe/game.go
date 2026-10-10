@@ -3,6 +3,9 @@ package tictactoe
 type Game struct {
 }
 
+type Player interface {
+}
+
 func New() (game *Game) {
 	var g Game
 
@@ -11,4 +14,7 @@ func New() (game *Game) {
 
 func (g *Game) Done() bool {
 	return false
+}
+
+func (g *Game) AssignPlayer(playerNum int, player Player) {
 }

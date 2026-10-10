@@ -19,3 +19,11 @@ func TestDoneExists(t *testing.T) {
 	done = g.Done()
 	_ = done
 }
+
+func TestAssignPlayerExists(t *testing.T) {
+	playerNum := 0
+	player := newMockPlayer()
+	g := ttt.New()
+
+	g.AssignPlayer(playerNum, player)
+}

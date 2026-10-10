@@ -21,4 +21,3 @@ func TestDoneReturnsFalseByDefault(t *testing.T) {
 		t.Errorf("Done() returns true on initial call")
 	}
 }
-
