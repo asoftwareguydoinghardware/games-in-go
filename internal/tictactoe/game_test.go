@@ -51,7 +51,10 @@ func failIfNotAnnounced(t *testing.T, m *mockPlayer) {
 }
 
 func TestPlayAnnouncesCorrectInitialPlayer(t *testing.T) {
-	initialPlayerNum := 1
+	testPlayAnnouncesCorrectInitialPlayer(t, 1)
+}
+
+func testPlayAnnouncesCorrectInitialPlayer(t *testing.T, initialPlayerNum int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	g.AssignPlayer(0, p0)
