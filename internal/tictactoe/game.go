@@ -4,5 +4,7 @@ type Game struct {
 }
 
 func New() (game *Game) {
-	return nil
+	var g Game
+
+	return &g
 }
