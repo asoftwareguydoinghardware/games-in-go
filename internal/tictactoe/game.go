@@ -18,3 +18,6 @@ func (g *Game) Done() bool {
 
 func (g *Game) AssignPlayer(playerNum int, player Player) {
 }
+
+func (g *Game) InitialPlayer(player int) {
+}

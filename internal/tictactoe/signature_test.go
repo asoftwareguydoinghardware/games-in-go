@@ -27,3 +27,8 @@ func TestAssignPlayerExists(t *testing.T) {
 
 	g.AssignPlayer(playerNum, player)
 }
+
+func TestInitialPlayerExists(t *testing.T) {
+	g := ttt.New()
+	g.InitialPlayer(0)
+}
