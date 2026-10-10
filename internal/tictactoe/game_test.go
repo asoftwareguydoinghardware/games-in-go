@@ -49,3 +49,23 @@ func failIfNotAnnounced(t *testing.T, m *mockPlayer) {
 		t.Errorf("Did not Announce initial player to player %d after Play() called", m.playerNum)
 	}
 }
+
+func TestPlayAnnouncesCorrectInitialPlayer(t *testing.T) {
+	initialPlayerNum := 1
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+	g.InitialPlayer(initialPlayerNum)
+
+	g.Play()
+
+	failIfDidNotAnnounceCorrectPlayer(t, p0, initialPlayerNum)
+	failIfDidNotAnnounceCorrectPlayer(t, p1, initialPlayerNum)
+}
+
+func failIfDidNotAnnounceCorrectPlayer(t *testing.T, m *mockPlayer, want int) {
+	if m.initialPlayer != want {
+		t.Errorf("Play() announced wrong initial player to player %d, have %d, want %d", m.playerNum, m.initialPlayer, want)
+	}
+}

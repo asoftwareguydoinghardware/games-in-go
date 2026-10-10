@@ -26,6 +26,6 @@ func (g *Game) InitialPlayer(player int) {
 }
 
 func (g *Game) Play() {
-	g.players[0].AnnounceInitialPlayer(0)
-	g.players[1].AnnounceInitialPlayer(0)
+	g.players[0].AnnounceInitialPlayer(1)
+	g.players[1].AnnounceInitialPlayer(1)
 }
