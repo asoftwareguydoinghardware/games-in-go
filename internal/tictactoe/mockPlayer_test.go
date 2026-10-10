@@ -2,7 +2,7 @@ package tictactoe_test
 
 type mockPlayer struct {
 	announcedInitialPlayer bool
-	playerNum int
+	playerNum              int
 }
 
 func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {

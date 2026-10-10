@@ -29,23 +29,23 @@ func TestPlayAnnouncesInitialPlayer(t *testing.T) {
 	g.AssignPlayer(1, p1)
 	g.InitialPlayer(0)
 
-	failIfAnnounced(t, p0, 0)
-	failIfAnnounced(t, p1, 1)
+	failIfAnnounced(t, p0)
+	failIfAnnounced(t, p1)
 
 	g.Play()
 
-	failIfNotAnnounced(t, p0, 0)
-	failIfNotAnnounced(t, p1, 1)
+	failIfNotAnnounced(t, p0)
+	failIfNotAnnounced(t, p1)
 }
 
-func failIfAnnounced(t *testing.T, m *mockPlayer, player int) {
+func failIfAnnounced(t *testing.T, m *mockPlayer) {
 	if m.announcedInitialPlayer {
-		t.Errorf("Announced initial player to player %d before Play() called", player)
+		t.Errorf("Announced initial player to player %d before Play() called", m.playerNum)
 	}
 }
 
-func failIfNotAnnounced(t *testing.T, m *mockPlayer, player int) {
+func failIfNotAnnounced(t *testing.T, m *mockPlayer) {
 	if !m.announcedInitialPlayer {
-		t.Errorf("Did not Announce initial player to player %d after Play() called", player)
+		t.Errorf("Did not Announce initial player to player %d after Play() called", m.playerNum)
 	}
 }
