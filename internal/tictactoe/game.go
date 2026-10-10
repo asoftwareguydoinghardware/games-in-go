@@ -1,7 +1,8 @@
 package tictactoe
 
 type Game struct {
-	players [2]Player
+	players       [2]Player
+	initialPlayer int
 }
 
 type Player interface {
@@ -23,9 +24,10 @@ func (g *Game) AssignPlayer(playerNum int, player Player) {
 }
 
 func (g *Game) InitialPlayer(player int) {
+	g.initialPlayer = player
 }
 
 func (g *Game) Play() {
-	g.players[0].AnnounceInitialPlayer(1)
-	g.players[1].AnnounceInitialPlayer(1)
+	g.players[0].AnnounceInitialPlayer(g.initialPlayer)
+	g.players[1].AnnounceInitialPlayer(g.initialPlayer)
 }

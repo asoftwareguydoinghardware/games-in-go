@@ -52,6 +52,7 @@ func failIfNotAnnounced(t *testing.T, m *mockPlayer) {
 
 func TestPlayAnnouncesCorrectInitialPlayer(t *testing.T) {
 	testPlayAnnouncesCorrectInitialPlayer(t, 1)
+	testPlayAnnouncesCorrectInitialPlayer(t, 0)
 }
 
 func testPlayAnnouncesCorrectInitialPlayer(t *testing.T, initialPlayerNum int) {
