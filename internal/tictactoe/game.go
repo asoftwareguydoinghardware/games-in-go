@@ -7,6 +7,7 @@ type Game struct {
 
 type Player interface {
 	AnnounceInitialPlayer(ip int)
+	Move()
 }
 
 func New() (game *Game) {
@@ -30,4 +31,6 @@ func (g *Game) InitialPlayer(player int) {
 func (g *Game) Play() {
 	g.players[0].AnnounceInitialPlayer(g.initialPlayer)
 	g.players[1].AnnounceInitialPlayer(g.initialPlayer)
+
+	g.players[0].Move()
 }

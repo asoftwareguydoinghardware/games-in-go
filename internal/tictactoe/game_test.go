@@ -87,3 +87,15 @@ func TestDefaultInitialPlayerIsPlayer0(t *testing.T) {
 	failIfDidNotAnnounceCorrectPlayer(t, p0, defaultInitialPlayer)
 	failIfDidNotAnnounceCorrectPlayer(t, p1, defaultInitialPlayer)
 }
+
+func TestPlayCallsMove(t *testing.T) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+	g.Play()
+
+	if !p0.moveCalled {
+		t.Errorf("Play() did not call Move() for player %d", p0.playerNum)
+	}
+}
