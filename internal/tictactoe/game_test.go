@@ -24,7 +24,7 @@ func TestDoneReturnsFalseByDefault(t *testing.T) {
 
 func TestPlayAnnouncesInitialPlayer(t *testing.T) {
 	g := ttt.New()
-	p0, p1 := newMockPlayer(), newMockPlayer()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 	g.InitialPlayer(0)

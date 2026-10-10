@@ -2,11 +2,13 @@ package tictactoe_test
 
 type mockPlayer struct {
 	announcedInitialPlayer bool
+	playerNum int
 }
 
-func newMockPlayer() (newPlayer *mockPlayer) {
+func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
 	var m mockPlayer
 
+	m.playerNum = playerNum
 	return &m
 }
 
