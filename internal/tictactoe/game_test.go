@@ -111,3 +111,20 @@ func TestPlayCallsMoveForPlayer1(t *testing.T) {
 		t.Errorf("Play() did not call Move() for player %d", p1.playerNum)
 	}
 }
+
+func TestPlayCallsMoveForInitialPlayer(t *testing.T) {
+	testPlayCallsMoveForInitialPlayer(t, 1)
+}
+
+func testPlayCallsMoveForInitialPlayer(t *testing.T, initialPlayer int) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	if mockPlayerForFirstMove != initialPlayer {
+		t.Errorf("Have first move by player %d, want %d", mockPlayerForFirstMove, initialPlayer)
+	}
+}

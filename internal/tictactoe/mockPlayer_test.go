@@ -7,8 +7,12 @@ type mockPlayer struct {
 	moveCalled             bool
 }
 
+var mockPlayerForFirstMove int
+
 func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
 	var m mockPlayer
+
+	mockPlayerForFirstMove = -1
 
 	m.playerNum = playerNum
 	return &m
@@ -21,4 +25,7 @@ func (m *mockPlayer) AnnounceInitialPlayer(player int) {
 
 func (m *mockPlayer) Move() {
 	m.moveCalled = true
+	if mockPlayerForFirstMove == -1 {
+		mockPlayerForFirstMove = m.playerNum
+	}
 }
