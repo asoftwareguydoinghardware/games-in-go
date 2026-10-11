@@ -6,12 +6,15 @@ type mockPlayer struct {
 	playerNum              int
 	moveCalled             bool
 	tracker                *tracker
+	iAmPlayer1             bool
 }
 
 type trackerState int
 
 const (
 	wantInitialMove trackerState = iota
+	wantPlayer1Move
+	wantPlayer2Move
 	otherState
 )
 
@@ -38,14 +41,24 @@ func (m *mockPlayer) Move() {
 	tracker := m.tracker
 	m.moveCalled = true
 	if tracker.state == wantInitialMove {
-		tracker.state = otherState
+		if m.iAmPlayer1 {
+			tracker.state = wantPlayer2Move
+		} else {
+			tracker.state = wantPlayer1Move
+		}
 		tracker.mockPlayerForFirstMove = m.playerNum
 		tracker.mockPlayersAlternated = true
 		tracker.mockLastPlayer = m.playerNum
-	} else if tracker.mockLastPlayer == m.playerNum {
-		tracker.mockPlayersAlternated = false
-	} else {
-		tracker.mockLastPlayer = m.playerNum
+	} else if tracker.state == wantPlayer1Move {
+		tracker.state = wantPlayer2Move
+		if !m.iAmPlayer1 {
+			tracker.mockPlayersAlternated = false
+		}
+	} else if tracker.state == wantPlayer2Move {
+		tracker.state = wantPlayer1Move
+		if m.iAmPlayer1 {
+			tracker.mockPlayersAlternated = false
+		}
 	}
 }
 
@@ -59,4 +72,7 @@ func assignTracker(m1 *mockPlayer, m2 *mockPlayer) {
 
 	m1.tracker = &t
 	m2.tracker = &t
+
+	m1.iAmPlayer1 = true
+	m2.iAmPlayer1 = false
 }
