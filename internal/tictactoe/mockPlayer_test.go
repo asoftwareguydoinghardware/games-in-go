@@ -5,18 +5,17 @@ type mockPlayer struct {
 	initialPlayer          int
 	playerNum              int
 	moveCalled             bool
+	tracker                *tracker
 }
 
-var mockPlayerForFirstMove int
-var mockPlayersAlternated = false
-var mockLastPlayer int
+type tracker struct {
+	mockPlayerForFirstMove int
+	mockPlayersAlternated  bool
+	mockLastPlayer         int
+}
 
 func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
 	var m mockPlayer
-
-	mockPlayerForFirstMove = -1
-	mockPlayersAlternated = false
-	mockLastPlayer = -1
 
 	m.playerNum = playerNum
 	return &m
@@ -29,13 +28,24 @@ func (m *mockPlayer) AnnounceInitialPlayer(player int) {
 
 func (m *mockPlayer) Move() {
 	m.moveCalled = true
-	if mockPlayerForFirstMove == -1 {
-		mockPlayerForFirstMove = m.playerNum
-		mockPlayersAlternated = true
-		mockLastPlayer = m.playerNum
-	} else if mockLastPlayer == m.playerNum {
-		mockPlayersAlternated = false
+	if m.tracker.mockPlayerForFirstMove == -1 {
+		m.tracker.mockPlayerForFirstMove = m.playerNum
+		m.tracker.mockPlayersAlternated = true
+		m.tracker.mockLastPlayer = m.playerNum
+	} else if m.tracker.mockLastPlayer == m.playerNum {
+		m.tracker.mockPlayersAlternated = false
 	} else {
-		mockLastPlayer = m.playerNum
+		m.tracker.mockLastPlayer = m.playerNum
 	}
+}
+
+func assignTracker(m1 *mockPlayer, m2 *mockPlayer) {
+	var t tracker
+
+	t.mockPlayerForFirstMove = -1
+	t.mockPlayersAlternated = false
+	t.mockLastPlayer = -1
+
+	m1.tracker = &t
+	m2.tracker = &t
 }

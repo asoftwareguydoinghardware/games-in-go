@@ -25,6 +25,7 @@ func TestDoneReturnsFalseByDefault(t *testing.T) {
 func TestPlayAnnouncesInitialPlayer(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	assignTracker(p0, p1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 	g.InitialPlayer(0)
@@ -58,6 +59,7 @@ func TestPlayAnnouncesCorrectInitialPlayer(t *testing.T) {
 func testPlayAnnouncesCorrectInitialPlayer(t *testing.T, initialPlayerNum int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	assignTracker(p0, p1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 	g.InitialPlayer(initialPlayerNum)
@@ -79,6 +81,7 @@ func TestDefaultInitialPlayerIsPlayer0(t *testing.T) {
 
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	assignTracker(p0, p1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 	// no assignment of initial player
@@ -91,6 +94,7 @@ func TestDefaultInitialPlayerIsPlayer0(t *testing.T) {
 func TestPlayCallsMoveForPlayer0(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	assignTracker(p0, p1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 	g.Play()
@@ -103,6 +107,7 @@ func TestPlayCallsMoveForPlayer0(t *testing.T) {
 func TestPlayCallsMoveForPlayer1(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	assignTracker(p0, p1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 	g.Play()
@@ -120,13 +125,14 @@ func TestPlayCallsMoveForInitialPlayer(t *testing.T) {
 func testPlayCallsMoveForInitialPlayer(t *testing.T, initialPlayer int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	assignTracker(p0, p1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 	g.InitialPlayer(initialPlayer)
 	g.Play()
 
-	if mockPlayerForFirstMove != initialPlayer {
-		t.Errorf("Have first move by player %d, want %d", mockPlayerForFirstMove, initialPlayer)
+	if p0.tracker.mockPlayerForFirstMove != initialPlayer {
+		t.Errorf("Have first move by player %d, want %d", p0.tracker.mockPlayerForFirstMove, initialPlayer)
 	}
 }
 
@@ -137,12 +143,13 @@ func TestPlayAlternatesPlayers(t *testing.T) {
 func testPlayAlternatesPlayers(t *testing.T, initialPlayer int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	assignTracker(p0, p1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 	g.InitialPlayer(initialPlayer)
 	g.Play()
 
-	if !mockPlayersAlternated {
+	if !p0.tracker.mockPlayersAlternated {
 		t.Errorf("Play() did not alternate between players")
 	}
 }
