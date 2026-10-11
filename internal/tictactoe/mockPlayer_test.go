@@ -27,15 +27,16 @@ func (m *mockPlayer) AnnounceInitialPlayer(player int) {
 }
 
 func (m *mockPlayer) Move() {
+	tracker := m.tracker
 	m.moveCalled = true
-	if m.tracker.mockPlayerForFirstMove == -1 {
-		m.tracker.mockPlayerForFirstMove = m.playerNum
-		m.tracker.mockPlayersAlternated = true
-		m.tracker.mockLastPlayer = m.playerNum
-	} else if m.tracker.mockLastPlayer == m.playerNum {
-		m.tracker.mockPlayersAlternated = false
+	if tracker.mockPlayerForFirstMove == -1 {
+		tracker.mockPlayerForFirstMove = m.playerNum
+		tracker.mockPlayersAlternated = true
+		tracker.mockLastPlayer = m.playerNum
+	} else if tracker.mockLastPlayer == m.playerNum {
+		tracker.mockPlayersAlternated = false
 	} else {
-		m.tracker.mockLastPlayer = m.playerNum
+		tracker.mockLastPlayer = m.playerNum
 	}
 }
 
