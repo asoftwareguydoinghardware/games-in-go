@@ -1,6 +1,7 @@
 package tictactoe
 
 import "fmt"
+import "io"
 
 type Game struct {
 	players       [2]Player
@@ -50,11 +51,16 @@ func isGoodMove(move string) bool {
 	}
 
 	var row, col int
-	n, err := fmt.Sscanf(move, "%d,%d", &row, &col)
+	var junk byte
+	n, err := fmt.Sscanf(move, "%d,%d%c", &row, &col, &junk)
 	_, _ = n, err
-	if err != nil {
+	if err != nil && err != io.EOF {
 		return false
 	}
+	if n == 3 {
+		return false
+	}
+
 	if row >= 3 || row <= 0 {
 		return false
 	}
