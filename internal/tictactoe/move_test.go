@@ -1,0 +1,98 @@
+package tictactoe_test
+
+import (
+	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
+	"testing"
+)
+
+type badMoveTestCase struct {
+	player        int
+	index         int
+	move          string
+	initialPlayer int
+}
+
+func TestBadMove(t *testing.T) {
+	testcases := []badMoveTestCase{
+		badMoveTestCase{player: 0, index: 0, move: "", initialPlayer: 0},
+	}
+
+	for _, tc := range testcases {
+		testBadMove(t, tc)
+	}
+}
+
+var defaultPlayer0Moves = moveList{
+	{move: "0,0", good: true},
+	{move: "0,1", good: true},
+	{move: "0,2", good: true},
+}
+
+var defaultPlayer1Moves = moveList{
+	{move: "1,0", good: true},
+	{move: "2,0", good: true},
+	{move: "2,1", good: true},
+}
+
+type move struct {
+	move string
+	good bool
+}
+type moveList []move
+
+func testBadMove(t *testing.T, tc badMoveTestCase) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	p0List := defaultPlayer0Moves
+	p1List := defaultPlayer1Moves
+	if tc.player == 0 {
+		p0List = addBadMoveToList(p0List, tc)
+	} else {
+		p1List = addBadMoveToList(p1List, tc)
+	}
+
+	p0.moves = p0List
+	p1.moves = p1List
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	g.InitialPlayer(tc.initialPlayer)
+	g.Play()
+
+	if p0.tracker.firstBadMove != -1 {
+		var firstList, secondList moveList
+
+		if tc.player == 0 {
+			firstList, secondList = p0List, p1List
+		} else {
+			firstList, secondList = p1List, p0List
+		}
+
+		t.Errorf("for move sequences %v and %v play did not properly alternate on move %d", firstList, secondList, p0.tracker.firstBadMove)
+	}
+}
+
+func listFromArray(array []string) moveList {
+	list := make(moveList, len(array))
+	for i, v := range array {
+		list[i].move = v
+		list[i].good = true
+	}
+
+	return list
+}
+
+func addBadMoveToList(list moveList, badData badMoveTestCase) moveList {
+	badEntry := move{move: badData.move, good: false}
+	initial := list[:badData.index]
+	ending := list[badData.index:]
+
+	result := append(moveList{}, initial...)
+	result = append(result, badEntry)
+	result = append(result, ending...)
+
+	return result
+}
