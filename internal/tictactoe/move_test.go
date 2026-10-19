@@ -398,7 +398,7 @@ func TestGameEndOnADrawl(t *testing.T) {
 	}
 }
 
-func assignGoodMoves(p0 *mockPlayer, p1 *mockPlayer, moves []string) {
+func assignGoodMoves(firstPlayer *mockPlayer, secondPlayer *mockPlayer, moves []string) {
 	list := [2]moveList{}
 
 	i := 0
@@ -409,6 +409,6 @@ func assignGoodMoves(p0 *mockPlayer, p1 *mockPlayer, moves []string) {
 		i = (i + 1) % 2
 	}
 
-	p0.moves = list[0]
-	p1.moves = list[1]
+	firstPlayer.moves = list[0]
+	secondPlayer.moves = list[1]
 }
