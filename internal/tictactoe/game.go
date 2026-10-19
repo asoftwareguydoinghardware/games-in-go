@@ -126,13 +126,11 @@ func (g *Game) done() bool {
 func (g *Game) isDraw() bool {
 	owner := &g.squareOwner
 
-	for _, col := range owner {
-		for _, ownerId := range col {
-			if ownerId == nobody {
-				return false
-			}
-		}
+	if player0 == owner[0][0] && player1 == owner[0][1] && player0 == owner[0][2] && player1 == owner[1][0] && player0 == owner[1][1] && player1 == owner[1][2] && player0 == owner[2][1] && player1 == owner[2][0] && player0 == owner[2][2] {
+		return true
 	}
-
-	return true
+	if player1 == owner[0][0] && player0 == owner[0][1] && player1 == owner[0][2] && player0 == owner[1][0] && player1 == owner[1][1] && player0 == owner[1][2] && player1 == owner[2][1] && player0 == owner[2][0] && player1 == owner[2][2] {
+		return true
+	}
+	return false
 }

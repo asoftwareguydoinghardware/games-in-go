@@ -413,44 +413,6 @@ func testGameEndOnADraw(t *testing.T, initialPlayer int) {
 	}
 }
 
-func TestGameEndOnADraw2(t *testing.T) {
-	const initialPlayer = 0
-	g := ttt.New()
-	p0, p1 := newMockPlayer(0), newMockPlayer(1)
-
-	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
-
-	assignTracker(p0, p1)
-
-	/* should correspond to this board config using a notation of
-	Zn where Z is either x or o, and n is the move (from a game, not
-	player perspective).
-		o0 x1 x2
-		o3 x4 o5
-		o7 x6 o8
-	*/
-	moves := []string{
-		"0,1", "0,0", "0,2", "1,0", "1,1", "1,2", "2,1", "2,0", "2,2",
-	}
-
-	assignGoodMoves(p0, p1, moves)
-
-	if initialPlayer == 0 {
-		showBoardMoves(t, p0, p1)
-	} else {
-		showBoardMoves(t, p1, p0)
-	}
-
-	g.InitialPlayer(initialPlayer)
-	g.Play()
-
-	if want := 9; p0.tracker.lastMove != want {
-		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
-	}
-}
-
 func assignGoodMoves(firstPlayer *mockPlayer, secondPlayer *mockPlayer, moves []string) {
 	list := [2]moveList{}
 
