@@ -40,7 +40,7 @@ func (g *Game) Play() {
 
 	for !g.done() {
 		move := g.players[player].Move()
-		for !isGoodMove(move) {
+		for !g.isGoodMove(move) {
 			move = g.players[player].Move()
 		}
 		g.markSquareOccupied(move)
@@ -55,7 +55,7 @@ func (g *Game) markSquareOccupied(move string) {
 	g.squareOccupied[row][col] = true
 }
 
-func isGoodMove(move string) bool {
+func (g *Game) isGoodMove(move string) bool {
 	if move == "" || move == "x" {
 		return false
 	}
@@ -75,6 +75,10 @@ func isGoodMove(move string) bool {
 		return false
 	}
 	if col >= 3 || col <= -1 {
+		return false
+	}
+
+	if g.squareOccupied[row][col] {
 		return false
 	}
 
