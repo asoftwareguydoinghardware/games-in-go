@@ -109,3 +109,28 @@ func addBadMoveToList(list moveList, badData badMoveTestCase) moveList {
 
 	return result
 }
+
+/*
+tests to force correction to code based on tests that used one
+based index values instead of zero based values
+*/
+func TestGoodMoves(t *testing.T) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	p0List := defaultPlayer0Moves
+	p1List := defaultPlayer1Moves
+
+	p0.moves = p0List
+	p1.moves = p1List
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	g.InitialPlayer(0)
+	g.Play()
+
+	if p0.tracker.firstBadMove != -1 {
+		t.Errorf("for move sequences %v and %v play did not properly alternate on move %d", p0List, p1List, p0.tracker.firstBadMove)
+	}
+}
