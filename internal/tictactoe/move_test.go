@@ -322,8 +322,10 @@ func TestCannotClaimOpponentsSquare(t *testing.T) {
 }
 
 func TestGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T) {
-	const initialPlayer = 0
+	testGameContinuesIfThirdRowNotOwnedBySamePlayer(t, 0)
+}
 
+func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
@@ -331,24 +333,31 @@ func TestGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T) {
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 
-	p0.moves = moveList{
+	winningMoves := moveList{
 		{move: "0,0", good: true},
 		{move: "0,1", good: true},
 		{move: "2,2", good: true},
 		{move: "0,2", good: true},
 	}
-	p1.moves = moveList{
+	losingMoves := moveList{
 		{move: "2,0", good: true},
 		{move: "2,1", good: true},
 		{move: "1,2", good: true},
 		{move: "1,0", good: true},
 	}
 
+	if winningPlayer == 0 {
+		p0.moves = winningMoves
+		p1.moves = losingMoves
+	} else {
+		panic("untested code path")
+	}
+
 	assignTracker(p0, p1)
 	g.AssignPlayer(0, p0)
 	g.AssignPlayer(1, p1)
 
-	g.InitialPlayer(initialPlayer)
+	g.InitialPlayer(winningPlayer)
 	g.Play()
 
 	if want := 7; p0.tracker.lastMove != want {
