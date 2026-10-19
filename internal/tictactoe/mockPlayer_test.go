@@ -1,5 +1,7 @@
 package tictactoe_test
 
+import "fmt"
+
 type mockPlayer struct {
 	announcedInitialPlayer bool
 	initialPlayer          int
@@ -7,6 +9,8 @@ type mockPlayer struct {
 	moveCalled             bool
 	tracker                *tracker
 	iAmPlayer1             bool
+	moves                  moveList
+	currentPlayerMove      int
 }
 
 type trackerState int
@@ -22,12 +26,19 @@ type tracker struct {
 	state                  trackerState
 	mockPlayerForFirstMove int
 	mockPlayersAlternated  bool
+	currentTrackerMove     int
+	firstBadMove           int
 }
 
 func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
 	var m mockPlayer
 
 	m.playerNum = playerNum
+	if playerNum == 0 {
+		m.moves = defaultPlayer0Moves
+	} else {
+		m.moves = defaultPlayer1Moves
+	}
 	return &m
 }
 
@@ -36,7 +47,7 @@ func (m *mockPlayer) AnnounceInitialPlayer(player int) {
 	m.initialPlayer = player
 }
 
-func (m *mockPlayer) Move() {
+func (m *mockPlayer) Move() string {
 	tracker := m.tracker
 	m.moveCalled = true
 
@@ -53,13 +64,38 @@ func (m *mockPlayer) Move() {
 		tracker.state = wantPlayer2Move
 		if !m.iAmPlayer1 {
 			tracker.mockPlayersAlternated = false
+			if tracker.firstBadMove == -1 {
+				tracker.firstBadMove = tracker.currentTrackerMove
+			}
 		}
 	case wantPlayer2Move:
 		tracker.state = wantPlayer1Move
 		if m.iAmPlayer1 {
 			tracker.mockPlayersAlternated = false
+			if tracker.firstBadMove == -1 {
+				tracker.firstBadMove = tracker.currentTrackerMove
+			}
 		}
 	}
+
+	if m.currentPlayerMove >= len(m.moves) {
+		msg := fmt.Sprintf("internal error, want to return move %d, but only have %d moves", m.currentPlayerMove, len(m.moves))
+		panic(msg)
+	}
+
+	move := m.moves[m.currentPlayerMove]
+	m.currentPlayerMove++
+	if !move.good {
+		if m.iAmPlayer1 {
+			tracker.state = wantPlayer1Move
+		} else {
+			tracker.state = wantPlayer2Move
+		}
+	}
+
+	tracker.currentTrackerMove++
+
+	return move.move
 }
 
 func assignTracker(m1 *mockPlayer, m2 *mockPlayer) {
@@ -68,6 +104,7 @@ func assignTracker(m1 *mockPlayer, m2 *mockPlayer) {
 	t.state = wantInitialMove
 	t.mockPlayerForFirstMove = -1
 	t.mockPlayersAlternated = false
+	t.firstBadMove = -1
 
 	m1.tracker = &t
 	m2.tracker = &t
