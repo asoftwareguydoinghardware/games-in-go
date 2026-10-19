@@ -608,6 +608,7 @@ func testLeftToRighDownDiagnoalWin(t *testing.T, winningPlayer int) {
 
 func TestDiagonalLeftToRightUpward(t *testing.T) {
 	testDiagonalLeftToRightUpward(t, 0)
+	testDiagonalLeftToRightUpward(t, 1)
 }
 
 func testDiagonalLeftToRightUpward(t *testing.T, winningPlayer int) {
