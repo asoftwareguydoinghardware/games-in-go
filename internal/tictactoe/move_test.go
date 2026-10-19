@@ -506,6 +506,12 @@ func testSimpleColumnWin(t *testing.T, initialPlayer, winningPlayer int, column 
 
 	t.Logf("winning column %d, winning player %d, initial player %d, player 0 moves %v, player1 moves %v\n", column, winningPlayer, initialPlayer, p0.moves, p1.moves)
 
+	if initialPlayer == 0 {
+		showBoardMoves(t, p0, p1)
+	} else {
+		showBoardMoves(t, p1, p0)
+	}
+
 	g.InitialPlayer(initialPlayer)
 	g.Play()
 
@@ -519,4 +525,50 @@ func testSimpleColumnWin(t *testing.T, initialPlayer, winningPlayer int, column 
 	if p0.tracker.lastMove != want {
 		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
 	}
+}
+
+func showBoardMoves(t *testing.T, firstPlayer, secondPlayer *mockPlayer) {
+	type square struct {
+		owner   string
+		moveNum int
+	}
+	squares := [3][3]square{}
+
+	for i, m := range firstPlayer.moves {
+		row, col := rowColumnFromMove(m.move)
+		s := &squares[row][col]
+		s.owner = "x"
+		s.moveNum = i*2 + 1
+	}
+
+	for i, m := range secondPlayer.moves {
+		row, col := rowColumnFromMove(m.move)
+		s := &squares[row][col]
+		s.owner = "o"
+		s.moveNum = i*2 + 2
+	}
+
+	config := ""
+	for r := 0; r < 3; r++ {
+		for c := 0; c < 3; c++ {
+			s := &squares[r][c]
+			if s.owner == "" {
+				config += "-- "
+			} else {
+				config += fmt.Sprintf("%s%d ", s.owner, s.moveNum)
+			}
+		}
+		config += "\n"
+	}
+	t.Log("Board configuration for X going first:\n" + config)
+}
+
+func rowColumnFromMove(m string) (row, col int) {
+	n, err := fmt.Sscanf(m, "%d,%d", &row, &col)
+	if n != 2 || err != nil {
+		msg := fmt.Sprintf("bad move string %q", m)
+		panic(msg)
+	}
+
+	return row, col
 }
