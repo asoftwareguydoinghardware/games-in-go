@@ -49,8 +49,8 @@ func isGoodMove(move string) bool {
 		return false
 	}
 
-	var row int
-	n, err := fmt.Sscanf(move, "%d,", &row)
+	var row, col int
+	n, err := fmt.Sscanf(move, "%d,%d", &row, &col)
 	_, _ = n, err
 	if err != nil {
 		return false
