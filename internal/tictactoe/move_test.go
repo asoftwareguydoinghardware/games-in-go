@@ -374,6 +374,7 @@ func TestSimpleColumnWin(t *testing.T) {
 	testSimpleColumnWin(t, 0, 0, 2)
 	testSimpleColumnWin(t, 0, 1, 0)
 	testSimpleColumnWin(t, 0, 1, 1)
+	testSimpleColumnWin(t, 0, 1, 2)
 }
 
 func testSimpleColumnWin(t *testing.T, initialPlayer, winningPlayer int, column int) {
