@@ -38,10 +38,7 @@ func (g *Game) Play() {
 	player := g.initialPlayer
 
 	move := g.players[player].Move()
-	if !isGoodMove(move) {
-		move = g.players[player].Move()
-	}
-	if !isGoodMove(move) {
+	for !isGoodMove(move) {
 		move = g.players[player].Move()
 	}
 	player = (player + 1) % 2

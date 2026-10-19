@@ -136,19 +136,20 @@ func TestGoodMoves(t *testing.T) {
 }
 
 type multipleBadMovesTestCase struct {
-	player int
-	index int
-	move string
-	numBadMoves int
+	player        int
+	index         int
+	move          string
+	numBadMoves   int
 	initialPlayer int
 }
 
 func TestMultipleBadMovesRepeatRequestForMove(t *testing.T) {
-	testcases := []multipleBadMovesTestCase {
-		{player: 0, index: 0, move: "x,y", numBadMoves:2, initialPlayer: 0},
+	testcases := []multipleBadMovesTestCase{
+		{player: 0, index: 0, move: "x,y", numBadMoves: 2, initialPlayer: 0},
+		{player: 0, index: 0, move: "x,y", numBadMoves: 3, initialPlayer: 0},
 	}
 
-	for _, tc := range(testcases) {
+	for _, tc := range testcases {
 		testMultipleBadMovesRepeatRequestForMove(t, tc)
 	}
 }
@@ -187,7 +188,6 @@ func testMultipleBadMovesRepeatRequestForMove(t *testing.T, tc multipleBadMovesT
 		t.Errorf("for move sequences %v and %v play did not properly alternate on move %d", firstList, secondList, p0.tracker.firstBadMove)
 	}
 }
-
 
 func addRepeatedBadMoveToList(list moveList, badData multipleBadMovesTestCase) moveList {
 	badEntry := move{move: badData.move, good: false}
