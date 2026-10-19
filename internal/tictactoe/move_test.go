@@ -203,3 +203,19 @@ func addRepeatedBadMoveToList(list moveList, badData multipleBadMovesTestCase) m
 
 	return result
 }
+
+func TestGameRunsUntilSimpleWin(t *testing.T) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	g.InitialPlayer(0)
+	g.Play()
+
+	if want := 5; p0.tracker.lastMove != want {
+		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
+	}
+}

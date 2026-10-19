@@ -28,6 +28,7 @@ type tracker struct {
 	mockPlayersAlternated  bool
 	currentTrackerMove     int
 	firstBadMove           int
+	lastMove               int
 }
 
 func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
@@ -94,6 +95,7 @@ func (m *mockPlayer) Move() string {
 	}
 
 	tracker.currentTrackerMove++
+	tracker.lastMove = tracker.currentTrackerMove
 
 	return move.move
 }
@@ -105,6 +107,7 @@ func assignTracker(m1 *mockPlayer, m2 *mockPlayer) {
 	t.mockPlayerForFirstMove = -1
 	t.mockPlayersAlternated = false
 	t.firstBadMove = -1
+	t.lastMove = 0
 
 	m1.tracker = &t
 	m2.tracker = &t
