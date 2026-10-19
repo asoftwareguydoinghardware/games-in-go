@@ -134,3 +134,72 @@ func TestGoodMoves(t *testing.T) {
 		t.Errorf("for move sequences %v and %v play did not properly alternate on move %d", p0List, p1List, p0.tracker.firstBadMove)
 	}
 }
+
+type multipleBadMovesTestCase struct {
+	player int
+	index int
+	move string
+	numBadMoves int
+	initialPlayer int
+}
+
+func TestMultipleBadMovesRepeatRequestForMove(t *testing.T) {
+	testcases := []multipleBadMovesTestCase {
+		{player: 0, index: 0, move: "x,y", numBadMoves:2, initialPlayer: 0},
+	}
+
+	for _, tc := range(testcases) {
+		testMultipleBadMovesRepeatRequestForMove(t, tc)
+	}
+}
+
+func testMultipleBadMovesRepeatRequestForMove(t *testing.T, tc multipleBadMovesTestCase) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	p0List := defaultPlayer0Moves
+	p1List := defaultPlayer1Moves
+	if tc.player == 0 {
+		p0List = addRepeatedBadMoveToList(p0List, tc)
+	} else {
+		p1List = addRepeatedBadMoveToList(p1List, tc)
+	}
+
+	p0.moves = p0List
+	p1.moves = p1List
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	g.InitialPlayer(tc.initialPlayer)
+	g.Play()
+
+	if p0.tracker.firstBadMove != -1 {
+		var firstList, secondList moveList
+
+		if tc.player == 0 {
+			firstList, secondList = p0List, p1List
+		} else {
+			firstList, secondList = p1List, p0List
+		}
+
+		t.Errorf("for move sequences %v and %v play did not properly alternate on move %d", firstList, secondList, p0.tracker.firstBadMove)
+	}
+}
+
+
+func addRepeatedBadMoveToList(list moveList, badData multipleBadMovesTestCase) moveList {
+	badEntry := move{move: badData.move, good: false}
+	initial := list[:badData.index]
+	ending := list[badData.index:]
+
+	result := append(moveList{}, initial...)
+	for i := 0; i < badData.numBadMoves; i++ {
+		result = append(result, badEntry)
+	}
+
+	result = append(result, ending...)
+
+	return result
+}

@@ -39,7 +39,10 @@ func (g *Game) Play() {
 
 	move := g.players[player].Move()
 	if !isGoodMove(move) {
-		g.players[player].Move()
+		move = g.players[player].Move()
+	}
+	if !isGoodMove(move) {
+		move = g.players[player].Move()
 	}
 	player = (player + 1) % 2
 	g.players[player].Move()
