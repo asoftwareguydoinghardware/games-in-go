@@ -655,3 +655,60 @@ func testDiagonalLeftToRightUpward(t *testing.T, winningPlayer int) {
 		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
 	}
 }
+
+func TestGameOverOnDraw(t *testing.T) {
+	testGameOverOnDraw(t, 0)
+}
+
+func testGameOverOnDraw(t *testing.T, initialPlayer int) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	assignTracker(p0, p1)
+
+	/*
+		Final board config showing players (x,o) and move number
+			x0 x8 o1
+			o5 x2 x4
+			x6 o7 o3
+	*/
+	initialMoves := moveList{
+		{move: "0,0", good: true},
+		{move: "1,1", good: true},
+		{move: "1,2", good: true},
+		{move: "2,0", good: true},
+		{move: "0,1", good: true},
+	}
+	secondaryMoves := moveList{
+		{move: "0,2", good: true},
+		{move: "2,2", good: true},
+		{move: "1,0", good: true},
+		{move: "2,1", good: true},
+	}
+
+	if initialPlayer == 0 {
+		p0.moves = initialMoves
+		p1.moves = secondaryMoves
+	} else {
+		p1.moves = initialMoves
+		p0.moves = secondaryMoves
+	}
+
+	t.Logf("game is a draw initial player %d, player 0 moves %v, player1 moves %v\n", initialPlayer, p0.moves, p1.moves)
+	if initialPlayer == 0 {
+		showBoardMoves(t, p0, p1)
+	} else {
+		showBoardMoves(t, p1, p0)
+	}
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	if want := 9; p0.tracker.lastMove != want {
+		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
+	}
+}

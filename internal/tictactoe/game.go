@@ -124,6 +124,10 @@ func (g *Game) done() bool {
 		return true
 	}
 
+	if noMovesLeft(owner) {
+		return true
+	}
+
 	return false
 }
 
@@ -156,4 +160,16 @@ func playerOwnsAColumn(owner *[3][3]ownerId, player ownerId) bool {
 
 	return false
 
+}
+
+func noMovesLeft(owner *[3][3]ownerId) bool {
+	for _, row := range *owner {
+		for _, square := range row {
+			if square == nobody {
+				return false
+			}
+		}
+	}
+
+	return true
 }
