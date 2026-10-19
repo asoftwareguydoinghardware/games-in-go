@@ -52,7 +52,7 @@ func isGoodMove(move string) bool {
 	var row int
 	n, err := fmt.Sscanf(move, "%d", &row)
 	_, _ = n, err
-	if row >= 4 {
+	if row >= 4 || row == 0 {
 		return false
 	}
 

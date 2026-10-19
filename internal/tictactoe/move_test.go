@@ -18,6 +18,7 @@ func TestBadMove(t *testing.T) {
 		badMoveTestCase{player: 0, index: 0, move: "x", initialPlayer: 0},
 		badMoveTestCase{player: 0, index: 0, move: "4,1", initialPlayer: 0},
 		badMoveTestCase{player: 0, index: 0, move: "5,1", initialPlayer: 0},
+		badMoveTestCase{player: 0, index: 0, move: "0,1", initialPlayer: 0},
 	}
 
 	for _, tc := range testcases {
