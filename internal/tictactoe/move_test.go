@@ -320,3 +320,38 @@ func TestCannotClaimOpponentsSquare(t *testing.T) {
 		t.Errorf("for move sequences %v and %v play did not properly alternate on move %d", p0List, p1List, p0.tracker.firstBadMove)
 	}
 }
+
+func TestGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T) {
+	const initialPlayer = 0
+
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	p0.moves = moveList{
+		{move: "0,0", good: true},
+		{move: "0,1", good: true},
+		{move: "2,2", good: true},
+		{move: "0,2", good: true},
+	}
+	p1.moves = moveList{
+		{move: "2,0", good: true},
+		{move: "2,1", good: true},
+		{move: "1,2", good: true},
+		{move: "1,0", good: true},
+	}
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	if want := 7; p0.tracker.lastMove != want {
+		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
+	}
+}

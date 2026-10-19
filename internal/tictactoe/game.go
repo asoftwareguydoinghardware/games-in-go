@@ -3,10 +3,18 @@ package tictactoe
 import "fmt"
 import "io"
 
+type ownerId int
+
+const (
+	nobody ownerId = iota
+	player0
+	player1
+)
+
 type Game struct {
-	players        [2]Player
-	initialPlayer  int
-	squareOccupied [3][3]bool
+	players       [2]Player
+	initialPlayer int
+	squareOwner   [3][3]ownerId
 }
 
 type Player interface {
@@ -36,23 +44,30 @@ func (g *Game) Play() {
 	g.players[0].AnnounceInitialPlayer(g.initialPlayer)
 	g.players[1].AnnounceInitialPlayer(g.initialPlayer)
 
-	player := g.initialPlayer
+	playerInd := g.initialPlayer
 
 	for !g.done() {
-		move := g.players[player].Move()
-		for !g.isGoodMove(move) {
-			move = g.players[player].Move()
+		var owner ownerId
+
+		move := g.players[playerInd].Move()
+		if playerInd == 0 {
+			owner = player0
+		} else {
+			owner = player1
 		}
-		g.markSquareOccupied(move)
-		player = (player + 1) % 2
+		for !g.isGoodMove(move) {
+			move = g.players[playerInd].Move()
+		}
+		g.markSquareOccupied(move, owner)
+		playerInd = (playerInd + 1) % 2
 	}
 }
 
-func (g *Game) markSquareOccupied(move string) {
+func (g *Game) markSquareOccupied(move string, owner ownerId) {
 	var row, col int
 
 	fmt.Sscanf(move, "%d,%d", &row, &col)
-	g.squareOccupied[row][col] = true
+	g.squareOwner[row][col] = owner
 }
 
 func (g *Game) isGoodMove(move string) bool {
@@ -78,7 +93,7 @@ func (g *Game) isGoodMove(move string) bool {
 		return false
 	}
 
-	if g.squareOccupied[row][col] {
+	if g.squareOwner[row][col] != nobody {
 		return false
 	}
 
@@ -86,12 +101,12 @@ func (g *Game) isGoodMove(move string) bool {
 }
 
 func (g *Game) done() bool {
-	occupied := &g.squareOccupied
+	occupied := &g.squareOwner
 
-	if occupied[0][0] && occupied[0][1] && occupied[0][2] {
+	if player0 == occupied[0][0] && player0 == occupied[0][1] && player0 == occupied[0][2] {
 		return true
 	}
-	if occupied[2][0] && occupied[2][1] && occupied[2][2] {
+	if player0 == occupied[2][0] && player0 == occupied[2][1] && player0 == occupied[2][2] {
 		return true
 	}
 	return false
