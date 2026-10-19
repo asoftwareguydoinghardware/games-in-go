@@ -368,7 +368,10 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 }
 
 func TestGameEndOnADrawl(t *testing.T) {
-	const initialPlayer = 0
+	testGameEndOnADrawl(t, 0)
+}
+
+func testGameEndOnADrawl(t *testing.T, initialPlayer int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
@@ -388,7 +391,12 @@ func TestGameEndOnADrawl(t *testing.T) {
 	moves := []string{
 		"0,0", "0,1", "0,2", "1,0", "1,1", "1,2", "2,1", "2,0", "2,2",
 	}
-	assignGoodMoves(p0, p1, moves)
+
+	if initialPlayer == 0 {
+		assignGoodMoves(p0, p1, moves)
+	} else {
+		panic("unused code path")
+	}
 
 	g.InitialPlayer(initialPlayer)
 	g.Play()
