@@ -83,5 +83,12 @@ func isGoodMove(move string) bool {
 
 func (g *Game) done() bool {
 	occupied := &g.squareOccupied
-	return (occupied[0][0] && occupied[0][1] && occupied[0][2]) || (occupied[2][0] && occupied[2][1] && occupied[2][2])
+
+	if occupied[0][0] && occupied[0][1] && occupied[0][2] {
+		return true
+	}
+	if occupied[2][0] && occupied[2][1] && occupied[2][2] {
+		return true
+	}
+	return false
 }
