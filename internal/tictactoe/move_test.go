@@ -323,6 +323,7 @@ func TestCannotClaimOpponentsSquare(t *testing.T) {
 
 func TestGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T) {
 	testGameContinuesIfThirdRowNotOwnedBySamePlayer(t, 0)
+	testGameContinuesIfThirdRowNotOwnedBySamePlayer(t, 1)
 }
 
 func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer int) {
@@ -350,7 +351,8 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 		p0.moves = winningMoves
 		p1.moves = losingMoves
 	} else {
-		panic("untested code path")
+		p0.moves = losingMoves
+		p1.moves = winningMoves
 	}
 
 	assignTracker(p0, p1)
