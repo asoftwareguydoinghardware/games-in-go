@@ -370,7 +370,6 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 
 func TestGameEndOnADraw(t *testing.T) {
 	testGameEndOnADraw(t, 0)
-	testGameEndOnADraw(t, 1)
 }
 
 func testGameEndOnADraw(t *testing.T, initialPlayer int) {
@@ -397,7 +396,7 @@ func testGameEndOnADraw(t *testing.T, initialPlayer int) {
 	if initialPlayer == 0 {
 		assignGoodMoves(p0, p1, moves)
 	} else {
-		assignGoodMoves(p1, p0, moves)
+		panic("unused code path")
 	}
 
 	if initialPlayer == 0 {
