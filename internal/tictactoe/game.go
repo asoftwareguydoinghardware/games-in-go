@@ -4,8 +4,9 @@ import "fmt"
 import "io"
 
 type Game struct {
-	players       [2]Player
-	initialPlayer int
+	players        [2]Player
+	initialPlayer  int
+	squareOccupied [3][3]bool
 }
 
 type Player interface {
@@ -37,16 +38,22 @@ func (g *Game) Play() {
 
 	player := g.initialPlayer
 
-	for move := 0; move < 6; move++ {
+	occupied := &g.squareOccupied
+	for !(occupied[0][0] && occupied[0][1] && occupied[0][2]) {
 		move := g.players[player].Move()
-		if move == "0,2" {
-			break
-		}
 		for !isGoodMove(move) {
 			move = g.players[player].Move()
 		}
+		g.markSquareOccupied(move)
 		player = (player + 1) % 2
 	}
+}
+
+func (g *Game) markSquareOccupied(move string) {
+	var row, col int
+
+	fmt.Sscanf(move, "%d,%d", &row, &col)
+	g.squareOccupied[row][col] = true
 }
 
 func isGoodMove(move string) bool {
