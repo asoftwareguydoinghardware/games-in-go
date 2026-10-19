@@ -558,6 +558,7 @@ func testSimpleRowWin(t *testing.T, initialPlayer, winningPlayer int, row int) {
 
 func TestLeftToRighDownDiagonalWin(t *testing.T) {
 	testLeftToRighDownDiagnoalWin(t, 0)
+	testLeftToRighDownDiagnoalWin(t, 1)
 }
 
 func testLeftToRighDownDiagnoalWin(t *testing.T, winningPlayer int) {
