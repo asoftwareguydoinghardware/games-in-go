@@ -370,6 +370,7 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 
 func TestSimpleColumnWin(t *testing.T) {
 	testSimpleColumnWin(t, 0, 0, 0)
+	testSimpleColumnWin(t, 0, 0, 1)
 }
 
 func testSimpleColumnWin(t *testing.T, initialPlayer, winningPlayer int, column int) {
