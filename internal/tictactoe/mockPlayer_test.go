@@ -80,7 +80,7 @@ func (m *mockPlayer) Move() string {
 	}
 
 	if m.currentPlayerMove >= len(m.moves) {
-		msg := fmt.Sprintf("internal error, want to return move %d, but last move index is %d", m.currentPlayerMove, len(m.moves)-1)
+		msg := fmt.Sprintf("internal error, want to return move %d, but last move index is %d, player %d, moves %v", m.currentPlayerMove, len(m.moves)-1, m.playerNum, m.moves)
 		panic(msg)
 	}
 
