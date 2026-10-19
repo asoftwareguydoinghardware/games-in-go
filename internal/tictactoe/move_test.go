@@ -257,3 +257,25 @@ func TestGameRunsUntilSimpleWin3(t *testing.T) {
 		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
 	}
 }
+
+func TestGameRunsUntilThirdRowOwned(t *testing.T) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	p0.moves = moveList{
+		{move: "2,0", good: true},
+		{move: "2,1", good: true},
+		{move: "2,2", good: true},
+	}
+
+	g.InitialPlayer(0)
+	g.Play()
+
+	if want := 5; p0.tracker.lastMove != want {
+		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
+	}
+}

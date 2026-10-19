@@ -39,7 +39,7 @@ func (g *Game) Play() {
 	player := g.initialPlayer
 
 	occupied := &g.squareOccupied
-	for !(occupied[0][0] && occupied[0][1] && occupied[0][2]) {
+	for !(occupied[0][0] && occupied[0][1] && occupied[0][2]) && !(occupied[2][0] && occupied[2][1] && occupied[2][2]) {
 		move := g.players[player].Move()
 		for !isGoodMove(move) {
 			move = g.players[player].Move()
