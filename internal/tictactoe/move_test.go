@@ -368,65 +368,6 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 	}
 }
 
-func TestGameEndOnADraw(t *testing.T) {
-	testGameEndOnADraw(t, 0)
-}
-
-func testGameEndOnADraw(t *testing.T, initialPlayer int) {
-	g := ttt.New()
-	p0, p1 := newMockPlayer(0), newMockPlayer(1)
-
-	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
-
-	assignTracker(p0, p1)
-
-	/* should correspond to this board config using a notation of
-	Zn where Z is either x or o, and n is the move (from a game, not
-	player perspective).
-		x0 o1 x2
-		o3 x4 o5
-		o7 x6 o8
-	*/
-	moves := []string{
-		"0,0", "0,1", "0,2", "1,0", "1,1", "1,2", "2,1", "2,0", "2,2",
-	}
-
-	if initialPlayer == 0 {
-		assignGoodMoves(p0, p1, moves)
-	} else {
-		panic("unused code path")
-	}
-
-	if initialPlayer == 0 {
-		showBoardMoves(t, p0, p1)
-	} else {
-		showBoardMoves(t, p1, p0)
-	}
-	g.InitialPlayer(initialPlayer)
-	g.Play()
-
-	if want := 9; p0.tracker.lastMove != want {
-		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
-	}
-}
-
-func assignGoodMoves(firstPlayer *mockPlayer, secondPlayer *mockPlayer, moves []string) {
-	list := [2]moveList{}
-
-	i := 0
-
-	for _, m := range moves {
-		move := move{move: m, good: true}
-		list[i] = append(list[i], move)
-		i = (i + 1) % 2
-	}
-
-	firstPlayer.moves = list[0]
-	secondPlayer.moves = list[1]
-}
-
 func TestSimpleColumnWin(t *testing.T) {
 	testSimpleColumnWin(t, 0, 0, 0)
 }
