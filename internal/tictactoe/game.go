@@ -123,6 +123,10 @@ func (g *Game) done() bool {
 		return true
 	}
 
+	if player0 == owner[0][2] && player0 == owner[1][1] && player0 == owner[2][1] {
+		return true
+	}
+
 	return false
 }
 

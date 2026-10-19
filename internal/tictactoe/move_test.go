@@ -605,3 +605,52 @@ func testLeftToRighDownDiagnoalWin(t *testing.T, winningPlayer int) {
 		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
 	}
 }
+
+func TestDiagonalLeftToRightUpward(t *testing.T) {
+	testDiagonalLeftToRightUpward(t, 0)
+}
+
+func testDiagonalLeftToRightUpward(t *testing.T, winningPlayer int) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	assignTracker(p0, p1)
+
+	winningMoves := moveList{
+		{move: "0,2", good: true},
+		{move: "1,1", good: true},
+		{move: "2,1", good: true},
+	}
+	losingMoves := moveList{
+		{move: "1,0", good: true},
+		{move: "2,0", good: true},
+		{move: "2,1", good: true},
+		{move: "0,1", good: true},
+	}
+
+	if winningPlayer == 0 {
+		p0.moves = winningMoves
+		p1.moves = losingMoves
+	} else {
+		p1.moves = winningMoves
+		p0.moves = losingMoves
+	}
+
+	t.Logf("winning left to right downward diagonal, winning player %d, player 0 moves %v, player1 moves %v\n", winningPlayer, p0.moves, p1.moves)
+	if winningPlayer == 0 {
+		showBoardMoves(t, p0, p1)
+	} else {
+		showBoardMoves(t, p1, p0)
+	}
+
+	g.InitialPlayer(winningPlayer)
+	g.Play()
+
+	if want := 5; p0.tracker.lastMove != want {
+		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
+	}
+}
