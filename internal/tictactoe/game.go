@@ -121,14 +121,10 @@ func (g *Game) done() bool {
 }
 
 func player0OwnsAColumn(owner *[3][3]ownerId) bool {
-	if player0 == owner[0][0] && player0 == owner[1][0] && player0 == owner[2][0] {
-		return true
-	}
-	if player0 == owner[0][1] && player0 == owner[1][1] && player0 == owner[2][1] {
-		return true
-	}
-	if player0 == owner[0][2] && player0 == owner[1][2] && player0 == owner[2][2] {
-		return true
+	for col := 0; col < 3; col++ {
+		if player0 == owner[0][col] && player0 == owner[1][col] && player0 == owner[2][col] {
+			return true
+		}
 	}
 
 	return false
