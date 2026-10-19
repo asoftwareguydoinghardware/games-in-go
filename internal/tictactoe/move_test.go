@@ -1,6 +1,7 @@
 package tictactoe_test
 
 import (
+	"fmt"
 	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
 	"testing"
 )
@@ -452,4 +453,70 @@ func assignGoodMoves(firstPlayer *mockPlayer, secondPlayer *mockPlayer, moves []
 
 	firstPlayer.moves = list[0]
 	secondPlayer.moves = list[1]
+}
+
+func TestSimpleColumnWin(t *testing.T) {
+	testSimpleColumnWin(t, 0, 0, 0)
+}
+
+func testSimpleColumnWin(t *testing.T, initialPlayer, winningPlayer int, column int) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	assignTracker(p0, p1)
+
+	winningMoves := moveList{}
+	losingMoves := moveList{}
+
+	for m := 0; m < 3; m++ {
+		wMove := fmt.Sprintf("%d,%d", m, column)
+		winningMoves = append(winningMoves, move{move: wMove, good: true})
+		// lMove will pick the same row as the winning move, but will
+		// alternate choosing a column left/right of the winning move
+		var offset int
+		if m%2 == 0 {
+			offset = 1
+		} else {
+			offset = 2
+		}
+		lMove := fmt.Sprintf("%d,%d", m, (column+offset)%3)
+		losingMoves = append(losingMoves, move{move: lMove, good: true})
+	}
+	/* If the winner goes first, they will win on their third move and
+	their opponent will only be able to play two moves.
+
+	If the loser goes first, they will play three moves, each of which
+	is follwed by a move by the winner.
+
+	In each case, having three moves available for the loser is
+	enough to ensure we reach an end game.
+	*/
+
+	if winningPlayer == 0 {
+		p0.moves = winningMoves
+		p1.moves = losingMoves
+	} else {
+		p0.moves = losingMoves
+		p1.moves = winningMoves
+	}
+
+	t.Logf("winning column %d, winning player %d, initial player %d, player 0 moves %v, player1 moves %v\n", column, winningPlayer, initialPlayer, p0.moves, p1.moves)
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	var want int
+	if winningPlayer == initialPlayer {
+		want = 5
+	} else {
+		want = 6
+	}
+
+	if p0.tracker.lastMove != want {
+		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
+	}
 }
