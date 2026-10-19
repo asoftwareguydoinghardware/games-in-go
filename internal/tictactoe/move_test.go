@@ -490,3 +490,66 @@ func rowColumnFromMove(m string) (row, col int) {
 
 	return row, col
 }
+
+func TestSimpleRowWins(t *testing.T) {
+	testSimpleRowWin(t, 0, 0, 1)
+}
+
+func testSimpleRowWin(t *testing.T, initialPlayer, winningPlayer int, row int) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	assignTracker(p0, p1)
+
+	winningMoves := moveList{}
+	losingMoves := moveList{}
+
+	for m := 0; m < 3; m++ {
+		wMove := fmt.Sprintf("%d,%d", row, m)
+		winningMoves = append(winningMoves, move{move: wMove, good: true})
+		// lMove will pick the same column as the winning move, but will
+		// alternate choosing a row up/down of the winning move
+		var offset int
+		if m%2 == 0 {
+			offset = 1
+		} else {
+			offset = 2
+		}
+		lMove := fmt.Sprintf("%d,%d", (row+offset)%3, m)
+		losingMoves = append(losingMoves, move{move: lMove, good: true})
+	}
+
+	if winningPlayer == 0 {
+		p0.moves = winningMoves
+		p1.moves = losingMoves
+	} else {
+		p0.moves = losingMoves
+		p1.moves = winningMoves
+	}
+
+	t.Logf("winning row %d, winning player %d, initial player %d, player 0 moves %v, player1 moves %v\n", row, winningPlayer, initialPlayer, p0.moves, p1.moves)
+
+	if initialPlayer == 0 {
+		showBoardMoves(t, p0, p1)
+	} else {
+		showBoardMoves(t, p1, p0)
+	}
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	var want int
+	if winningPlayer == initialPlayer {
+		want = 5
+	} else {
+		want = 6
+	}
+
+	if p0.tracker.lastMove != want {
+		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
+	}
+}
