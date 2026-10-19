@@ -219,3 +219,21 @@ func TestGameRunsUntilSimpleWin(t *testing.T) {
 		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
 	}
 }
+
+func TestGameRunsUntilSimpleWin2(t *testing.T) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	// If player 1 goes first, there will be six moves until
+	// the game is over
+	g.InitialPlayer(1)
+	g.Play()
+
+	if want := 6; p0.tracker.lastMove != want {
+		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
+	}
+}
