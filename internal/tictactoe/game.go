@@ -113,6 +113,14 @@ func (g *Game) done() bool {
 		return true
 	}
 
+	if player0OwnsAColumn(owner) {
+		return true
+	}
+
+	return false
+}
+
+func player0OwnsAColumn(owner *[3][3]ownerId) bool {
 	if player0 == owner[0][0] && player0 == owner[1][0] && player0 == owner[2][0] {
 		return true
 	}
@@ -122,5 +130,7 @@ func (g *Game) done() bool {
 	if player0 == owner[0][2] && player0 == owner[1][2] && player0 == owner[2][2] {
 		return true
 	}
+
 	return false
+
 }
