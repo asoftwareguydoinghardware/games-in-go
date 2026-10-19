@@ -58,7 +58,7 @@ func isGoodMove(move string) bool {
 	if row >= 3 || row <= 0 {
 		return false
 	}
-	if col >= 3 || col < -1 {
+	if col >= 3 || col <= -1 {
 		return false
 	}
 
