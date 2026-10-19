@@ -400,6 +400,11 @@ func testGameEndOnADraw(t *testing.T, initialPlayer int) {
 		assignGoodMoves(p1, p0, moves)
 	}
 
+	if initialPlayer == 0 {
+		showBoardMoves(t, p0, p1)
+	} else {
+		showBoardMoves(t, p1, p0)
+	}
 	g.InitialPlayer(initialPlayer)
 	g.Play()
 
@@ -431,6 +436,12 @@ func TestGameEndOnADraw2(t *testing.T) {
 	}
 
 	assignGoodMoves(p0, p1, moves)
+
+	if initialPlayer == 0 {
+		showBoardMoves(t, p0, p1)
+	} else {
+		showBoardMoves(t, p1, p0)
+	}
 
 	g.InitialPlayer(initialPlayer)
 	g.Play()
