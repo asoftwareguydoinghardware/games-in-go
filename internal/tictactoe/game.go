@@ -113,30 +113,19 @@ func (g *Game) done() bool {
 		return true
 	}
 
-	if player0OwnsAColumn(owner) {
+	if playerOwnsAColumn(owner, player0) {
 		return true
 	}
-	if player1OwnsAColumn(owner) {
+	if playerOwnsAColumn(owner, player1) {
 		return true
 	}
 
 	return false
 }
 
-func player0OwnsAColumn(owner *[3][3]ownerId) bool {
+func playerOwnsAColumn(owner *[3][3]ownerId, player ownerId) bool {
 	for col := 0; col < 3; col++ {
-		if player0 == owner[0][col] && player0 == owner[1][col] && player0 == owner[2][col] {
-			return true
-		}
-	}
-
-	return false
-
-}
-
-func player1OwnsAColumn(owner *[3][3]ownerId) bool {
-	for col := 0; col < 3; col++ {
-		if player1 == owner[0][col] && player1 == owner[1][col] && player1 == owner[2][col] {
+		if player == owner[0][col] && player == owner[1][col] && player == owner[2][col] {
 			return true
 		}
 	}
