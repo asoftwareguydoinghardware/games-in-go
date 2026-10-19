@@ -35,7 +35,7 @@ func (g *Game) Play() {
 	player := g.initialPlayer
 
 	move := g.players[player].Move()
-	if move == "" {
+	if move == "" || move == "x" {
 		g.players[player].Move()
 	}
 	player = (player + 1) % 2
