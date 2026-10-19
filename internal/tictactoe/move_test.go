@@ -367,11 +367,11 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 	}
 }
 
-func TestGameEndOnADrawl(t *testing.T) {
-	testGameEndOnADrawl(t, 0)
+func TestGameEndOnADraw(t *testing.T) {
+	testGameEndOnADraw(t, 0)
 }
 
-func testGameEndOnADrawl(t *testing.T, initialPlayer int) {
+func testGameEndOnADraw(t *testing.T, initialPlayer int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
