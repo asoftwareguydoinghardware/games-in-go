@@ -35,9 +35,17 @@ func (g *Game) Play() {
 	player := g.initialPlayer
 
 	move := g.players[player].Move()
-	if move == "" || move == "x" {
+	if !isGoodMove(move) {
 		g.players[player].Move()
 	}
 	player = (player + 1) % 2
 	g.players[player].Move()
+}
+
+func isGoodMove(move string) bool {
+	if move == "" || move == "x" {
+		return false
+	}
+
+	return true
 }
