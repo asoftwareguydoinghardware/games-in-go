@@ -109,6 +109,7 @@ func (g *Game) done() bool {
 	if playerOwnsARow(owner, player1) {
 		return true
 	}
+
 	if playerOwnsAColumn(owner, player0) {
 		return true
 	}
@@ -116,17 +117,21 @@ func (g *Game) done() bool {
 		return true
 	}
 
-	if player0 == owner[0][0] && player0 == owner[1][1] && player0 == owner[2][2] {
+	if playerOwnsADiagonal(owner, player0) {
 		return true
 	}
-	if player1 == owner[0][0] && player1 == owner[1][1] && player1 == owner[2][2] {
+	if playerOwnsADiagonal(owner, player1) {
 		return true
 	}
 
-	if player0 == owner[0][2] && player0 == owner[1][1] && player0 == owner[2][1] {
+	return false
+}
+
+func playerOwnsADiagonal(owner *[3][3]ownerId, player ownerId) bool {
+	if player == owner[0][0] && player == owner[1][1] && player == owner[2][2] {
 		return true
 	}
-	if player1 == owner[0][2] && player1 == owner[1][1] && player1 == owner[2][1] {
+	if player == owner[0][2] && player == owner[1][1] && player == owner[2][1] {
 		return true
 	}
 
