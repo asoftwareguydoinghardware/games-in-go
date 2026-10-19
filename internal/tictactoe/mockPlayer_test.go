@@ -39,7 +39,9 @@ func (m *mockPlayer) AnnounceInitialPlayer(player int) {
 func (m *mockPlayer) Move() {
 	tracker := m.tracker
 	m.moveCalled = true
-	if tracker.state == wantInitialMove {
+
+	switch tracker.state {
+	case wantInitialMove:
 		if m.iAmPlayer1 {
 			tracker.state = wantPlayer2Move
 		} else {
@@ -47,12 +49,12 @@ func (m *mockPlayer) Move() {
 		}
 		tracker.mockPlayerForFirstMove = m.playerNum
 		tracker.mockPlayersAlternated = true
-	} else if tracker.state == wantPlayer1Move {
+	case wantPlayer1Move:
 		tracker.state = wantPlayer2Move
 		if !m.iAmPlayer1 {
 			tracker.mockPlayersAlternated = false
 		}
-	} else if tracker.state == wantPlayer2Move {
+	case wantPlayer2Move:
 		tracker.state = wantPlayer1Move
 		if m.iAmPlayer1 {
 			tracker.mockPlayersAlternated = false
