@@ -494,6 +494,7 @@ func rowColumnFromMove(m string) (row, col int) {
 func TestSimpleRowWins(t *testing.T) {
 	testSimpleRowWin(t, 0, 0, 1)
 	testSimpleRowWin(t, 0, 1, 1)
+	testSimpleRowWin(t, 0, 1, 2)
 }
 
 func testSimpleRowWin(t *testing.T, initialPlayer, winningPlayer int, row int) {
