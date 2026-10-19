@@ -103,17 +103,10 @@ func (g *Game) isGoodMove(move string) bool {
 func (g *Game) done() bool {
 	owner := &g.squareOwner
 
-	if player1 == owner[0][0] && player1 == owner[0][1] && player1 == owner[0][2] {
+	if playerOwnsARow(owner, player0) {
 		return true
 	}
-	if player1 == owner[1][0] && player1 == owner[1][1] && player1 == owner[1][2] {
-		return true
-	}
-	if player1 == owner[2][0] && player1 == owner[2][1] && player1 == owner[2][2] {
-		return true
-	}
-
-	if player0OwnsARow(owner) {
+	if playerOwnsARow(owner, player1) {
 		return true
 	}
 	if playerOwnsAColumn(owner, player0) {
@@ -126,15 +119,11 @@ func (g *Game) done() bool {
 	return false
 }
 
-func player0OwnsARow(owner *[3][3]ownerId) bool {
-	if player0 == owner[0][0] && player0 == owner[0][1] && player0 == owner[0][2] {
-		return true
-	}
-	if player0 == owner[1][0] && player0 == owner[1][1] && player0 == owner[1][2] {
-		return true
-	}
-	if player0 == owner[2][0] && player0 == owner[2][1] && player0 == owner[2][2] {
-		return true
+func playerOwnsARow(owner *[3][3]ownerId, player ownerId) bool {
+	for row := 0; row < 3; row++ {
+		if player == owner[row][0] && player == owner[row][1] && player == owner[row][2] {
+			return true
+		}
 	}
 	return false
 }
