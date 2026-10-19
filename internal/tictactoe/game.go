@@ -101,12 +101,12 @@ func (g *Game) isGoodMove(move string) bool {
 }
 
 func (g *Game) done() bool {
-	occupied := &g.squareOwner
+	owner := &g.squareOwner
 
-	if player0 == occupied[0][0] && player0 == occupied[0][1] && player0 == occupied[0][2] {
+	if player0 == owner[0][0] && player0 == owner[0][1] && player0 == owner[0][2] {
 		return true
 	}
-	if player0 == occupied[2][0] && player0 == occupied[2][1] && player0 == occupied[2][2] {
+	if player0 == owner[2][0] && player0 == owner[2][1] && player0 == owner[2][2] {
 		return true
 	}
 	return false
