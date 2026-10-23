@@ -14,14 +14,6 @@ func TestNewReturnsNonNilValue(t *testing.T) {
 	}
 }
 
-func TestDoneReturnsFalseByDefault(t *testing.T) {
-	g := ttt.New()
-	done := g.Done()
-	if done {
-		t.Errorf("Done() returns true on initial call")
-	}
-}
-
 func TestPlayAnnouncesInitialPlayer(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)

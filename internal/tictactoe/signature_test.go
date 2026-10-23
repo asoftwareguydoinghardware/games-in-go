@@ -12,14 +12,6 @@ func TestNewExists(t *testing.T) {
 	_ = game
 }
 
-func TestDoneExists(t *testing.T) {
-	var done bool
-
-	g := ttt.New()
-	done = g.Done()
-	_ = done
-}
-
 func TestAssignPlayerExists(t *testing.T) {
 	playerNum := 0
 	player := newMockPlayer(0)

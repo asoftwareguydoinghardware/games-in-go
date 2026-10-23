@@ -28,10 +28,6 @@ func New() (game *Game) {
 	return &g
 }
 
-func (g *Game) Done() bool {
-	return false
-}
-
 func (g *Game) AssignPlayer(playerNum int, player Player) {
 	g.players[playerNum] = player
 }
