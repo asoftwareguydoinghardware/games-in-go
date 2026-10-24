@@ -88,6 +88,12 @@ func (g *Game) Ranking() (ranks [][]int) {
 			{1},
 		}
 	}
+	if playerOwnsARow(owner, player0) {
+		return [][]int{
+			{0},
+			{1},
+		}
+	}
 
 	return [][]int{
 		{0, 1},
