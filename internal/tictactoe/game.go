@@ -81,24 +81,17 @@ identity of each player.
 */
 func (g *Game) Ranking() (ranks [][]int) {
 	owner := &g.squareOwner
-	player0Won := [][]int{
-		{0},
-		{1},
-	}
 
 	player1Won := [][]int{
 		{1},
 		{0},
 	}
 
-	if playerOwnsAColumn(owner, player0) {
-		return player0Won
-	}
-	if playerOwnsARow(owner, player0) {
-		return player0Won
-	}
-	if playerOwnsADiagonal(owner, player0) {
-		return player0Won
+	if player0Won(owner) {
+		return [][]int{
+			{0},
+			{1},
+		}
 	}
 
 	if playerOwnsARow(owner, player1) {
@@ -225,4 +218,18 @@ func noMovesLeft(owner *[3][3]ownerId) bool {
 	}
 
 	return true
+}
+
+func player0Won(owner *[3][3]ownerId) bool {
+	if playerOwnsAColumn(owner, player0) {
+		return true
+	}
+	if playerOwnsARow(owner, player0) {
+		return true
+	}
+	if playerOwnsADiagonal(owner, player0) {
+		return true
+	}
+
+	return false
 }
