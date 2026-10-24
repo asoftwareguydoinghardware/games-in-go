@@ -140,24 +140,10 @@ func (g *Game) isGoodMove(move string) bool {
 func (g *Game) done() bool {
 	owner := &g.squareOwner
 
-	if playerOwnsARow(owner, player0) {
+	if player0Won(owner) {
 		return true
 	}
-	if playerOwnsARow(owner, player1) {
-		return true
-	}
-
-	if playerOwnsAColumn(owner, player0) {
-		return true
-	}
-	if playerOwnsAColumn(owner, player1) {
-		return true
-	}
-
-	if playerOwnsADiagonal(owner, player0) {
-		return true
-	}
-	if playerOwnsADiagonal(owner, player1) {
+	if player1Won(owner) {
 		return true
 	}
 
