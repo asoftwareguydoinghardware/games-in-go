@@ -108,10 +108,6 @@ func (g *Game) markSquareOccupied(move string, owner ownerId) {
 }
 
 func (g *Game) isGoodMove(move string) bool {
-	if move == "" || move == "x" {
-		return false
-	}
-
 	var row, col int
 	var junk byte
 	n, err := fmt.Sscanf(move, "%d,%d%c", &row, &col, &junk)
@@ -119,7 +115,7 @@ func (g *Game) isGoodMove(move string) bool {
 	if err != nil && err != io.EOF {
 		return false
 	}
-	if n == 3 {
+	if n != 2 {
 		return false
 	}
 
