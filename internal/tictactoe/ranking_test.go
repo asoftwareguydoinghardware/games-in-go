@@ -65,7 +65,7 @@ func TestRankingReturnsCorrectValueForADraw(t *testing.T) {
 	}
 }
 
-func TestRankingReturnsCorrectValueWhenPlayer0OwnsAColumn(t *testing.T) {
+func TestRankingReturnsCorrectValueWhenPlayer0OwnsARow(t *testing.T) {
 	const initialPlayer = 0
 
 	g := ttt.New()
@@ -96,7 +96,7 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsAColumn(t *testing.T) {
 	p0.moves = initialMoves
 	p1.moves = secondaryMoves
 
-	t.Logf("Player 0 wins with column 0 initial player %d, player 0 moves %v, player1 moves %v\n", initialPlayer, p0.moves, p1.moves)
+	t.Logf("Player 0 wins with row 0 initial player %d, player 0 moves %v, player1 moves %v\n", initialPlayer, p0.moves, p1.moves)
 	if initialPlayer == 0 {
 		showBoardMoves(t, p0, p1)
 	} else {
@@ -118,7 +118,7 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsAColumn(t *testing.T) {
 	}
 }
 
-func TestRankingReturnsCorrectValueWhenPlayer0OwnsARow(t *testing.T) {
+func TestRankingReturnsCorrectValueWhenPlayer0OwnsAColumn(t *testing.T) {
 	const initialPlayer = 0
 
 	g := ttt.New()
