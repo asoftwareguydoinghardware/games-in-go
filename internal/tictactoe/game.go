@@ -80,7 +80,9 @@ be indicated by having a slice with a single entry which contains the
 identity of each player.
 */
 func (g *Game) Ranking() (ranks [][]int) {
-	return nil
+	return [][]int{
+		{0, 1},
+	}
 }
 
 func (g *Game) markSquareOccupied(move string, owner ownerId) {
