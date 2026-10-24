@@ -337,3 +337,60 @@ func TestRankingReturnsCorrectValueWhenPlayer1OwnsAColumn(t *testing.T) {
 		t.Errorf("*In game with initial move by player %d, moves for player 0 %v, and moves for player 1 = %v have g.Ranking()[0][0]) = %d, want %d", initialPlayer, p0.moves, p1.moves, have, want)
 	}
 }
+
+func TestRankingReturnsCorrectValueWhenPlayer1OwnsADiagonal(t *testing.T) {
+	const initialPlayer = 1
+
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	assignTracker(p0, p1)
+
+	/*
+		Final board config showing players (x,o) and move number
+			x0 o1 --
+			-- x2 o3
+			-- -- x4
+	*/
+	initialMoves := moveList{
+		{move: "0,0", good: true},
+		{move: "1,1", good: true},
+		{move: "2,2", good: true},
+	}
+	secondaryMoves := moveList{
+		{move: "0,1", good: true},
+		{move: "1,2", good: true},
+	}
+
+	p0.moves = secondaryMoves
+	p1.moves = initialMoves
+
+	t.Logf("Player 1 wins with diagonal from 0,0 to 2,2 initial player %d, player 0 moves %v, player1 moves %v\n", initialPlayer, p0.moves, p1.moves)
+	if initialPlayer == 0 {
+		showBoardMoves(t, p0, p1)
+	} else {
+		showBoardMoves(t, p1, p0)
+	}
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	results := g.Ranking()
+
+	if have, want := len(results), 2; have != want {
+		t.Errorf("*In game with initial move by player %d, moves for player 0 %v, and moves for player 1 = %v have len(g.Ranking()) = %d, want %d", initialPlayer, p0.moves, p1.moves, have, want)
+		return
+	}
+
+	if have, want := results[1][0], 0; have != want {
+		t.Errorf("*In game with initial move by player %d, moves for player 0 %v, and moves for player 1 = %v have g.Ranking()[1][0]) = %d, want %d", initialPlayer, p0.moves, p1.moves, have, want)
+	}
+
+	if have, want := results[0][0], 1; have != want {
+		t.Errorf("*In game with initial move by player %d, moves for player 0 %v, and moves for player 1 = %v have g.Ranking()[0][0]) = %d, want %d", initialPlayer, p0.moves, p1.moves, have, want)
+	}
+}

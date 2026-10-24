@@ -107,6 +107,9 @@ func (g *Game) Ranking() (ranks [][]int) {
 	if playerOwnsAColumn(owner, player1) {
 		return player1Won
 	}
+	if playerOwnsADiagonal(owner, player1) {
+		return player1Won
+	}
 
 	return [][]int{
 		{0, 1},
