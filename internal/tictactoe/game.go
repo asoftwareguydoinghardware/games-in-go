@@ -83,9 +83,9 @@ func (g *Game) Ranking() (ranks [][]int) {
 	owner := &g.squareOwner
 
 	if playerOwnsAColumn(owner, player0) {
-		return [][]int {
+		return [][]int{
 			{0},
-			{0},
+			{1},
 		}
 	}
 

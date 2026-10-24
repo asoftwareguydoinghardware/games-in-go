@@ -112,4 +112,8 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsAColumn(t *testing.T) {
 		t.Errorf("In game with initial move by player %d, moves for player 0 %v, and moves for player 1 = %v have len(g.Ranking()) = %d, want %d", initialPlayer, p0.moves, p1.moves, have, want)
 		return
 	}
+
+	if have, want := results[1][0], 1; have != want {
+		t.Errorf("In game with initial move by player %d, moves for player 0 %v, and moves for player 1 = %v have g.Ranking()[1][0]) = %d, want %d", initialPlayer, p0.moves, p1.moves, have, want)
+	}
 }
