@@ -81,18 +81,16 @@ identity of each player.
 */
 func (g *Game) Ranking() (ranks [][]int) {
 	owner := &g.squareOwner
+	player0WonResults := [][]int{
+		{0},
+		{1},
+	}
 
 	if playerOwnsAColumn(owner, player0) {
-		return [][]int{
-			{0},
-			{1},
-		}
+		return player0WonResults
 	}
 	if playerOwnsARow(owner, player0) {
-		return [][]int{
-			{0},
-			{1},
-		}
+		return player0WonResults
 	}
 
 	return [][]int{
