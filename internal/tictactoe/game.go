@@ -59,6 +59,30 @@ func (g *Game) Play() {
 	}
 }
 
+/*
+To allow the interface to handle things where players essentially
+accumulate points, Ranking() returns a slice where the first element
+of the slice is a slice of players that have the highest points.
+Normally the slice of players that have the highest point will contain
+a single entry as players are not often tied.  The same rationale/argument
+applies to the subsequent members of the slice returned.
+
+If, for example, there are four players and there is a tie for second place,
+the top level slice will have three elements:
+
+	[0] a slice containing the player that is in first place
+	[1] a slice containing the two players in second place
+	[2] a slice containing the player that came in last place.
+
+There should be no entries in the slice with a nil value.
+In a game like tic-tac-toe that can result in a draw, that condition should
+be indicated by having a slice with a single entry which contains the
+identity of each player.
+*/
+func (g *Game) Ranking() (ranks [][]int) {
+	return nil
+}
+
 func (g *Game) markSquareOccupied(move string, owner ownerId) {
 	var row, col int
 

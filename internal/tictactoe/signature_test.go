@@ -34,3 +34,11 @@ func TestPlayExists(t *testing.T) {
 	g.InitialPlayer(0)
 	g.Play()
 }
+
+func TestRankingExists(t *testing.T) {
+	var results [][]int
+
+	g := ttt.New()
+	results = g.Ranking()
+	_ = results
+}
