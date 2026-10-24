@@ -86,6 +86,11 @@ func (g *Game) Ranking() (ranks [][]int) {
 		{1},
 	}
 
+	player1Won := [][]int{
+		{1},
+		{0},
+	}
+
 	if playerOwnsAColumn(owner, player0) {
 		return player0WonResults
 	}
@@ -97,16 +102,10 @@ func (g *Game) Ranking() (ranks [][]int) {
 	}
 
 	if playerOwnsARow(owner, player1) {
-		return [][]int{
-			{1},
-			{0},
-		}
+		return player1Won
 	}
 	if playerOwnsAColumn(owner, player1) {
-		return [][]int{
-			{1},
-			{0},
-		}
+		return player1Won
 	}
 
 	return [][]int{
