@@ -80,6 +80,15 @@ be indicated by having a slice with a single entry which contains the
 identity of each player.
 */
 func (g *Game) Ranking() (ranks [][]int) {
+	owner := &g.squareOwner
+
+	if playerOwnsAColumn(owner, player0) {
+		return [][]int {
+			{0},
+			{0},
+		}
+	}
+
 	return [][]int{
 		{0, 1},
 	}
