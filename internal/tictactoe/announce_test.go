@@ -171,4 +171,34 @@ func TestAnnounceRankingsCalled(t *testing.T) {
 	if !p1.dataFromApp.announceRankingCalled {
 		t.Errorf("AnnounceRanking method not called for player 1")
 	}
+
+	want := [][]int{
+		{0},
+		{1},
+	}
+
+	have := p0.dataFromApp.announcedRanking
+	if !rankingsEqual(have, want) {
+		t.Errorf("Player 0 have announced ranking %v want %v", have, want)
+	}
+}
+
+func rankingsEqual(r1, r2 [][]int) bool {
+	if len(r1) != len(r2) {
+		return false
+	}
+
+	for i := 0; i < len(r1); i++ {
+		if len(r1[i]) != len(r2[i]) {
+			return false
+		}
+
+		for j := 0; j < len(r1[i]); j++ {
+			if r1[i][j] != r2[i][j] {
+				return false
+			}
+		}
+	}
+
+	return true
 }

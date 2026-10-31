@@ -4,6 +4,7 @@ import "fmt"
 
 type appData struct {
 	announceRankingCalled bool
+	announcedRanking      [][]int
 
 	assignedPlayerNum bool
 	playerNum         int
@@ -63,6 +64,7 @@ func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
 
 func (m *mockPlayer) AnnounceRanking(ranking [][]int) {
 	m.dataFromApp.announceRankingCalled = true
+	m.dataFromApp.announcedRanking = ranking
 }
 
 func (m *mockPlayer) AssignPlayerNumber(pn int) {

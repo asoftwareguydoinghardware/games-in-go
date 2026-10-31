@@ -66,7 +66,11 @@ func (g *Game) Play() {
 		playerInd = (playerInd + 1) % 2
 	}
 
-	var ranking [][]int
+	ranking := [][]int{
+		{0},
+		{1},
+	}
+
 	g.players[0].AnnounceRanking(ranking)
 	g.players[1].AnnounceRanking(ranking)
 }
