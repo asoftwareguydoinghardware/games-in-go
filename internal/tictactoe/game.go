@@ -31,7 +31,7 @@ func New() (game *Game) {
 
 func (g *Game) AssignPlayer(playerNum int, player Player) {
 	g.players[playerNum] = player
-	player.AssignPlayerNumber(0)
+	player.AssignPlayerNumber(playerNum)
 }
 
 func (g *Game) InitialPlayer(player int) {

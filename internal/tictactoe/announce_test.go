@@ -7,9 +7,11 @@ import (
 
 func TestAssignPlayerNotifiesPlayerOfTheirNumber(t *testing.T) {
 	testAssignPlayerNotifiesPlayerOfTheirNumber(t, 0)
+	testAssignPlayerNotifiesPlayerOfTheirNumber(t, 1)
 }
 
 func testAssignPlayerNotifiesPlayerOfTheirNumber(t *testing.T, playerNum int) {
+	t.Logf("testAssignPlayerNotifiesPlayerOfTheirNumber(%d)", playerNum)
 	g := ttt.New()
 	player := newMockPlayer(0)
 
@@ -18,4 +20,9 @@ func testAssignPlayerNotifiesPlayerOfTheirNumber(t *testing.T, playerNum int) {
 	if !player.assignedPlayerNumber {
 		t.Errorf("g.AssignPlayer(%d, player) did not call player.AssignPlayerNumber", playerNum)
 	}
+
+	if have, want := player.playerNum, playerNum; have != want {
+		t.Errorf("g.AssignPlayer(%d, player) did not call player.AssignPlayer() with %d, called with %d", playerNum, want, have)
+	}
+
 }
