@@ -74,6 +74,12 @@ func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
 
 func TestAllMovesAnnouncedCorrectly(t *testing.T) {
 	testAllMovesAnnouncedCorrectly(t, 0)
+	/*
+		Initially thought there would be a test:
+			testAllMovesAnnouncedCorrectly(t, 1)
+		but that passes.  TDD does not allow (or at least advocates
+		against adding tests that pass).
+	*/
 }
 
 func testAllMovesAnnouncedCorrectly(t *testing.T, initialPlayer int) {
