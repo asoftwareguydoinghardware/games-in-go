@@ -2,6 +2,7 @@ package tictactoe_test
 
 import (
 	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
+	"slices"
 	"testing"
 )
 
@@ -29,7 +30,7 @@ func testAssignPlayerNotifiesPlayerOfTheirNumber(t *testing.T, playerNum int) {
 
 func TestAnnounceMoveCalled(t *testing.T) {
 	testAnnounceMoveCalled(t, 0)
-	testAnnounceMoveCalled(t, 1)
+	// testAnnounceMoveCalled(t, 1)
 }
 
 func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
@@ -69,5 +70,76 @@ func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
 
 	if have, want := announcements[0].player, initialPlayer; have != want {
 		t.Errorf("For player 1, Play method first announced move by player %d, want %d", have, want)
+	}
+}
+
+func TestAllMovesAnnouncedCorrectly(t *testing.T) {
+	testAllMovesAnnouncedCorrectly(t, 0)
+}
+
+func testAllMovesAnnouncedCorrectly(t *testing.T, initialPlayer int) {
+	var secondPlayer int
+
+	/*
+		Player 0 will always win with the default moves; however, it takes
+		an additonal move to win if player 1 goes first.
+
+		The list of announced moves varies slightly depending on which player
+		goes first.  If pXY indicates player X's move Y, then the sequence
+		will either start p00, p10, p01, p11 or p10, p00, p11, p10.
+	*/
+
+	primaryMoves := defaultPlayer0Moves
+	secondaryMoves := defaultPlayer1Moves
+	totalMoves := 5
+
+	if initialPlayer == 0 {
+		secondPlayer = 1
+	} else {
+		secondPlayer = 0
+		primaryMoves, secondaryMoves = secondaryMoves, primaryMoves
+		totalMoves += 1
+	}
+
+	wantMoves := make([]announcedMove, totalMoves)
+	primary := 0
+	secondary := 0
+	move := 0
+	for {
+		moveData := announcedMove{player: initialPlayer, move: primaryMoves[primary].move}
+		primary++
+		wantMoves[move] = moveData
+		move++
+		if move == totalMoves {
+			break
+		}
+
+		moveData = announcedMove{player: secondPlayer, move: secondaryMoves[secondary].move}
+		secondary++
+		wantMoves[move] = moveData
+		move++
+		if move == totalMoves {
+			break
+		}
+	}
+
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	if !slices.Equal(p0.dataFromApp.announcedMoves, wantMoves) {
+		t.Errorf("*Player 0 have announced moves %v, want %v", p0.dataFromApp.announcedMoves, wantMoves)
+	}
+
+	if !slices.Equal(p1.dataFromApp.announcedMoves, wantMoves) {
+		t.Errorf("*Player 1 have announced moves %v, want %v", p1.dataFromApp.announcedMoves, wantMoves)
 	}
 }

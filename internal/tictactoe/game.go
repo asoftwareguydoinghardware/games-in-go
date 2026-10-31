@@ -45,9 +45,6 @@ func (g *Game) Play() {
 
 	playerInd := g.initialPlayer
 
-	g.players[0].AnnounceMove(playerInd, "0,0")
-	g.players[1].AnnounceMove(playerInd, "0,0")
-
 	for !g.done() {
 		var owner ownerId
 
@@ -61,6 +58,10 @@ func (g *Game) Play() {
 			move = g.players[playerInd].Move()
 		}
 		g.markSquareOccupied(move, owner)
+
+		g.players[0].AnnounceMove(playerInd, move)
+		g.players[1].AnnounceMove(playerInd, move)
+
 		playerInd = (playerInd + 1) % 2
 	}
 }
