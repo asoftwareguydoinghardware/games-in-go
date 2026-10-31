@@ -71,6 +71,10 @@ func (g *Game) Play() {
 		{1},
 	}
 
+	if g.initialPlayer == 0 {
+		ranking[0], ranking[1] = ranking[1], ranking[0]
+	}
+
 	g.players[0].AnnounceRanking(ranking)
 	g.players[1].AnnounceRanking(ranking)
 }

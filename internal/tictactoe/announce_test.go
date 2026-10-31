@@ -183,6 +183,42 @@ func TestAnnounceRankingsCalled(t *testing.T) {
 	}
 }
 
+func TestAnnounceRankingCorrectWhenPlayer1Wins(t *testing.T) {
+	const initialPlayer = 0 // should not matter if this is 0 or 1
+
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	p0.moves, p1.moves = p1.moves, p0.moves
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	if !p0.dataFromApp.announceRankingCalled {
+		t.Errorf("AnnounceRanking method not called for player 0")
+	}
+
+	if !p1.dataFromApp.announceRankingCalled {
+		t.Errorf("AnnounceRanking method not called for player 1")
+	}
+
+	want := [][]int{
+		{1},
+		{0},
+	}
+
+	have := p0.dataFromApp.announcedRanking
+	if !rankingsEqual(have, want) {
+		t.Errorf("Player 0 have announced ranking %v want %v", have, want)
+	}
+}
+
 func rankingsEqual(r1, r2 [][]int) bool {
 	if len(r1) != len(r2) {
 		return false
