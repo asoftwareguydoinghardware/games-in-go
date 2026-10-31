@@ -2,12 +2,16 @@ package tictactoe_test
 
 import "fmt"
 
+type appData struct {
+	assignedPlayerNum bool
+	playerNum         int
+}
+
 type mockPlayer struct {
+	dataFromApp appData
+
 	announcedInitialPlayer bool
 	initialPlayer          int
-
-	assignedPlayerNumber bool
-	playerNum            int
 
 	announceMoveCalled bool
 
@@ -50,8 +54,8 @@ func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
 }
 
 func (m *mockPlayer) AssignPlayerNumber(pn int) {
-	m.assignedPlayerNumber = true
-	m.playerNum = pn
+	m.dataFromApp.assignedPlayerNum = true
+	m.dataFromApp.playerNum = pn
 }
 
 func (m *mockPlayer) AnnounceInitialPlayer(player int) {

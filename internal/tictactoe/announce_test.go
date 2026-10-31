@@ -17,11 +17,11 @@ func testAssignPlayerNotifiesPlayerOfTheirNumber(t *testing.T, playerNum int) {
 
 	g.AssignPlayer(playerNum, player)
 
-	if !player.assignedPlayerNumber {
+	if !player.dataFromApp.assignedPlayerNum {
 		t.Errorf("g.AssignPlayer(%d, player) did not call player.AssignPlayerNumber", playerNum)
 	}
 
-	if have, want := player.playerNum, playerNum; have != want {
+	if have, want := player.dataFromApp.playerNum, playerNum; have != want {
 		t.Errorf("g.AssignPlayer(%d, player) did not call player.AssignPlayer() with %d, called with %d", playerNum, want, have)
 	}
 
