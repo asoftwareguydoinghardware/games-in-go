@@ -30,7 +30,6 @@ func testAssignPlayerNotifiesPlayerOfTheirNumber(t *testing.T, playerNum int) {
 
 func TestAnnounceMoveCalled(t *testing.T) {
 	testAnnounceMoveCalled(t, 0)
-	// testAnnounceMoveCalled(t, 1)
 }
 
 func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
