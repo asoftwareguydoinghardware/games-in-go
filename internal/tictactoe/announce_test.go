@@ -28,8 +28,10 @@ func testAssignPlayerNotifiesPlayerOfTheirNumber(t *testing.T, playerNum int) {
 }
 
 func TestAnnounceMoveCalled(t *testing.T) {
-	const initialPlayer = 0
+	testAnnounceMoveCalled(t, 0)
+}
 
+func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
