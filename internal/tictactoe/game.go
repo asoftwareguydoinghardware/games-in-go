@@ -66,14 +66,7 @@ func (g *Game) Play() {
 		playerInd = (playerInd + 1) % 2
 	}
 
-	ranking := [][]int{
-		{0},
-		{1},
-	}
-
-	if g.initialPlayer == 0 {
-		ranking[0], ranking[1] = ranking[1], ranking[0]
-	}
+	ranking := g.Ranking()
 
 	g.players[0].AnnounceRanking(ranking)
 	g.players[1].AnnounceRanking(ranking)

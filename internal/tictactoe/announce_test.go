@@ -184,7 +184,7 @@ func TestAnnounceRankingsCalled(t *testing.T) {
 }
 
 func TestAnnounceRankingCorrectWhenPlayer1Wins(t *testing.T) {
-	const initialPlayer = 0 // should not matter if this is 0 or 1
+	const initialPlayer = 0
 
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
@@ -216,6 +216,52 @@ func TestAnnounceRankingCorrectWhenPlayer1Wins(t *testing.T) {
 	have := p0.dataFromApp.announcedRanking
 	if !rankingsEqual(have, want) {
 		t.Errorf("Player 0 have announced ranking %v want %v", have, want)
+	}
+}
+
+func TestAnnounceRankingCorrectForDraw(t *testing.T) {
+	const initialPlayer = 0
+
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	p0.moves = moveList{
+		{move: "0,0", good: true},
+		{move: "1,1", good: true},
+		{move: "1,2", good: true},
+		{move: "2,0", good: true},
+		{move: "0,1", good: true},
+	}
+	p1.moves = moveList{
+		{move: "0,2", good: true},
+		{move: "2,2", good: true},
+		{move: "1,0", good: true},
+		{move: "2,1", good: true},
+	}
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	if !p1.dataFromApp.announceRankingCalled {
+		t.Errorf("AnnounceRanking method not called for player 1")
+	}
+
+	want1 := [][]int{
+		{1, 0},
+	}
+	want2 := [][]int{
+		{0, 1},
+	}
+
+	have := p0.dataFromApp.announcedRanking
+	if !rankingsEqual(have, want1) && !rankingsEqual(have, want2) {
+		t.Errorf("Player 0 have announced ranking %v want %v or %v", have, want1, want2)
 	}
 }
 
