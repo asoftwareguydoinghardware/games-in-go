@@ -50,7 +50,7 @@ func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
 	}
 
 	announcements := p0.dataFromApp.announcedMoves
-	if have, want := announcements[0].move, "0,0"; have != want {
+	if have, want := announcements[0].move, defaultPlayer0Moves[0].move; have != want {
 		t.Errorf("For player 0, Play method first announced move is %q, want %q", have, want)
 	}
 
@@ -63,7 +63,7 @@ func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
 		return
 	}
 	announcements = p1.dataFromApp.announcedMoves
-	if have, want := announcements[0].move, "0,0"; have != want {
+	if have, want := announcements[0].move, defaultPlayer0Moves[0].move; have != want {
 		t.Errorf("For player 1, Play method first announced move is %q, want %q", have, want)
 	}
 
