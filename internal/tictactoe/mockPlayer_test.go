@@ -9,6 +9,8 @@ type mockPlayer struct {
 	assignedPlayerNumber bool
 	playerNum            int
 
+	announceMoveCalled bool
+
 	mockPlayerNum     int
 	moveCalled        bool
 	tracker           *tracker
@@ -55,6 +57,10 @@ func (m *mockPlayer) AssignPlayerNumber(pn int) {
 func (m *mockPlayer) AnnounceInitialPlayer(player int) {
 	m.announcedInitialPlayer = true
 	m.initialPlayer = player
+}
+
+func (m *mockPlayer) AnnounceMove(player int, move string) {
+	m.announceMoveCalled = true
 }
 
 func (m *mockPlayer) Move() string {

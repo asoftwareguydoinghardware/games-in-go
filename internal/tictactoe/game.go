@@ -19,6 +19,7 @@ type Game struct {
 
 type Player interface {
 	AnnounceInitialPlayer(ip int)
+	AnnounceMove(player int, move string)
 	Move() string
 	AssignPlayerNumber(pn int)
 }
@@ -43,6 +44,8 @@ func (g *Game) Play() {
 	g.players[1].AnnounceInitialPlayer(g.initialPlayer)
 
 	playerInd := g.initialPlayer
+
+	g.players[0].AnnounceMove(0, "")
 
 	for !g.done() {
 		var owner ownerId
