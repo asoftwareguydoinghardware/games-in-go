@@ -41,7 +41,7 @@ func TestAnnounceMoveCalled(t *testing.T) {
 	g.Play()
 
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
-	if !p0.announceMoveCalled {
+	if !p0.dataFromApp.announceMoveCalled {
 		t.Errorf("Play method did not call AnnounceMove method.")
 	}
 }

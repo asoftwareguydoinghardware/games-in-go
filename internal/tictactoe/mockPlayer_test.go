@@ -5,18 +5,19 @@ import "fmt"
 type appData struct {
 	assignedPlayerNum bool
 	playerNum         int
-}
-
-type mockPlayer struct {
-	dataFromApp appData
 
 	announcedInitialPlayer bool
 	initialPlayer          int
 
 	announceMoveCalled bool
 
+	moveCalled bool
+}
+
+type mockPlayer struct {
+	dataFromApp appData
+
 	playerNum         int
-	moveCalled        bool
 	tracker           *tracker
 	iAmPlayer1        bool
 	moves             moveList
@@ -59,17 +60,17 @@ func (m *mockPlayer) AssignPlayerNumber(pn int) {
 }
 
 func (m *mockPlayer) AnnounceInitialPlayer(player int) {
-	m.announcedInitialPlayer = true
-	m.initialPlayer = player
+	m.dataFromApp.announcedInitialPlayer = true
+	m.dataFromApp.initialPlayer = player
 }
 
 func (m *mockPlayer) AnnounceMove(player int, move string) {
-	m.announceMoveCalled = true
+	m.dataFromApp.announceMoveCalled = true
 }
 
 func (m *mockPlayer) Move() string {
 	tracker := m.tracker
-	m.moveCalled = true
+	m.dataFromApp.moveCalled = true
 
 	switch tracker.state {
 	case wantInitialMove:
