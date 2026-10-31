@@ -33,13 +33,13 @@ func TestPlayAnnouncesInitialPlayer(t *testing.T) {
 
 func failIfAnnounced(t *testing.T, m *mockPlayer) {
 	if m.announcedInitialPlayer {
-		t.Errorf("Announced initial player to player %d before Play() called", m.playerNum)
+		t.Errorf("Announced initial player to player %d before Play() called", m.mockPlayerNum)
 	}
 }
 
 func failIfNotAnnounced(t *testing.T, m *mockPlayer) {
 	if !m.announcedInitialPlayer {
-		t.Errorf("Did not Announce initial player to player %d after Play() called", m.playerNum)
+		t.Errorf("Did not Announce initial player to player %d after Play() called", m.mockPlayerNum)
 	}
 }
 
@@ -64,7 +64,7 @@ func testPlayAnnouncesCorrectInitialPlayer(t *testing.T, initialPlayerNum int) {
 
 func failIfDidNotAnnounceCorrectPlayer(t *testing.T, m *mockPlayer, want int) {
 	if m.initialPlayer != want {
-		t.Errorf("Play() announced wrong initial player to player %d, have %d, want %d", m.playerNum, m.initialPlayer, want)
+		t.Errorf("Play() announced wrong initial player to player %d, have %d, want %d", m.mockPlayerNum, m.initialPlayer, want)
 	}
 }
 
@@ -92,7 +92,7 @@ func TestPlayCallsMoveForPlayer0(t *testing.T) {
 	g.Play()
 
 	if !p0.moveCalled {
-		t.Errorf("Play() did not call Move() for player %d", p0.playerNum)
+		t.Errorf("Play() did not call Move() for player %d", p0.mockPlayerNum)
 	}
 }
 
@@ -105,7 +105,7 @@ func TestPlayCallsMoveForPlayer1(t *testing.T) {
 	g.Play()
 
 	if !p1.moveCalled {
-		t.Errorf("Play() did not call Move() for player %d", p1.playerNum)
+		t.Errorf("Play() did not call Move() for player %d", p1.mockPlayerNum)
 	}
 }
 

@@ -5,12 +5,13 @@ import "fmt"
 type mockPlayer struct {
 	announcedInitialPlayer bool
 	initialPlayer          int
-	playerNum              int
-	moveCalled             bool
-	tracker                *tracker
-	iAmPlayer1             bool
-	moves                  moveList
-	currentPlayerMove      int
+
+	mockPlayerNum     int
+	moveCalled        bool
+	tracker           *tracker
+	iAmPlayer1        bool
+	moves             moveList
+	currentPlayerMove int
 }
 
 type trackerState int
@@ -34,7 +35,7 @@ type tracker struct {
 func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
 	var m mockPlayer
 
-	m.playerNum = playerNum
+	m.mockPlayerNum = playerNum
 	if playerNum == 0 {
 		m.moves = defaultPlayer0Moves
 	} else {
@@ -59,7 +60,7 @@ func (m *mockPlayer) Move() string {
 		} else {
 			tracker.state = wantPlayer1Move
 		}
-		tracker.mockPlayerForFirstMove = m.playerNum
+		tracker.mockPlayerForFirstMove = m.mockPlayerNum
 		tracker.mockPlayersAlternated = true
 	case wantPlayer1Move:
 		tracker.state = wantPlayer2Move
@@ -80,7 +81,7 @@ func (m *mockPlayer) Move() string {
 	}
 
 	if m.currentPlayerMove >= len(m.moves) {
-		msg := fmt.Sprintf("internal error, want to return move %d, but last move index is %d, player %d, moves %v", m.currentPlayerMove, len(m.moves)-1, m.playerNum, m.moves)
+		msg := fmt.Sprintf("internal error, want to return move %d, but last move index is %d, player %d, moves %v", m.currentPlayerMove, len(m.moves)-1, m.mockPlayerNum, m.moves)
 		panic(msg)
 	}
 
