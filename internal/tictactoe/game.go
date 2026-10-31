@@ -20,6 +20,7 @@ type Game struct {
 type Player interface {
 	AnnounceInitialPlayer(ip int)
 	AnnounceMove(player int, move string)
+	AnnounceRanking(ranking [][]int)
 	Move() string
 	AssignPlayerNumber(pn int)
 }
@@ -64,6 +65,9 @@ func (g *Game) Play() {
 
 		playerInd = (playerInd + 1) % 2
 	}
+
+	var ranking [][]int
+	g.players[0].AnnounceRanking(ranking)
 }
 
 /*

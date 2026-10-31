@@ -3,6 +3,8 @@ package tictactoe_test
 import "fmt"
 
 type appData struct {
+	announceRankingCalled bool
+
 	assignedPlayerNum bool
 	playerNum         int
 
@@ -57,6 +59,10 @@ func newMockPlayer(playerNum int) (newPlayer *mockPlayer) {
 		m.moves = defaultPlayer1Moves
 	}
 	return &m
+}
+
+func (m *mockPlayer) AnnounceRanking(ranking [][]int) {
+	m.dataFromApp.announceRankingCalled = true
 }
 
 func (m *mockPlayer) AssignPlayerNumber(pn int) {

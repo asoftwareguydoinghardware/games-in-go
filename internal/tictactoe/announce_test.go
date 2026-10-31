@@ -148,3 +148,23 @@ func testAllMovesAnnouncedCorrectly(t *testing.T, initialPlayer int) {
 		t.Errorf("*Player 1 have announced moves %v, want %v", p1.dataFromApp.announcedMoves, wantMoves)
 	}
 }
+
+func TestAnnounceRankingsCalled(t *testing.T) {
+	const initialPlayer = 1 // should not matter if this is 0 or 1
+
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+
+	assignTracker(p0, p1)
+	g.AssignPlayer(0, p0)
+	g.AssignPlayer(1, p1)
+
+	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
+
+	g.InitialPlayer(initialPlayer)
+	g.Play()
+
+	if !p0.dataFromApp.announceRankingCalled {
+		t.Errorf("AnnounceRanking method not called for player 0")
+	}
+}
