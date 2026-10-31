@@ -45,7 +45,7 @@ func (g *Game) Play() {
 
 	playerInd := g.initialPlayer
 
-	g.players[0].AnnounceMove(0, "")
+	g.players[0].AnnounceMove(0, "0,0")
 
 	for !g.done() {
 		var owner ownerId

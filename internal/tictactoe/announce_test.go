@@ -43,5 +43,11 @@ func TestAnnounceMoveCalled(t *testing.T) {
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 	if len(p0.dataFromApp.announcedMoves) == 0 {
 		t.Errorf("Play method did not call AnnounceMove method.")
+		return
+	}
+
+	firstAnnouncement := p0.dataFromApp.announcedMoves
+	if have, want := firstAnnouncement[0].move, "0,0"; have != want {
+		t.Errorf("Play method first announced move is %q, want %q", have, want)
 	}
 }
