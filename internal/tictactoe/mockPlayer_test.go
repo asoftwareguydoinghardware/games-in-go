@@ -9,8 +9,7 @@ type appData struct {
 	announcedInitialPlayer bool
 	initialPlayer          int
 
-	announceMoveCalled bool
-	announcedMoves     []announcedMove
+	announcedMoves []announcedMove
 
 	moveCalled bool
 }
@@ -71,7 +70,6 @@ func (m *mockPlayer) AnnounceInitialPlayer(player int) {
 }
 
 func (m *mockPlayer) AnnounceMove(player int, move string) {
-	m.dataFromApp.announceMoveCalled = true
 	data := announcedMove{player: player, move: move}
 	m.dataFromApp.announcedMoves = append(m.dataFromApp.announcedMoves, data)
 }
