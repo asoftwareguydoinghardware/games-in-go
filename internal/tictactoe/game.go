@@ -68,6 +68,7 @@ func (g *Game) Play() {
 
 	var ranking [][]int
 	g.players[0].AnnounceRanking(ranking)
+	g.players[1].AnnounceRanking(ranking)
 }
 
 /*

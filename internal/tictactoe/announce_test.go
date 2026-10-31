@@ -167,4 +167,8 @@ func TestAnnounceRankingsCalled(t *testing.T) {
 	if !p0.dataFromApp.announceRankingCalled {
 		t.Errorf("AnnounceRanking method not called for player 0")
 	}
+
+	if !p1.dataFromApp.announceRankingCalled {
+		t.Errorf("AnnounceRanking method not called for player 1")
+	}
 }
