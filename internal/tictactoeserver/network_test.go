@@ -26,9 +26,10 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 		return
 	}
 
-	checkMessage(t, buf, "110")
+	msg := string(buf[:n])
+	checkMessage(t, msg, "110")
 
-	msg := strings.ToLower(string(buf[3:n]))
+	msg = strings.ToLower(string(buf[3:n]))
 	wantList := []string{
 		"you are",
 		"initial player",
@@ -74,8 +75,8 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	}
 }
 
-func checkMessage(t *testing.T, msg []byte, wantCode string) {
-	if have, want := string(msg[:3]), wantCode; have != want {
+func checkMessage(t *testing.T, msg string, wantCode string) {
+	if have, want := msg[:3], wantCode; have != want {
 		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
 	}
 }
