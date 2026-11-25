@@ -35,11 +35,7 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 		"initial player",
 		"waiting for opponent",
 	}
-	for _, want := range wantList {
-		if !strings.Contains(msg, want) {
-			t.Errorf("Want message %q to contain %q", msg, want)
-		}
-	}
+	checkMessageContains(t, msg, wantList)
 
 	/* Ideally I would check len(msg) >= 2 after stripping the first
 	three characters.  However, the sequence in which I am writing
@@ -78,5 +74,13 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 func checkMessage(t *testing.T, msg string, wantCode string) {
 	if have, want := msg[:3], wantCode; have != want {
 		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
+	}
+}
+
+func checkMessageContains(t *testing.T, msg string, wantList []string) {
+	for _, want := range wantList {
+		if !strings.Contains(msg, want) {
+			t.Errorf("Want message %q to contain %q", msg, want)
+		}
 	}
 }
