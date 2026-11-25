@@ -15,7 +15,7 @@ func runGames(ctx context.Context, conf config) {
 	var err error
 	var c net.Conn
 	first := true
-	secondConnReady := make(chan struct{})
+	haveSecondConn := make(chan struct{})
 	localCtx, cancel := context.WithCancel(ctx)
 
 	for {
@@ -25,12 +25,12 @@ func runGames(ctx context.Context, conf config) {
 			return
 		}
 		if first {
-			go func(ctx context.Context, c net.Conn) {
+			go func(ctx context.Context, c net.Conn, ready <-chan struct{}) {
 				defer c.Close()
 				msg := "110 You are the initial player; waiting for opponent.\r\n"
 				c.Write([]byte(msg))
 				select {
-				case _, ok := <-secondConnReady:
+				case _, ok := <-ready:
 					if !ok {
 						return
 					}
@@ -39,18 +39,18 @@ func runGames(ctx context.Context, conf config) {
 				}
 				msg = "111 All players are present.\r\n"
 				c.Write([]byte(msg))
-			}(localCtx, c)
+			}(localCtx, c, haveSecondConn)
 		} else {
-			go func(ctx context.Context, c net.Conn) {
+			go func(ctx context.Context, c net.Conn, ready chan<- struct{}) {
 				defer c.Close()
 				msg := "111 All players are present.\r\n"
 				c.Write([]byte(msg))
 				select {
-				case secondConnReady <- struct{}{}:
+				case ready <- struct{}{}:
 				case <-ctx.Done():
 					return
 				}
-			}(localCtx, c)
+			}(localCtx, c, haveSecondConn)
 		}
 		first = false
 	}
