@@ -29,7 +29,7 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
 	}
 
-	msg := strings.ToLower(strings.Trim(string(buf[3:]), "\000"))
+	msg := strings.ToLower(string(buf[3:n]))
 	wantList := []string{
 		"you are",
 		"initial player",
