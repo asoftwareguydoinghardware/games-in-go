@@ -48,9 +48,18 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 
 	In the unlikely case, len(msg) < 2, the code below will panic,
 	so that is likely sufficient.
+
+	OK, the comment is getting out of date as the check should now
+	be three.  However, the underlying point remains:  I acknowledge
+	the checks should be better, but strict TDD prevents that.
 	*/
 	theRest := msg[len(msg)-2:]
 	if have, want := theRest, "\r\n"; have != want {
 		t.Errorf("Message %q does not end with %q", msg, want)
+	}
+
+	lastChar := rune(msg[len(msg)-3])
+	if have, want := lastChar, '.'; have != want {
+		t.Errorf("Want sentences in messages, msg %q does not end with %q", msg, want)
 	}
 }
