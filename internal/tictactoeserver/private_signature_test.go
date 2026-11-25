@@ -38,8 +38,7 @@ func TestRunGamesOldExists(t *testing.T) {
 }
 
 func TestRunGamesExists(t *testing.T) {
-	t.Skip("bad test, need proper sentinel return value")
-	var mock mockListen
+	var mock mockListen2
 	var ctx context.Context = context.Background()
 	conf := config{
 		listener: &mock,
