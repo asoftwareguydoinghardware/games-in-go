@@ -384,6 +384,43 @@ func TestSecondPlayerAssigned(t *testing.T) {
 	})
 }
 
+func TestAssignedPlayersAreUniqueAndNonNil(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var n1, n2 nullNetConn
+		listen := mockListen3{
+			connections: []net.Conn{n1, n2},
+		}
+		conf := newConfig(&listen)
+		var g gameObserver
+
+		conf.game = func() game {
+			return &g
+		}
+
+		runGames(context.Background(), conf)
+
+		synctest.Wait()
+
+		if have, want := len(g.assignPlayerArgs), 2; have != want {
+			t.Skip("Not enough calls to AssignPlayer()")
+			return
+		}
+
+		p0 := g.assignPlayerArgs[0].player
+		p1 := g.assignPlayerArgs[1].player
+
+		if p0 == nil {
+			t.Errorf("AssignPlayer() for player 0 called with nil player argument")
+		}
+		if p1 == nil {
+			t.Errorf("AssignPlayer() for player 1 called with nil player argument")
+		}
+		if p0 == p1 {
+			t.Errorf("AssignPlayer() called with the same player argument for player0 and player1")
+		}
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int

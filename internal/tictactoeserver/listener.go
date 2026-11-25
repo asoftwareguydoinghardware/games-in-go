@@ -75,8 +75,12 @@ func player1(ctx context.Context, info player1Info) {
 	msg := "111 All players are present.\r\n"
 	c.Write([]byte(msg))
 	game := conf.game()
-	game.AssignPlayer(0, nil)
-	game.AssignPlayer(1, nil)
+
+	var p0, p1 nullPlayer
+	p0.playerNumber = -3
+
+	game.AssignPlayer(0, p0)
+	game.AssignPlayer(1, p1)
 	select {
 	case ready <- struct{}{}:
 	case <-ctx.Done():
