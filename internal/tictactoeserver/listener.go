@@ -9,7 +9,9 @@ type config struct {
 }
 
 func runGames(conf config) {
-	for _, err := conf.listener.Accept(); err == nil; _, err = conf.listener.Accept() {
+	accept := conf.listener.Accept
+
+	for _, err := accept(); err == nil; _, err = accept() {
 		// nothing for now
 	}
 }
