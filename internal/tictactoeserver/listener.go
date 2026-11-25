@@ -40,12 +40,15 @@ func runGamesOld(conf config) {
 
 func runGames(ctx context.Context, conf config) {
 	var err error
+	var c net.Conn
 
 	for {
-		_, err = conf.listener.Accept()
+		c, err = conf.listener.Accept()
 		if errors.Is(err, net.ErrClosed) {
 			return
 		}
+		msg := "110 You are the initial player; waiting for opponent.\r\n"
+		go c.Write([]byte(msg))
 	}
 }
 

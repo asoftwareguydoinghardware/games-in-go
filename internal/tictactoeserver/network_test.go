@@ -128,6 +128,10 @@ func checkResponse(t *testing.T, response string, wantCode string) {
 	}
 
 	msg = strings.TrimLeftFunc(msg, unicode.IsSpace)
+	if len(msg) == 0 {
+		t.Errorf("Want text after whitespace in reponse %q", response)
+		return
+	}
 	first := rune(msg[0])
 	if !unicode.IsUpper(first) {
 		t.Errorf("Want sentences in messages, message %q does not start with an upper case letter (%q)", msg, first)
@@ -135,6 +139,10 @@ func checkResponse(t *testing.T, response string, wantCode string) {
 }
 
 func checkMessageContains(t *testing.T, msg string, wantList []string) {
+	if have, want := len(msg), 3; have <= want {
+		t.Errorf("message %q too short, need at least %d characters have %d", msg, want, have)
+		return
+	}
 	msg = strings.ToLower(msg[3:])
 	for _, want := range wantList {
 		if !strings.Contains(msg, want) {

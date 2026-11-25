@@ -6,6 +6,7 @@ import (
 	"net"
 	"slices"
 	"testing"
+	"testing/synctest"
 )
 
 func TestRunGamesAcceptsAConnection(t *testing.T) {
@@ -105,30 +106,32 @@ func TestRunGamesCallsFatalOnError(t *testing.T) {
 }
 
 func TestFirstConnectionGets110Response(t *testing.T) {
-	cs, ss := net.Pipe()
-	defer cs.Close()
-	defer ss.Close()
+	synctest.Test(t, func(t *testing.T) {
+		cs, ss := net.Pipe()
+		defer cs.Close()
+		defer ss.Close()
 
-	set2SecondTimeout(cs)
-	listen := mockListen{
-		connections: []net.Conn{ss},
-	}
-	conf := config{
-		listener: &listen,
-		fatal:    nullFatal,
-	}
+		set2SecondTimeout(cs)
+		listen := mockListen2{
+			connections: []net.Conn{ss},
+		}
+		conf := config{
+			listener: &listen,
+			fatal:    nullFatal,
+		}
 
-	runGamesOld(conf)
+		runGames(context.Background(), conf)
 
-	buf := make([]byte, 100)
-	n, err := cs.Read(buf)
-	if err != nil {
-		t.Errorf("client Read() returned error %v, want nil", err)
-		return
-	}
+		buf := make([]byte, 100)
+		n, err := cs.Read(buf)
+		if err != nil {
+			t.Errorf("client Read() returned error %v, want nil", err)
+			return
+		}
 
-	response := string(buf[:n])
-	checkResponse110(t, response)
+		response := string(buf[:n])
+		checkResponse110(t, response)
+	})
 }
 
 func TestSecondConnectionGets111Response(t *testing.T) {
@@ -239,6 +242,9 @@ type mockListen2 struct {
 
 	acceptCount int
 	shutdownErr error
+
+	connections    []net.Conn
+	nextConnection int
 }
 
 func (m *mockListen2) Accept() (c net.Conn, err error) {
@@ -249,6 +255,13 @@ func (m *mockListen2) Accept() (c net.Conn, err error) {
 
 	m.acceptCount++
 
+	if m.nextConnection < len(m.connections) {
+		c = m.connections[m.nextConnection]
+		m.nextConnection++
+		if m.callsUntilShutdown == 0 {
+			m.callsUntilShutdown = len(m.connections) + 1
+		}
+	}
 	m.callsUntilShutdown--
 	if m.callsUntilShutdown < -10 {
 		panic("excessive calls to Accept()")
