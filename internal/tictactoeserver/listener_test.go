@@ -118,6 +118,37 @@ func TestSecondConnectionGets111Response(t *testing.T) {
 	checkResponse111(t, response)
 }
 
+func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testing.T) {
+	var null nullNetConn
+
+	cs, ss := net.Pipe()
+	defer cs.Close()
+	defer ss.Close()
+
+	set2SecondTimeout(cs)
+	listen := mockListen{
+		connections: []net.Conn{ss, null},
+	}
+	conf := config{
+		listener: &listen,
+		fatal:    nullFatal,
+	}
+
+	runGames(conf)
+
+	buf := make([]byte, 100)
+	cs.Read(buf) // discard 110 response
+	n, err := cs.Read(buf)
+
+	if err != nil {
+		t.Errorf("client Read() returned error %v, want nil", err)
+		return
+	}
+
+	response := string(buf[:n])
+	checkResponse111(t, response)
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
