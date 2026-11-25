@@ -35,13 +35,6 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 		"waiting for opponent",
 	}
 	checkMessageContains(t, msg, wantList)
-	msg = string(buf[3:n])
-
-	msg = strings.TrimLeftFunc(string(buf[3:n]), unicode.IsSpace)
-	first := rune(msg[0])
-	if !unicode.IsUpper(first) {
-		t.Errorf("Want sentences in messages, message %q does not start with an upper case letter (%q)", msg, first)
-	}
 }
 
 func checkMessage(t *testing.T, response string, wantCode string) {
@@ -63,6 +56,12 @@ func checkMessage(t *testing.T, response string, wantCode string) {
 	firstCharOfMsg := rune(msg[0])
 	if !unicode.IsSpace(firstCharOfMsg) {
 		t.Errorf("Want a whitespace character between response code and human readable message, first character is %q want a space character", firstCharOfMsg)
+	}
+
+	msg = strings.TrimLeftFunc(msg, unicode.IsSpace)
+	first := rune(msg[0])
+	if !unicode.IsUpper(first) {
+		t.Errorf("Want sentences in messages, message %q does not start with an upper case letter (%q)", msg, first)
 	}
 }
 
