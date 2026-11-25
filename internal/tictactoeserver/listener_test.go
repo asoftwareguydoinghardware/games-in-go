@@ -244,6 +244,9 @@ type mockListen2 struct {
 func (m *mockListen2) Accept() (c net.Conn, err error) {
 	var n nullNetConn
 
+	c = n
+	err = mockFunctionErr
+
 	m.acceptCount++
 
 	m.callsUntilShutdown--
@@ -254,10 +257,11 @@ func (m *mockListen2) Accept() (c net.Conn, err error) {
 		if m.shutdownErr == nil {
 			m.shutdownErr = net.ErrClosed
 		}
-		return nil, m.shutdownErr
+		c = nil
+		err = m.shutdownErr
 	}
 
-	return n, mockFunctionErr
+	return c, err
 }
 
 func (m *mockListen2) Close() (err error) {
