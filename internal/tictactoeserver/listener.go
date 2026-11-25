@@ -1,6 +1,7 @@
 package tictactoeserver
 
 import (
+	"context"
 	"net"
 )
 
@@ -33,6 +34,9 @@ func runGamesOld(conf config) {
 		bytes := []byte(msg)
 		go conn.Write(bytes)
 	}
+}
+
+func runGames(ctx context.Context, conf config) {
 }
 
 func handleFirstConn(conn net.Conn) {

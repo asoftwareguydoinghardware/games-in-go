@@ -1,6 +1,7 @@
 package tictactoeserver
 
 import (
+	"context"
 	"log"
 	"net"
 	"testing"
@@ -34,6 +35,17 @@ func TestRunGamesOldExists(t *testing.T) {
 	}
 
 	runGamesOld(conf)
+}
+
+func TestRunGamesExists(t *testing.T) {
+	var mock mockListen
+	var ctx context.Context = context.Background()
+	conf := config{
+		listener: &mock,
+		fatal:    nullFatal,
+	}
+
+	runGames(ctx, conf)
 }
 
 func TestMembersOfConfigType(t *testing.T) {
