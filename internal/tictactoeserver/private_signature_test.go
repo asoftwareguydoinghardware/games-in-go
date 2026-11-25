@@ -30,3 +30,11 @@ func TestRunGamesExists(t *testing.T) {
 
 	runGames(conf)
 }
+
+func TestMembersOfConfigType(t *testing.T) {
+	var conf config
+	var l net.Listener
+
+	conf.listener = l
+	_ = conf
+}
