@@ -17,14 +17,41 @@ func TestRunGamesAcceptsAConnection(t *testing.T) {
 	}
 }
 
+func TestRunGamesAcceptsConnections(t *testing.T) {
+	connectionCount := []int{2}
+
+	for _, count := range connectionCount {
+		listen := mockListen{numAcceptsRemaining: count}
+		conf := config{listener: &listen}
+
+		runGames(conf)
+
+		if have, want := listen.acceptCallCount, count; have != want {
+			t.Errorf("with mock listener, have %d calls to Accept(), want %d", have, want)
+		}
+	}
+}
+
 type mockListen struct {
-	acceptCalled bool
+	acceptCalled        bool
+	numAcceptsRemaining int
+	acceptCallCount     int
 }
 
 func (m *mockListen) Accept() (c net.Conn, err error) {
 	m.acceptCalled = true
 
-	return nil, fmt.Errorf("mock function")
+	m.numAcceptsRemaining--
+	m.acceptCallCount++
+
+	if m.numAcceptsRemaining < 0 {
+		if m.numAcceptsRemaining < -10 {
+			panic("excessive calls to mock Accept() after returning error condition")
+		}
+		return nil, fmt.Errorf("mock function")
+	} else {
+		return nil, nil
+	}
 }
 
 func (m *mockListen) Addr() (n net.Addr) {

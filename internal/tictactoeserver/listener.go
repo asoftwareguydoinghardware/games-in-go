@@ -10,4 +10,5 @@ type config struct {
 
 func runGames(conf config) {
 	conf.listener.Accept()
+	conf.listener.Accept()
 }
