@@ -11,9 +11,7 @@ import (
 func TestRunGamesAcceptsAConnection(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		var listen mockListen2
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		runGames(context.Background(), conf)
 
@@ -33,9 +31,7 @@ func TestRunGamesAcceptsConnections(t *testing.T) {
 			}
 			t.Logf("testing %d connections", count)
 			listen := mockListen2{callsUntilShutdown: count}
-			conf := config{
-				listener: &listen,
-			}
+			conf := newConfig(&listen)
 
 			runGames(context.Background(), conf)
 
@@ -55,9 +51,7 @@ func TestRunGamesContinuesAcceptingUntilNetErrClosed(t *testing.T) {
 		// when Accept() (does not) return net.ErrClosed.
 
 		listen := mockListen2{callsUntilShutdown: callCount}
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		runGames(context.Background(), conf)
 
@@ -79,9 +73,7 @@ func TestRunGamesHandlesWrappedNetErrClosed(t *testing.T) {
 			callsUntilShutdown: callCount,
 			shutdownErr:        wrappedErr,
 		}
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		runGames(context.Background(), conf)
 
@@ -101,9 +93,7 @@ func TestFirstConnectionGets110Response(t *testing.T) {
 		listen := mockListen2{
 			connections: []net.Conn{ss},
 		}
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		runGames(context.Background(), conf)
 
@@ -130,9 +120,7 @@ func TestSecondConnectionGets111Response(t *testing.T) {
 		listen := mockListen2{
 			connections: []net.Conn{null, ss},
 		}
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		runGames(context.Background(), conf)
 
@@ -160,9 +148,7 @@ func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testi
 		listen := mockListen2{
 			connections: []net.Conn{ss, null},
 		}
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		// net.Pipe connections block until there is a matched
 		// set of read/write requests on the two ends of the
@@ -196,9 +182,7 @@ func TestFirstConnectionDoesNotGet111ResponseWhenThereIsNoSecondConnection(t *te
 		listen := mockListen2{
 			connections: []net.Conn{ss},
 		}
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		runGames(context.Background(), conf)
 
@@ -224,9 +208,7 @@ func TestFirstConnectionClosed(t *testing.T) {
 		listen := mockListen2{
 			connections: []net.Conn{checkClosed, null},
 		}
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		runGames(context.Background(), conf)
 
@@ -246,9 +228,7 @@ func TestSecondConnectionClosed(t *testing.T) {
 		listen := mockListen2{
 			connections: []net.Conn{null, checkClosed},
 		}
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		// needs to run in a seperate goroutine so that the
 		// Write() in checkClosedNetConn.Close() will not be
@@ -270,9 +250,7 @@ func TestFirstconnectionClosedIfContextCancelled(t *testing.T) {
 			connections: []net.Conn{checkClosed},
 		}
 
-		conf := config{
-			listener: &listen,
-		}
+		conf := newConfig(&listen)
 
 		ctx, cancel := context.WithCancel(context.Background())
 		go runGames(ctx, conf)

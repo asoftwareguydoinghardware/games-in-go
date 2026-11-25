@@ -37,9 +37,7 @@ func TestRunGamesExists(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		var mock mockListen2
 		var ctx context.Context = context.Background()
-		conf := config{
-			listener: &mock,
-		}
+		conf := newConfig(&mock)
 
 		runGames(ctx, conf)
 	})
