@@ -63,10 +63,40 @@ func TestRunGamesCallsFatalOnError(t *testing.T) {
 	}
 }
 
+func TestFirstConnectionGets110Response(t *testing.T) {
+	cs, ss := net.Pipe()
+	defer cs.Close()
+	defer ss.Close()
+
+	set2SecondTimeout(cs)
+	listen := mockListen{
+		connections: []net.Conn{ss},
+	}
+	conf := config{
+		listener: &listen,
+		fatal:    nullFatal,
+	}
+
+	runGames(conf)
+
+	buf := make([]byte, 100)
+	n, err := cs.Read(buf)
+	if err != nil {
+		t.Errorf("client Read() returned error %v, want nil", err)
+		return
+	}
+
+	response := string(buf[:n])
+	checkResponse(t, response, "110")
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
 	acceptCallCount     int
+
+	connections []net.Conn
+	nextConn    int
 }
 
 var mockFunctionErr = fmt.Errorf("mock function")
@@ -77,13 +107,22 @@ func (m *mockListen) Accept() (c net.Conn, err error) {
 	m.numAcceptsRemaining--
 	m.acceptCallCount++
 
-	if m.numAcceptsRemaining <= 0 {
+	var null nullNetConn
+
+	if len(m.connections) > 0 {
+		if m.nextConn < len(m.connections) {
+			m.nextConn++
+			return m.connections[m.nextConn-1], nil
+		} else {
+			return null, mockFunctionErr
+		}
+	} else if m.numAcceptsRemaining <= 0 {
 		if m.numAcceptsRemaining < -10 {
 			panic("excessive calls to mock Accept() after returning error condition")
 		}
 		return nil, mockFunctionErr
 	} else {
-		return nil, nil
+		return null, nil
 	}
 }
 

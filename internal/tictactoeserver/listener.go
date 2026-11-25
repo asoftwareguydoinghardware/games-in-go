@@ -14,10 +14,13 @@ func runGames(conf config) {
 	fatal := conf.fatal
 
 	for {
-		_, err := accept()
+		conn, err := accept()
 		if err != nil {
 			fatal(err)
 			return
 		}
+		msg := "110 X.\r\n"
+		bytes := []byte(msg)
+		go conn.Write(bytes)
 	}
 }
