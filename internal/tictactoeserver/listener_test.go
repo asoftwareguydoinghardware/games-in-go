@@ -23,11 +23,10 @@ func TestRunGamesAcceptsAConnection(t *testing.T) {
 }
 
 func TestRunGamesAcceptsConnections(t *testing.T) {
-	t.Skip("bad test case; need to return net.ErrClosed")
 	connectionCount := []int{2, 5, 1}
 
 	for _, count := range connectionCount {
-		listen := mockListen{numAcceptsRemaining: count}
+		listen := mockListen2{callsUntilShutdown: count}
 		conf := config{
 			listener: &listen,
 			fatal:    nullFatal,
@@ -35,7 +34,7 @@ func TestRunGamesAcceptsConnections(t *testing.T) {
 
 		runGames(context.Background(), conf)
 
-		if have, want := listen.acceptCallCount, count; have != want {
+		if have, want := listen.acceptCount, count; have != want {
 			t.Errorf("with mock listener, have %d calls to Accept(), want %d", have, want)
 		}
 	}
