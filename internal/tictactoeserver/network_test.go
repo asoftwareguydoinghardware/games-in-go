@@ -61,6 +61,11 @@ func TestAddSecondPlayerAnnounceEveryonePresent(t *testing.T) {
 
 	response := string(buf[:n])
 	checkResponse(t, response, "111")
+
+	wantList := []string{
+		"all players are present",
+	}
+	checkMessageContains(t, response, wantList)
 }
 
 func checkResponse(t *testing.T, response string, wantCode string) {
