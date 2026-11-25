@@ -59,6 +59,27 @@ func TestRunGamesContinuesAcceptingUntilNetErrClosed(t *testing.T) {
 	}
 }
 
+func TestRunGamesHandlesWrappedNetErrClosed(t *testing.T) {
+	var (
+		callCount  = 5
+		wrappedErr = fmt.Errorf("%w", net.ErrClosed)
+	)
+
+	listen := mockListen2{
+		callsUntilShutdown: callCount,
+		shutdownErr:        wrappedErr,
+	}
+	conf := config{
+		listener: &listen,
+	}
+
+	runGames(context.Background(), conf)
+
+	if have, want := listen.acceptCount, callCount; have != want {
+		t.Errorf("With mock listner returning net.ErrClosed after %d calls to Accept(), have %d calls, want %d", callCount, have, want)
+	}
+}
+
 func TestRunGamesCallsFatalOnError(t *testing.T) {
 	var count = 3
 	var fatalArgs []any
@@ -217,6 +238,7 @@ type mockListen2 struct {
 	callsUntilShutdown int
 
 	acceptCount int
+	shutdownErr error
 }
 
 func (m *mockListen2) Accept() (c net.Conn, err error) {
@@ -225,11 +247,14 @@ func (m *mockListen2) Accept() (c net.Conn, err error) {
 	m.acceptCount++
 
 	m.callsUntilShutdown--
-	if m.callsUntilShutdown <= 0 {
-		return nil, net.ErrClosed
-	}
 	if m.callsUntilShutdown < -10 {
 		panic("excessive calls to Accept()")
+	}
+	if m.callsUntilShutdown <= 0 {
+		if m.shutdownErr == nil {
+			m.shutdownErr = net.ErrClosed
+		}
+		return nil, m.shutdownErr
 	}
 
 	return n, mockFunctionErr

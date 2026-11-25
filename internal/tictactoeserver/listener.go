@@ -2,6 +2,7 @@ package tictactoeserver
 
 import (
 	"context"
+	"errors"
 	"net"
 )
 
@@ -42,7 +43,7 @@ func runGames(ctx context.Context, conf config) {
 
 	for {
 		_, err = conf.listener.Accept()
-		if err == net.ErrClosed {
+		if errors.Is(err, net.ErrClosed) {
 			return
 		}
 	}
