@@ -68,6 +68,29 @@ func TestAddSecondPlayerAnnounceEveryonePresent(t *testing.T) {
 	checkMessageContains(t, response, wantList)
 }
 
+func TestAddSecondPlayerAnnouncesEveryonePresentToFirstPlayer(t *testing.T) {
+	var p2s nullNetConn
+	p1c, p1s := net.Pipe()
+	defer p1c.Close()
+	defer p1s.Close()
+
+	p1 := createPlayer(p1s)
+	p1.addSecondPlayer(p2s)
+
+	buf := make([]byte, 100)
+	p1c.Read(buf)
+	n,err := p1c.Read(buf)
+
+	if err != nil {
+		t.Errorf("client Read() returned error %v, want nil", err)
+		return
+	}
+	if n < 3 {
+		t.Errorf("client Read() returned n = %d, want at least 3", n)
+		return
+	}
+}
+
 func checkResponse(t *testing.T, response string, wantCode string) {
 	if have, min := len(response), 6; have < min {
 		t.Errorf("Expected response of more than %d bytes, have %d bytes", min, have)
