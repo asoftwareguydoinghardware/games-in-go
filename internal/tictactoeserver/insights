@@ -1,0 +1,26 @@
+Should probably call synctest.Wait() within each test as opposed to
+being called within some goroutine's call stack.  This should make the
+synchronization point more obvious; the "system" has stabilized and it is
+safe to examine data after synctest.Wait() returns.
+
+The "server code" should probably be called in a goroutine.  This allows
+the TestXXX function to simulate the client(s) independently of the server
+goroutine.
+
+Instead of doing a struct literal, use a "newXXX" function.  The newXXX
+function can be extended to add null/stub functions as the functionality
+of the structure is extended.  Adding new null/stub functions helps ensure
+existing code runs essentially the same as before; new test can update the
+stub function(s) to something that can either capture data or control the
+"injection" of data.
+
+Need to evaluate this one, but it may make sense to have all the tests
+written without the "Test" prefix, and have one TestX() that iterates over
+a table of the functions to be run like:
+	for _, f := range table {
+		synctest.Test(t, f)
+	}
+One downside is it may be "too easy" to accidentally disable/skip a test.
+Another downside may be that we lose the control we have with the
+XXX argument in the "go test -run XXX" command.
+
