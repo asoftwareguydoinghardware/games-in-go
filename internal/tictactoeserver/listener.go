@@ -6,6 +6,7 @@ import (
 
 type config struct {
 	listener net.Listener
+	fatal    func(v ...any)
 }
 
 func runGames(conf config) {

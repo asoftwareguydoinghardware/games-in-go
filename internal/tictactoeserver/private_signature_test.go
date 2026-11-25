@@ -1,6 +1,7 @@
 package tictactoeserver
 
 import (
+	"log"
 	"net"
 	"testing"
 )
@@ -37,5 +38,6 @@ func TestMembersOfConfigType(t *testing.T) {
 	var l net.Listener
 
 	conf.listener = l
+	conf.fatal = log.Fatal
 	_ = conf
 }
