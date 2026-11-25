@@ -33,6 +33,8 @@ My choices:
 	171 Opponent declined to play another round
 	180 Opponent quit before game started, awaiting new opponent
 	181 Opponent quit mid-game, awaiting new opponent
+	190 You are player 0
+	191 You are player 1
 
 	200 Confirming your move
 	201 Confirming new game
