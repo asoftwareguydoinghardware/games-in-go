@@ -4,7 +4,7 @@ import (
 	"net"
 )
 
-type player struct{
+type player struct {
 	c net.Conn
 }
 

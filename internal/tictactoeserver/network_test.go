@@ -74,7 +74,7 @@ func TestAddSecondPlayerAnnouncesEveryonePresentToFirstPlayer(t *testing.T) {
 
 	buf := make([]byte, 100)
 	p1c.Read(buf)
-	n,err := p1c.Read(buf)
+	n, err := p1c.Read(buf)
 
 	if err != nil {
 		t.Errorf("client Read() returned error %v, want nil", err)
