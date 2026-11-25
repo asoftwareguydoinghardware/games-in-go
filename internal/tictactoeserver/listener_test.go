@@ -213,6 +213,28 @@ func TestFirstConnectionDoesNotGet111ResponseWhenThereIsNoSecondConnection(t *te
 	})
 }
 
+func TestFirstConnectionClosed(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		checkClosed := new(checkClosedNetConn)
+		checkClosed.sender, checkClosed.receiver = net.Pipe()
+
+		var null nullNetConn
+
+		listen := mockListen2{
+			connections: []net.Conn{checkClosed, null},
+		}
+		conf := config{
+			listener: &listen,
+		}
+
+		runGames(context.Background(), conf)
+
+		// Would deadlock before change associated with this test
+		// was added.
+		checkClosed.receiver.Read(nil)
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int

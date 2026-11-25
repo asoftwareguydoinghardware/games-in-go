@@ -33,6 +33,7 @@ func runGames(ctx context.Context, conf config) {
 				}
 				msg = "111 All players are present.\r\n"
 				c.Write([]byte(msg))
+				c.Close()
 			}(c)
 		} else {
 			msg := "111 All players are present.\r\n"
