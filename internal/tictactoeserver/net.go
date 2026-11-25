@@ -24,7 +24,5 @@ func (p *player) addSecondPlayer(c net.Conn) {
 	msg := "111 All players are present.\r\n"
 	bytes := []byte(msg)
 	go c.Write(bytes)
-
-	bytes = make([]byte, 3)
 	go p.c.Write(bytes)
 }

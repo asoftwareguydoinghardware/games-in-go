@@ -84,6 +84,9 @@ func TestAddSecondPlayerAnnouncesEveryonePresentToFirstPlayer(t *testing.T) {
 		t.Errorf("client Read() returned n = %d, want at least 3", n)
 		return
 	}
+
+	response := string(buf[:n])
+	checkResponse111(t, response)
 }
 
 func checkResponse(t *testing.T, response string, wantCode string) {
