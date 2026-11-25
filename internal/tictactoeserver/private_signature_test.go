@@ -32,18 +32,6 @@ func TestAddSecondPlayerExists(t *testing.T) {
 	})
 }
 
-func TestRunGamesOldExists(t *testing.T) {
-	synctest.Test(t, func(t *testing.T) {
-		var mock mockListen
-		conf := config{
-			listener: &mock,
-			fatal:    nullFatal,
-		}
-
-		runGamesOld(conf)
-	})
-}
-
 func TestRunGamesExists(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		var mock mockListen2

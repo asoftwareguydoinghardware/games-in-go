@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"slices"
 	"testing"
 	"testing/synctest"
 )
@@ -85,32 +84,6 @@ func TestRunGamesHandlesWrappedNetErrClosed(t *testing.T) {
 
 		if have, want := listen.acceptCount, callCount; have != want {
 			t.Errorf("With mock listner returning net.ErrClosed after %d calls to Accept(), have %d calls, want %d", callCount, have, want)
-		}
-	})
-}
-
-func TestRunGamesCallsFatalOnError(t *testing.T) {
-	synctest.Test(t, func(t *testing.T) {
-		var count = 3
-		var fatalArgs []any
-		var fatalCallCount int
-
-		listen := mockListen{numAcceptsRemaining: count}
-		conf := config{listener: &listen,
-			fatal: func(v ...any) {
-				fatalArgs = v
-				fatalCallCount++
-			},
-		}
-
-		runGamesOld(conf)
-
-		if have, want := fatalCallCount, 1; have != want {
-			t.Errorf("runGamesOld() called fatal %d times want %d", have, want)
-		}
-		have, want := fatalArgs, []any{mockFunctionErr}
-		if !slices.Equal(have, want) {
-			t.Errorf("runGamesOld() called fatal with args %v, want %v", have, want)
 		}
 	})
 }
