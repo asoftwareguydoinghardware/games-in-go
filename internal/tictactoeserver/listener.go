@@ -42,7 +42,7 @@ func runGames(ctx context.Context, conf config) {
 
 	for {
 		_, err = conf.listener.Accept()
-		if err != nil {
+		if err == net.ErrClosed {
 			return
 		}
 	}
