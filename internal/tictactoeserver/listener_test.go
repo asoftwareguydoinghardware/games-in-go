@@ -264,6 +264,35 @@ func TestFirstconnectionClosedIfContextCancelled(t *testing.T) {
 	})
 }
 
+func TestSecondConnectionGetsNewGame(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var n1, n2 nullNetConn
+		var gameWasCalled bool
+
+		listen := mockListen3{
+			connections: []net.Conn{n1, n2},
+		}
+
+		ng := func() game {
+			var n nullGame
+
+			gameWasCalled = true
+			return &n
+		}
+
+		conf := newConfig(&listen)
+		conf.game = ng
+
+		go runGames(context.Background(), conf)
+
+		synctest.Wait()
+
+		if !gameWasCalled {
+			t.Errorf("runGames() did not call game()")
+		}
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int

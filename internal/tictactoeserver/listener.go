@@ -34,6 +34,7 @@ func runGames(ctx context.Context, conf config) {
 			go player0(localCtx, c, haveSecondConn)
 		} else {
 			go player1(localCtx, c, haveSecondConn)
+			conf.game()
 		}
 		first = false
 	}
