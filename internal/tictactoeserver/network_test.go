@@ -37,24 +37,6 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	checkMessageContains(t, msg, wantList)
 	msg = string(buf[3:n])
 
-	/* Ideally I would check len(msg) >= 2 after stripping the first
-	three characters.  However, the sequence in which I am writing
-	the test cases means that test would never fail, and strict TDD
-	forbids me from writing that.
-
-	In the unlikely case, len(msg) < 2, the code below will panic,
-	so that is likely sufficient.
-
-	OK, the comment is getting out of date as the check should now
-	be three.  However, the underlying point remains:  I acknowledge
-	the checks should be better, but strict TDD prevents that.
-	*/
-
-	firstCharOfMsg := rune(msg[0])
-	if !unicode.IsSpace(firstCharOfMsg) {
-		t.Errorf("Want a whitespace character between response code and human readable message, first character is %q want a space character", firstCharOfMsg)
-	}
-
 	msg = strings.TrimLeftFunc(string(buf[3:n]), unicode.IsSpace)
 	first := rune(msg[0])
 	if !unicode.IsUpper(first) {
@@ -76,6 +58,11 @@ func checkMessage(t *testing.T, response string, wantCode string) {
 	lastChar := rune(msg[len(msg)-3])
 	if have, want := lastChar, '.'; have != want {
 		t.Errorf("Want sentences in messages, msg %q does not end with %q", msg, want)
+	}
+
+	firstCharOfMsg := rune(msg[0])
+	if !unicode.IsSpace(firstCharOfMsg) {
+		t.Errorf("Want a whitespace character between response code and human readable message, first character is %q want a space character", firstCharOfMsg)
 	}
 }
 
