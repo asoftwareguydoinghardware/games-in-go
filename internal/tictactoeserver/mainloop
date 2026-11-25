@@ -1,0 +1,102 @@
+type config struct {
+	listener net.Listener
+	g game
+}
+
+type game struct {
+	New func() gameInterface
+}
+
+type gameInterface interface {
+	func AssignPlayer(playerNum int, player Player)
+	func InitialPlayer(player int)
+	func Play()
+	func Ranking() (ranks [][]int)
+}
+
+type connections {
+	initialPlayer XXX
+	g gameInterface
+}
+
+// unused as of yet
+type playerInterface inteface {
+	AnnounceInitialPlayer(ip int)
+	AnnounceMove(player int, move string)
+	Move() string
+	AssignPlayerNumber(pn int)
+	ReportRanking([][]int)
+}
+
+// and really want something like a listener goroutine that adds connections
+// to a channel.
+//
+// a "main" routine will essentially take pairs of connections from the
+// channel and start games with them
+//
+// if one player leaves a game/tournament, then the other can have its
+// connection added back to the channel to "quickly" get paired up with
+// another player.
+//
+// This should be doable with a new type that implements the net.Listener
+// interface.
+func runGames(conf config) {
+	var conns connections
+
+	conns.g = conf.g
+	for c, err := listener.Accept() {
+		if err != nil {
+			log.Fatal(err)
+		}
+		conns.handleConn(c)
+	}
+}
+
+func (conns *connections)handleConn(c net.Conn) {
+	if conns.initialPlayer == nil {
+		cons.initialPlayer = createInitialPlayer(c)
+	} else {
+		go conns.startGame(conns.initialPlayer, c)
+		conns.initialPlayer = nil
+	}
+}
+
+func createInitialPlayer(c net.Conn) (p *player) {
+	p = new(player)	
+	p.c = c
+	// setup channel
+	go p.handleIO(func (c net.Conn){
+		msg := "110 You are the initial player, waiting for opponent.\r\n"
+		bytes := []byte(msg) 
+		c.Write(bytes)
+	})
+	return p
+}
+
+func (p *player)handleIO(func sendResponse110(c net.Conn)) {
+	sendResponse110(p.c)
+	// dispatch things based on channel
+}
+
+func (conns *connections) startGame(player0 player???, c net.Conn) {
+	g := conns.g.New()
+	// player0 := ???(p0)	// of type playerInterface or concrete implementation
+	player1 := createSecondPlayer(c)	// of type playerInterface or concrete implementation
+	g.AssignPlayer(0, player0)
+	g.AssignPlayer(1, player1)
+	player0.AssignPlayerNumber(0)
+	player1.AssignPlayerNumber(1)
+	g.InitialPlayer(0)
+	g.Play()
+	r := g.Ranking
+	player0.ReportRanking(r)
+	player1.ReportRanking(r)
+	// loop to potentially repeat
+}
+
+func createSecondPlayer(c net.Conn) (p *player) {
+	p = new(player)
+	p.c = c
+	// setup channel
+	go p.HandleIo(func (c net.Conn){})
+	return p

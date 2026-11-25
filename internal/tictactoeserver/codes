@@ -1,0 +1,43 @@
+From http:
+	1xx informational
+	2xx success
+	3xx redirection
+	4xx client error
+	5xx server error
+
+From smtp:
+	2xx success
+	3xx positive intermediate (command worked, but needs more data)
+	4xx temporary failure (i.e. try again later)
+	5xx permanent failure (i.e. don't try again)
+
+	x0x syntax issue
+	x1x information (status replies or help text)
+	x2x connections (transmission channel or link)
+	x5x mail system (staus of mailbox or server)
+
+My choices:
+	110 You are initial player, waiting for opponent
+	111 All players are present
+	120 You get the initial move
+	121 You get the second move
+	130 Please supply your move
+	141 Announcing your opponent's move
+	150 Board configuration row 0
+	151 Board configuration row 1
+	152 Board configuration row 2
+	160 You won
+	161 You tied, game was a draw
+	162 You lost
+	170 Please indicate if you would like to play another round
+	171 Opponent declined to play another round
+	180 Opponent quit before game started, awaiting new opponent
+	181 Opponent quit mid-game, awaiting new opponent
+
+	200 Confirming your move
+	201 Confirming new game
+	202 Goodbye
+	203 Waiting for opponent to accept/decline new gam
+
+	400 Invalid format for move: XXXX
+	401 Invalid move, square already occupied

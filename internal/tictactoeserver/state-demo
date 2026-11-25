@@ -1,0 +1,23 @@
+Normal good play, first to connect goes first:
+	initial player		secondary player
+	110
+	111			111
+	120			121
+	130
+	200			141
+	150			150
+	151			151
+	152			152
+				130
+	141			200
+	151..152		151..152
+	...
+	160/161/162		160/161/162
+	170			170
+
+	203
+	(assuming secondary declines)
+	171			200
+	202
+	
+	
