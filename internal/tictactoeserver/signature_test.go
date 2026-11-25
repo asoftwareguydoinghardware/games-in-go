@@ -2,8 +2,8 @@ package tictactoeserver_test
 
 import (
 	server "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoeserver"
-	"testing"
 	"net"
+	"testing"
 )
 
 func TestPlayGameExists(t *testing.T) {
