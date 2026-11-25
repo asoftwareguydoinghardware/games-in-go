@@ -24,3 +24,9 @@ func TestAddSecondPlayerExists(t *testing.T) {
 	p := createPlayer(c1)
 	p.addSecondPlayer(c3)
 }
+
+func TestRunGamesExists(t *testing.T) {
+	var conf config
+
+	runGames(conf)
+}
