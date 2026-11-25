@@ -26,15 +26,15 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 		return
 	}
 
-	msg := string(buf[:n])
-	checkResponse(t, msg, "110")
+	response := string(buf[:n])
+	checkResponse(t, response, "110")
 
 	wantList := []string{
 		"you are",
 		"initial player",
 		"waiting for opponent",
 	}
-	checkMessageContains(t, msg, wantList)
+	checkMessageContains(t, response, wantList)
 }
 
 func checkResponse(t *testing.T, response string, wantCode string) {
