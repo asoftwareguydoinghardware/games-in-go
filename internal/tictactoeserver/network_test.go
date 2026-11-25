@@ -50,11 +50,6 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	the checks should be better, but strict TDD prevents that.
 	*/
 
-	lastChar := rune(msg[len(msg)-3])
-	if have, want := lastChar, '.'; have != want {
-		t.Errorf("Want sentences in messages, msg %q does not end with %q", msg, want)
-	}
-
 	firstCharOfMsg := rune(msg[0])
 	if !unicode.IsSpace(firstCharOfMsg) {
 		t.Errorf("Want a whitespace character between response code and human readable message, first character is %q want a space character", firstCharOfMsg)
@@ -78,6 +73,10 @@ func checkMessage(t *testing.T, response string, wantCode string) {
 		t.Errorf("Message %q does not end with %q", msg, want)
 	}
 
+	lastChar := rune(msg[len(msg)-3])
+	if have, want := lastChar, '.'; have != want {
+		t.Errorf("Want sentences in messages, msg %q does not end with %q", msg, want)
+	}
 }
 
 func checkMessageContains(t *testing.T, msg string, wantList []string) {
