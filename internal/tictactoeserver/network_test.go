@@ -38,6 +38,28 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	checkMessageContains(t, response, wantList)
 }
 
+func TestAddSecondPlayerAnnounceEveryonePresent(t *testing.T) {
+	var c1 nullNetConn
+	p2c, p2s := net.Pipe()
+	defer p2c.Close()
+	defer p2s.Close()
+
+	p1 := createPlayer(c1)
+	go p1.addSecondPlayer(p2s)
+
+	buf := make([]byte, 100)
+	n, err := p2c.Read(buf)
+
+	if err != nil {
+		t.Errorf("client Read() returned error %v, want nil", err)
+		return
+	}
+	if n < 3 {
+		t.Errorf("client Read() returned n = %d, want at least 3", n)
+		return
+	}
+}
+
 func checkResponse(t *testing.T, response string, wantCode string) {
 	if have, want := response[:3], wantCode; have != want {
 		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
