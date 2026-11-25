@@ -12,7 +12,7 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	defer c1.Close()
 	defer c2.Close()
 
-	go createPlayer(c1)
+	createPlayer(c1)
 
 	buf := make([]byte, 100)
 	n, err := c2.Read(buf)
