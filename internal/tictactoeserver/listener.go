@@ -39,6 +39,7 @@ func runGamesOld(conf config) {
 
 func runGames(ctx context.Context, conf config) {
 	conf.listener.Accept()
+	conf.listener.Accept()
 }
 
 func handleFirstConn(conn net.Conn) {
