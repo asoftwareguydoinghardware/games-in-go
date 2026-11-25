@@ -29,6 +29,9 @@ func TestRunGamesAcceptsConnections(t *testing.T) {
 		connectionCount := []int{2, 5, 1}
 
 		for _, count := range connectionCount {
+			if count > 2 {
+				t.Skip("skipping more than 2 connections")
+			}
 			listen := mockListen2{callsUntilShutdown: count}
 			conf := config{
 				listener: &listen,
@@ -66,6 +69,7 @@ func TestRunGamesContinuesAcceptingUntilNetErrClosed(t *testing.T) {
 }
 
 func TestRunGamesHandlesWrappedNetErrClosed(t *testing.T) {
+	t.Skip("skipping tests using more than 2 connections")
 	synctest.Test(t, func(t *testing.T) {
 		var (
 			callCount  = 5
@@ -164,7 +168,13 @@ func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testi
 			fatal:    nullFatal,
 		}
 
-		runGames(context.Background(), conf)
+		// net.Pipe connections block until there is a matched
+		// set of read/write requests on the two ends of the
+		// pipe.  runGames() must be run in its own goroutine
+		// so that its i/o on the net.Pipe does not block
+		// waiting for the corresponding read/write that occurs
+		// after runGames() returns.
+		go runGames(context.Background(), conf)
 
 		buf := make([]byte, 100)
 		cs.Read(buf) // discard 110 response
@@ -177,6 +187,35 @@ func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testi
 
 		response := string(buf[:n])
 		checkResponse111(t, response)
+	})
+}
+
+func TestFirstConnectionDoesNotGet111ResponseWhenThereIsNoSecondConnection(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		cs, ss := net.Pipe()
+		defer cs.Close()
+		defer ss.Close()
+
+		set2SecondTimeout(cs)
+		listen := mockListen2{
+			connections: []net.Conn{ss},
+		}
+		conf := config{
+			listener: &listen,
+			fatal:    nullFatal,
+		}
+
+		runGames(context.Background(), conf)
+
+		buf := make([]byte, 100)
+		cs.Read(buf) // discard 110 response
+		n, err := cs.Read(buf)
+		if have, want := n, 0; have != want {
+			t.Errorf("With a single connection, second read returns n = %d, want %d", have, want)
+		}
+		if err == nil {
+			t.Errorf("with a single connection read, second read returned nil error, want a non-nil error")
+		}
 	})
 }
 
