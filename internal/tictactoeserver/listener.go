@@ -19,7 +19,7 @@ func runGames(conf config) {
 			fatal(err)
 			return
 		}
-		msg := "110 X.\r\n"
+		msg := "110 You are the initial player, waiting for opponent.\r\n"
 		bytes := []byte(msg)
 		go conn.Write(bytes)
 	}
