@@ -183,7 +183,7 @@ func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testi
 		defer ss.Close()
 
 		set2SecondTimeout(cs)
-		listen := mockListen{
+		listen := mockListen2{
 			connections: []net.Conn{ss, null},
 		}
 		conf := config{
@@ -191,7 +191,7 @@ func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testi
 			fatal:    nullFatal,
 		}
 
-		runGamesOld(conf)
+		runGames(context.Background(), conf)
 
 		buf := make([]byte, 100)
 		cs.Read(buf) // discard 110 response

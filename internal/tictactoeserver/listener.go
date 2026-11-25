@@ -49,8 +49,12 @@ func runGames(ctx context.Context, conf config) {
 			return
 		}
 		if first {
-			msg := "110 You are the initial player; waiting for opponent.\r\n"
-			go c.Write([]byte(msg))
+			go func(c net.Conn) {
+				msg := "110 You are the initial player; waiting for opponent.\r\n"
+				c.Write([]byte(msg))
+				msg = "111 All players are present.\r\n"
+				c.Write([]byte(msg))
+			}(c)
 		} else {
 			msg := "111 All players are present.\r\n"
 			go c.Write([]byte(msg))
