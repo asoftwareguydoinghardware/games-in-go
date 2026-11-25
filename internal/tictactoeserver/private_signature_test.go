@@ -38,7 +38,6 @@ func TestRunGamesExists(t *testing.T) {
 		var ctx context.Context = context.Background()
 		conf := config{
 			listener: &mock,
-			fatal:    nullFatal,
 		}
 
 		runGames(ctx, conf)
@@ -51,7 +50,6 @@ func TestMembersOfConfigType(t *testing.T) {
 		var l net.Listener
 
 		conf.listener = l
-		conf.fatal = log.Fatal
 		conf.printf = log.Printf
 		_ = conf
 	})

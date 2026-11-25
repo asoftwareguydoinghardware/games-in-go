@@ -13,7 +13,6 @@ func TestRunGamesAcceptsAConnection(t *testing.T) {
 		var listen mockListen2
 		conf := config{
 			listener: &listen,
-			fatal:    nullFatal,
 		}
 
 		runGames(context.Background(), conf)
@@ -35,7 +34,6 @@ func TestRunGamesAcceptsConnections(t *testing.T) {
 			listen := mockListen2{callsUntilShutdown: count}
 			conf := config{
 				listener: &listen,
-				fatal:    nullFatal,
 			}
 
 			runGames(context.Background(), conf)
@@ -104,7 +102,6 @@ func TestFirstConnectionGets110Response(t *testing.T) {
 		}
 		conf := config{
 			listener: &listen,
-			fatal:    nullFatal,
 		}
 
 		runGames(context.Background(), conf)
@@ -134,7 +131,6 @@ func TestSecondConnectionGets111Response(t *testing.T) {
 		}
 		conf := config{
 			listener: &listen,
-			fatal:    nullFatal,
 		}
 
 		runGames(context.Background(), conf)
@@ -165,7 +161,6 @@ func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testi
 		}
 		conf := config{
 			listener: &listen,
-			fatal:    nullFatal,
 		}
 
 		// net.Pipe connections block until there is a matched
@@ -202,7 +197,6 @@ func TestFirstConnectionDoesNotGet111ResponseWhenThereIsNoSecondConnection(t *te
 		}
 		conf := config{
 			listener: &listen,
-			fatal:    nullFatal,
 		}
 
 		runGames(context.Background(), conf)

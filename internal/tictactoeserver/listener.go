@@ -8,7 +8,6 @@ import (
 
 type config struct {
 	listener net.Listener
-	fatal    func(v ...any)
 	printf   func(format string, v ...any)
 }
 
