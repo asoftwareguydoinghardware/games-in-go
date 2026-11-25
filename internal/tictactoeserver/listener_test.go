@@ -38,6 +38,8 @@ type mockListen struct {
 	acceptCallCount     int
 }
 
+var mockFunctionErr = fmt.Errorf("mock function")
+
 func (m *mockListen) Accept() (c net.Conn, err error) {
 	m.acceptCalled = true
 
@@ -48,7 +50,7 @@ func (m *mockListen) Accept() (c net.Conn, err error) {
 		if m.numAcceptsRemaining < -10 {
 			panic("excessive calls to mock Accept() after returning error condition")
 		}
-		return nil, fmt.Errorf("mock function")
+		return nil, mockFunctionErr
 	} else {
 		return nil, nil
 	}
