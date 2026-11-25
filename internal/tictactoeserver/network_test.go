@@ -4,6 +4,7 @@ import (
 	"net"
 	"strings"
 	"testing"
+	"time"
 	"unicode"
 )
 
@@ -72,4 +73,10 @@ func checkMessageContains(t *testing.T, msg string, wantList []string) {
 			t.Errorf("Want message %q to contain %q", msg, want)
 		}
 	}
+}
+
+func set2SecondTimeout(c net.Conn) (err error) {
+	deadline := time.Now().Add(2 * time.Second)
+	err = c.SetDeadline(deadline)
+	return err
 }
