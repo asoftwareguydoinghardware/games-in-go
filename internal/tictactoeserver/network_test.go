@@ -27,7 +27,7 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	}
 
 	msg := string(buf[:n])
-	checkMessage(t, msg, "110")
+	checkResponse(t, msg, "110")
 
 	wantList := []string{
 		"you are",
@@ -37,7 +37,7 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	checkMessageContains(t, msg, wantList)
 }
 
-func checkMessage(t *testing.T, response string, wantCode string) {
+func checkResponse(t *testing.T, response string, wantCode string) {
 	if have, want := response[:3], wantCode; have != want {
 		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
 	}
