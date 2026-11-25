@@ -14,10 +14,10 @@ func TestRunGamesAcceptsAConnection(t *testing.T) {
 		fatal:    nullFatal,
 	}
 
-	runGames(conf)
+	runGamesOld(conf)
 
 	if !listen.acceptCalled {
-		t.Errorf("runGames() did not call listen.Accept(conf)")
+		t.Errorf("runGamesOld() did not call listen.Accept(conf)")
 	}
 }
 
@@ -31,7 +31,7 @@ func TestRunGamesAcceptsConnections(t *testing.T) {
 			fatal:    nullFatal,
 		}
 
-		runGames(conf)
+		runGamesOld(conf)
 
 		if have, want := listen.acceptCallCount, count; have != want {
 			t.Errorf("with mock listener, have %d calls to Accept(), want %d", have, want)
@@ -52,14 +52,14 @@ func TestRunGamesCallsFatalOnError(t *testing.T) {
 		},
 	}
 
-	runGames(conf)
+	runGamesOld(conf)
 
 	if have, want := fatalCallCount, 1; have != want {
-		t.Errorf("runGames() called fatal %d times want %d", have, want)
+		t.Errorf("runGamesOld() called fatal %d times want %d", have, want)
 	}
 	have, want := fatalArgs, []any{mockFunctionErr}
 	if !slices.Equal(have, want) {
-		t.Errorf("runGames() called fatal with args %v, want %v", have, want)
+		t.Errorf("runGamesOld() called fatal with args %v, want %v", have, want)
 	}
 }
 
@@ -77,7 +77,7 @@ func TestFirstConnectionGets110Response(t *testing.T) {
 		fatal:    nullFatal,
 	}
 
-	runGames(conf)
+	runGamesOld(conf)
 
 	buf := make([]byte, 100)
 	n, err := cs.Read(buf)
@@ -105,7 +105,7 @@ func TestSecondConnectionGets111Response(t *testing.T) {
 		fatal:    nullFatal,
 	}
 
-	runGames(conf)
+	runGamesOld(conf)
 
 	buf := make([]byte, 100)
 	n, err := cs.Read(buf)
@@ -134,7 +134,7 @@ func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testi
 		fatal:    nullFatal,
 	}
 
-	runGames(conf)
+	runGamesOld(conf)
 
 	buf := make([]byte, 100)
 	cs.Read(buf) // discard 110 response

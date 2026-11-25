@@ -26,14 +26,14 @@ func TestAddSecondPlayerExists(t *testing.T) {
 	p.addSecondPlayer(c3)
 }
 
-func TestRunGamesExists(t *testing.T) {
+func TestRunGamesOldExists(t *testing.T) {
 	var mock mockListen
 	conf := config{
 		listener: &mock,
 		fatal:    nullFatal,
 	}
 
-	runGames(conf)
+	runGamesOld(conf)
 }
 
 func TestMembersOfConfigType(t *testing.T) {

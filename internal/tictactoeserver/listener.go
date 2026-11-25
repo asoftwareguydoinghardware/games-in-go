@@ -9,7 +9,7 @@ type config struct {
 	fatal    func(v ...any)
 }
 
-func runGames(conf config) {
+func runGamesOld(conf config) {
 	accept := conf.listener.Accept
 	fatal := conf.fatal
 
