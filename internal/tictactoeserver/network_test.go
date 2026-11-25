@@ -28,14 +28,7 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	}
 
 	response := string(buf[:n])
-	checkResponse(t, response, "110")
-
-	wantList := []string{
-		"you are",
-		"initial player",
-		"waiting for opponent",
-	}
-	checkMessageContains(t, response, wantList)
+	checkResponse110(t, response)
 }
 
 func TestAddSecondPlayerAnnounceEveryonePresent(t *testing.T) {
@@ -154,6 +147,17 @@ func set2SecondTimeout(c net.Conn) (err error) {
 	deadline := time.Now().Add(2 * time.Second)
 	err = c.SetDeadline(deadline)
 	return err
+}
+
+func checkResponse110(t *testing.T, response string) {
+	checkResponse(t, response, "110")
+
+	wantList := []string{
+		"you are",
+		"initial player",
+		"waiting for opponent",
+	}
+	checkMessageContains(t, response, wantList)
 }
 
 func checkResponse111(t *testing.T, response string) {

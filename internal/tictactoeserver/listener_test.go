@@ -87,14 +87,7 @@ func TestFirstConnectionGets110Response(t *testing.T) {
 	}
 
 	response := string(buf[:n])
-	checkResponse(t, response, "110")
-
-	wantList := []string{
-		"you are",
-		"initial player",
-		"waiting for opponent",
-	}
-	checkMessageContains(t, response, wantList)
+	checkResponse110(t, response)
 }
 
 type mockListen struct {
