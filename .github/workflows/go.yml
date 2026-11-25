@@ -25,3 +25,7 @@ jobs:
 
     - name: Test tic tac toe
       run: go test -v ./internal/tictactoe
+
+    - name: Test tic tac toe server
+      run: go test -v ./internal/tictactoeserver
+
