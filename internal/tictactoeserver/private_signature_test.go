@@ -2,6 +2,7 @@ package tictactoeserver
 
 import (
 	"context"
+	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
 	"log"
 	"net"
 	"testing"
@@ -51,6 +52,7 @@ func TestMembersOfConfigType(t *testing.T) {
 
 		conf.listener = l
 		conf.printf = log.Printf
+		conf.game = ttt.New
 		_ = conf
 	})
 }

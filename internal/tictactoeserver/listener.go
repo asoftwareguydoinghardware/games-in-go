@@ -3,12 +3,14 @@ package tictactoeserver
 import (
 	"context"
 	"errors"
+	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
 	"net"
 )
 
 type config struct {
 	listener net.Listener
 	printf   func(format string, v ...any)
+	game     func() *ttt.Game
 }
 
 func runGames(ctx context.Context, conf config) {
