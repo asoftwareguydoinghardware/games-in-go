@@ -5,55 +5,66 @@ import (
 	"log"
 	"net"
 	"testing"
+	"testing/synctest"
 )
 
 func TestCreatePlayerExists(t *testing.T) {
-	var p *player
-	var c net.Conn
-	var null nullNetConn
+	synctest.Test(t, func(t *testing.T) {
+		var p *player
+		var c net.Conn
+		var null nullNetConn
 
-	c = null
-	p = createPlayer(c)
-	_ = p
+		c = null
+		p = createPlayer(c)
+		_ = p
+	})
 }
 
 func TestAddSecondPlayerExists(t *testing.T) {
-	var n1, n3 nullNetConn
-	var c1, c3 net.Conn
+	synctest.Test(t, func(t *testing.T) {
+		var n1, n3 nullNetConn
+		var c1, c3 net.Conn
 
-	c1, c3 = n1, n3
+		c1, c3 = n1, n3
 
-	p := createPlayer(c1)
-	p.addSecondPlayer(c3)
+		p := createPlayer(c1)
+		p.addSecondPlayer(c3)
+	})
 }
 
 func TestRunGamesOldExists(t *testing.T) {
-	var mock mockListen
-	conf := config{
-		listener: &mock,
-		fatal:    nullFatal,
-	}
+	synctest.Test(t, func(t *testing.T) {
+		var mock mockListen
+		conf := config{
+			listener: &mock,
+			fatal:    nullFatal,
+		}
 
-	runGamesOld(conf)
+		runGamesOld(conf)
+	})
 }
 
 func TestRunGamesExists(t *testing.T) {
-	var mock mockListen2
-	var ctx context.Context = context.Background()
-	conf := config{
-		listener: &mock,
-		fatal:    nullFatal,
-	}
+	synctest.Test(t, func(t *testing.T) {
+		var mock mockListen2
+		var ctx context.Context = context.Background()
+		conf := config{
+			listener: &mock,
+			fatal:    nullFatal,
+		}
 
-	runGames(ctx, conf)
+		runGames(ctx, conf)
+	})
 }
 
 func TestMembersOfConfigType(t *testing.T) {
-	var conf config
-	var l net.Listener
+	synctest.Test(t, func(t *testing.T) {
+		var conf config
+		var l net.Listener
 
-	conf.listener = l
-	conf.fatal = log.Fatal
-	conf.printf = log.Printf
-	_ = conf
+		conf.listener = l
+		conf.fatal = log.Fatal
+		conf.printf = log.Printf
+		_ = conf
+	})
 }

@@ -10,24 +10,8 @@ import (
 )
 
 func TestRunGamesAcceptsAConnection(t *testing.T) {
-	var listen mockListen2
-	conf := config{
-		listener: &listen,
-		fatal:    nullFatal,
-	}
-
-	runGames(context.Background(), conf)
-
-	if listen.acceptCount == 0 {
-		t.Errorf("runGames() did not call listen.Accept(conf)")
-	}
-}
-
-func TestRunGamesAcceptsConnections(t *testing.T) {
-	connectionCount := []int{2, 5, 1}
-
-	for _, count := range connectionCount {
-		listen := mockListen2{callsUntilShutdown: count}
+	synctest.Test(t, func(t *testing.T) {
+		var listen mockListen2
 		conf := config{
 			listener: &listen,
 			fatal:    nullFatal,
@@ -35,74 +19,100 @@ func TestRunGamesAcceptsConnections(t *testing.T) {
 
 		runGames(context.Background(), conf)
 
-		if have, want := listen.acceptCount, count; have != want {
-			t.Errorf("with mock listener, have %d calls to Accept(), want %d", have, want)
+		if listen.acceptCount == 0 {
+			t.Errorf("runGames() did not call listen.Accept(conf)")
 		}
-	}
+	})
+}
+
+func TestRunGamesAcceptsConnections(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		connectionCount := []int{2, 5, 1}
+
+		for _, count := range connectionCount {
+			listen := mockListen2{callsUntilShutdown: count}
+			conf := config{
+				listener: &listen,
+				fatal:    nullFatal,
+			}
+
+			runGames(context.Background(), conf)
+
+			if have, want := listen.acceptCount, count; have != want {
+				t.Errorf("with mock listener, have %d calls to Accept(), want %d", have, want)
+			}
+		}
+	})
 }
 
 func TestRunGamesContinuesAcceptingUntilNetErrClosed(t *testing.T) {
-	const callCount = 3 // arbitrary value
-	// The mockListen2 does not actually use the Close()
-	// method, but simulates that by returning net.ErrClosed.  This
-	// test is essentially making sure the loop (does not) terminate
-	// when Accept() (does not) return net.ErrClosed.
+	synctest.Test(t, func(t *testing.T) {
+		const callCount = 3 // arbitrary value
+		// The mockListen2 does not actually use the Close()
+		// method, but simulates that by returning net.ErrClosed.  This
+		// test is essentially making sure the loop (does not) terminate
+		// when Accept() (does not) return net.ErrClosed.
 
-	listen := mockListen2{callsUntilShutdown: callCount}
-	conf := config{
-		listener: &listen,
-	}
+		listen := mockListen2{callsUntilShutdown: callCount}
+		conf := config{
+			listener: &listen,
+		}
 
-	runGames(context.Background(), conf)
+		runGames(context.Background(), conf)
 
-	if have, want := listen.acceptCount, callCount; have != want {
-		t.Errorf("With mock listner returning net.ErrClosed after %d calls to Accept(), have %d calls, want %d", callCount, have, want)
-	}
+		if have, want := listen.acceptCount, callCount; have != want {
+			t.Errorf("With mock listner returning net.ErrClosed after %d calls to Accept(), have %d calls, want %d", callCount, have, want)
+		}
+	})
 }
 
 func TestRunGamesHandlesWrappedNetErrClosed(t *testing.T) {
-	var (
-		callCount  = 5
-		wrappedErr = fmt.Errorf("%w", net.ErrClosed)
-	)
+	synctest.Test(t, func(t *testing.T) {
+		var (
+			callCount  = 5
+			wrappedErr = fmt.Errorf("%w", net.ErrClosed)
+		)
 
-	listen := mockListen2{
-		callsUntilShutdown: callCount,
-		shutdownErr:        wrappedErr,
-	}
-	conf := config{
-		listener: &listen,
-	}
+		listen := mockListen2{
+			callsUntilShutdown: callCount,
+			shutdownErr:        wrappedErr,
+		}
+		conf := config{
+			listener: &listen,
+		}
 
-	runGames(context.Background(), conf)
+		runGames(context.Background(), conf)
 
-	if have, want := listen.acceptCount, callCount; have != want {
-		t.Errorf("With mock listner returning net.ErrClosed after %d calls to Accept(), have %d calls, want %d", callCount, have, want)
-	}
+		if have, want := listen.acceptCount, callCount; have != want {
+			t.Errorf("With mock listner returning net.ErrClosed after %d calls to Accept(), have %d calls, want %d", callCount, have, want)
+		}
+	})
 }
 
 func TestRunGamesCallsFatalOnError(t *testing.T) {
-	var count = 3
-	var fatalArgs []any
-	var fatalCallCount int
+	synctest.Test(t, func(t *testing.T) {
+		var count = 3
+		var fatalArgs []any
+		var fatalCallCount int
 
-	listen := mockListen{numAcceptsRemaining: count}
-	conf := config{listener: &listen,
-		fatal: func(v ...any) {
-			fatalArgs = v
-			fatalCallCount++
-		},
-	}
+		listen := mockListen{numAcceptsRemaining: count}
+		conf := config{listener: &listen,
+			fatal: func(v ...any) {
+				fatalArgs = v
+				fatalCallCount++
+			},
+		}
 
-	runGamesOld(conf)
+		runGamesOld(conf)
 
-	if have, want := fatalCallCount, 1; have != want {
-		t.Errorf("runGamesOld() called fatal %d times want %d", have, want)
-	}
-	have, want := fatalArgs, []any{mockFunctionErr}
-	if !slices.Equal(have, want) {
-		t.Errorf("runGamesOld() called fatal with args %v, want %v", have, want)
-	}
+		if have, want := fatalCallCount, 1; have != want {
+			t.Errorf("runGamesOld() called fatal %d times want %d", have, want)
+		}
+		have, want := fatalArgs, []any{mockFunctionErr}
+		if !slices.Equal(have, want) {
+			t.Errorf("runGamesOld() called fatal with args %v, want %v", have, want)
+		}
+	})
 }
 
 func TestFirstConnectionGets110Response(t *testing.T) {
@@ -165,34 +175,36 @@ func TestSecondConnectionGets111Response(t *testing.T) {
 }
 
 func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testing.T) {
-	var null nullNetConn
+	synctest.Test(t, func(t *testing.T) {
+		var null nullNetConn
 
-	cs, ss := net.Pipe()
-	defer cs.Close()
-	defer ss.Close()
+		cs, ss := net.Pipe()
+		defer cs.Close()
+		defer ss.Close()
 
-	set2SecondTimeout(cs)
-	listen := mockListen{
-		connections: []net.Conn{ss, null},
-	}
-	conf := config{
-		listener: &listen,
-		fatal:    nullFatal,
-	}
+		set2SecondTimeout(cs)
+		listen := mockListen{
+			connections: []net.Conn{ss, null},
+		}
+		conf := config{
+			listener: &listen,
+			fatal:    nullFatal,
+		}
 
-	runGamesOld(conf)
+		runGamesOld(conf)
 
-	buf := make([]byte, 100)
-	cs.Read(buf) // discard 110 response
-	n, err := cs.Read(buf)
+		buf := make([]byte, 100)
+		cs.Read(buf) // discard 110 response
+		n, err := cs.Read(buf)
 
-	if err != nil {
-		t.Errorf("client Read() returned error %v, want nil", err)
-		return
-	}
+		if err != nil {
+			t.Errorf("client Read() returned error %v, want nil", err)
+			return
+		}
 
-	response := string(buf[:n])
-	checkResponse111(t, response)
+		response := string(buf[:n])
+		checkResponse111(t, response)
+	})
 }
 
 type mockListen struct {
