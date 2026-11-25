@@ -38,8 +38,11 @@ func runGamesOld(conf config) {
 }
 
 func runGames(ctx context.Context, conf config) {
-	conf.listener.Accept()
-	conf.listener.Accept()
+	var err error
+
+	for conf.listener.Accept(); err == nil; _, err = conf.listener.Accept() {
+		// nothing
+	}
 }
 
 func handleFirstConn(conn net.Conn) {

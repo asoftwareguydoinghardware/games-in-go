@@ -23,7 +23,7 @@ func TestRunGamesAcceptsAConnection(t *testing.T) {
 }
 
 func TestRunGamesAcceptsConnections(t *testing.T) {
-	connectionCount := []int{2 /*, 5, 1 */}
+	connectionCount := []int{2,  5, /* 1 */}
 
 	for _, count := range connectionCount {
 		listen := mockListen{numAcceptsRemaining: count}
