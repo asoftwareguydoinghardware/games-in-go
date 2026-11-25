@@ -58,9 +58,16 @@ func TestAddSecondPlayerAnnounceEveryonePresent(t *testing.T) {
 		t.Errorf("client Read() returned n = %d, want at least 3", n)
 		return
 	}
+
+	response := string(buf[:n])
+	checkResponse(t, response, "111")
 }
 
 func checkResponse(t *testing.T, response string, wantCode string) {
+	if have, min := len(response), 6; have < min {
+		t.Errorf("Expected response of more than %d bytes, have %d bytes", min, have)
+		return
+	}
 	if have, want := response[:3], wantCode; have != want {
 		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
 	}

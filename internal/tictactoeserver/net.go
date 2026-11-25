@@ -17,6 +17,7 @@ func createPlayer(c net.Conn) (p *player) {
 }
 
 func (p *player) addSecondPlayer(c net.Conn) {
-	bytes := make([]byte, 3)
+	msg := "111 X.\r\n"
+	bytes := []byte(msg)
 	c.Write(bytes)
 }
