@@ -25,26 +25,28 @@ func runGames(ctx context.Context, conf config) {
 			return
 		}
 		if first {
-			go func(ctx context.Context, c net.Conn, ready <-chan struct{}) {
-				defer c.Close()
-				msg := "110 You are the initial player; waiting for opponent.\r\n"
-				c.Write([]byte(msg))
-				select {
-				case _, ok := <-ready:
-					if !ok {
-						return
-					}
-				case <-ctx.Done():
-					return
-				}
-				msg = "111 All players are present.\r\n"
-				c.Write([]byte(msg))
-			}(localCtx, c, haveSecondConn)
+			go player0(localCtx, c, haveSecondConn)
 		} else {
 			go player1(localCtx, c, haveSecondConn)
 		}
 		first = false
 	}
+}
+
+func player0(ctx context.Context, c net.Conn, ready <-chan struct{}) {
+	defer c.Close()
+	msg := "110 You are the initial player; waiting for opponent.\r\n"
+	c.Write([]byte(msg))
+	select {
+	case _, ok := <-ready:
+		if !ok {
+			return
+		}
+	case <-ctx.Done():
+		return
+	}
+	msg = "111 All players are present.\r\n"
+	c.Write([]byte(msg))
 }
 
 func player1(ctx context.Context, c net.Conn, ready chan<- struct{}) {
