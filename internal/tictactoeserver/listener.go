@@ -40,8 +40,11 @@ func runGamesOld(conf config) {
 func runGames(ctx context.Context, conf config) {
 	var err error
 
-	for conf.listener.Accept(); err == nil; _, err = conf.listener.Accept() {
-		// nothing
+	for {
+		_, err = conf.listener.Accept()
+		if err != nil {
+			return
+		}
 	}
 }
 
