@@ -330,6 +330,33 @@ func TestNewGameHappensAfterInitialResponse(t *testing.T) {
 	})
 }
 
+func TestFistPlayerAssigned(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var n1, n2 nullNetConn
+		listen := mockListen3{
+			connections: []net.Conn{n1, n2},
+		}
+		conf := newConfig(&listen)
+		var g gameObserver
+
+		conf.game = func() game {
+			return &g
+		}
+
+		runGames(context.Background(), conf)
+
+		synctest.Wait()
+
+		if have := len(g.assignPlayerArgs); have == 0 {
+			t.Errorf("AssignPlayer not called")
+			return
+		}
+		if have, want := g.assignPlayerArgs[0].playerNum, 0; have != want {
+			t.Errorf("first call to AssignPlayer() called with player number %d, want %d", have, want)
+		}
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
