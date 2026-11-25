@@ -6,13 +6,18 @@ import (
 	"time"
 )
 
-type nullNetConn struct{}
+type nullNetConn struct {
+	simpleWriteHook func()
+}
 
 func (nullNetConn) Read([]byte) (int, error) {
 	return 0, io.EOF
 }
 
-func (nullNetConn) Write(b []byte) (int, error) {
+func (n nullNetConn) Write(b []byte) (int, error) {
+	if n.simpleWriteHook != nil {
+		n.simpleWriteHook()
+	}
 	return len(b), nil
 }
 

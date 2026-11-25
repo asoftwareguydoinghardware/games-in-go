@@ -33,8 +33,7 @@ func runGames(ctx context.Context, conf config) {
 		if first {
 			go player0(localCtx, c, haveSecondConn)
 		} else {
-			go player1(localCtx, c, haveSecondConn)
-			conf.game()
+			go player1(localCtx, c, haveSecondConn, conf)
 		}
 		first = false
 	}
@@ -56,10 +55,11 @@ func player0(ctx context.Context, c net.Conn, ready <-chan struct{}) {
 	c.Write([]byte(msg))
 }
 
-func player1(ctx context.Context, c net.Conn, ready chan<- struct{}) {
+func player1(ctx context.Context, c net.Conn, ready chan<- struct{}, conf config) {
 	defer c.Close()
 	msg := "111 All players are present.\r\n"
 	c.Write([]byte(msg))
+	conf.game()
 	select {
 	case ready <- struct{}{}:
 	case <-ctx.Done():

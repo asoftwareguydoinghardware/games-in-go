@@ -293,6 +293,43 @@ func TestSecondConnectionGetsNewGame(t *testing.T) {
 	})
 }
 
+func TestNewGameHappensAfterInitialResponse(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		type state int
+		const (
+			start state = iota
+			gotResponse
+			gotRunGame
+		)
+		sequence := make(chan state, 10)
+
+		var n1, n2 nullNetConn
+		n2.simpleWriteHook = func() {
+			sequence <- gotResponse
+		}
+
+		listen := mockListen3{
+			connections: []net.Conn{n1, n2},
+		}
+		conf := newConfig(&listen)
+		conf.game = func() game {
+			var ng nullGame
+
+			sequence <- gotRunGame
+			return &ng
+		}
+
+		runGames(context.Background(), conf)
+
+		synctest.Wait()
+
+		s1 := <-sequence
+		if s1 != gotResponse {
+			t.Errorf("game() called before sending initial response")
+		}
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
