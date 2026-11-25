@@ -26,9 +26,7 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 		return
 	}
 
-	if have, want := string(buf[:3]), "110"; have != want {
-		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
-	}
+	checkMessage(t, buf, "110")
 
 	msg := strings.ToLower(string(buf[3:n]))
 	wantList := []string{
@@ -73,5 +71,11 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	first := rune(msg[0])
 	if !unicode.IsUpper(first) {
 		t.Errorf("Want sentences in messages, message %q does not start with an upper case letter (%q)", msg, first)
+	}
+}
+
+func checkMessage(t *testing.T, buf []byte, wantCode string) {
+	if have, want := string(buf[:3]), wantCode; have != want {
+		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
 	}
 }
