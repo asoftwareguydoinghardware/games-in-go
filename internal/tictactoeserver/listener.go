@@ -41,17 +41,19 @@ func runGames(ctx context.Context, conf config) {
 				c.Write([]byte(msg))
 			}(localCtx, c, haveSecondConn)
 		} else {
-			go func(ctx context.Context, c net.Conn, ready chan<- struct{}) {
-				defer c.Close()
-				msg := "111 All players are present.\r\n"
-				c.Write([]byte(msg))
-				select {
-				case ready <- struct{}{}:
-				case <-ctx.Done():
-					return
-				}
-			}(localCtx, c, haveSecondConn)
+			go player1(localCtx, c, haveSecondConn)
 		}
 		first = false
+	}
+}
+
+func player1(ctx context.Context, c net.Conn, ready chan<- struct{}) {
+	defer c.Close()
+	msg := "111 All players are present.\r\n"
+	c.Write([]byte(msg))
+	select {
+	case ready <- struct{}{}:
+	case <-ctx.Done():
+		return
 	}
 }
