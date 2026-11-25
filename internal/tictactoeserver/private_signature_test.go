@@ -54,5 +54,6 @@ func TestMembersOfConfigType(t *testing.T) {
 
 	conf.listener = l
 	conf.fatal = log.Fatal
+	conf.printf = log.Printf
 	_ = conf
 }
