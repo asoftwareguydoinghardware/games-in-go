@@ -68,4 +68,10 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	if !unicode.IsSpace(firstCharOfMsg) {
 		t.Errorf("Want a whitespace character between response code and human readable message, first character is %q want a space character", firstCharOfMsg)
 	}
+
+	msg = strings.TrimLeftFunc(string(buf[3:n]), unicode.IsSpace)
+	first := rune(msg[0])
+	if !unicode.IsUpper(first) {
+		t.Errorf("Want sentences in messages, message %q does not start with an upper case letter (%q)", msg, first)
+	}
 }
