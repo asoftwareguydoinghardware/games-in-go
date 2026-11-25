@@ -40,4 +40,17 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 			t.Errorf("Want message %q to contain %q", msg, want)
 		}
 	}
+
+	/* Ideally I would check len(msg) >= 2 after stripping the first
+	three characters.  However, the sequence in which I am writing
+	the test cases means that test would never fail, and strict TDD
+	forbids me from writing that.
+
+	In the unlikely case, len(msg) < 2, the code below will panic,
+	so that is likely sufficient.
+	*/
+	theRest := msg[len(msg)-2:]
+	if have, want := theRest, "\r\n"; have != want {
+		t.Errorf("Message %q does not end with %q", msg, want)
+	}
 }

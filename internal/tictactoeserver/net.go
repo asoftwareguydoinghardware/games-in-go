@@ -10,7 +10,7 @@ func PlayGame(p1, p2 net.Conn) {
 }
 
 func createPlayer(c net.Conn) (p *player) {
-	msg := "110 You are the initial player, waiting for opponent,"
+	msg := "110 You are the initial player, waiting for opponent,\r\n"
 	bytes := []byte(msg)
 	c.Write(bytes)
 	return p
