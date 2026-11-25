@@ -52,7 +52,11 @@ func TestMembersOfConfigType(t *testing.T) {
 
 		conf.listener = l
 		conf.printf = log.Printf
-		conf.game = ttt.New
+
+		var g game
+		g = ttt.New()
+		conf.game = func() game { return g }
+
 		_ = conf
 	})
 }

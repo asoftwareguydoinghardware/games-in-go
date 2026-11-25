@@ -7,10 +7,14 @@ import (
 	"net"
 )
 
+type game interface {
+	AssignPlayer(int, ttt.Player)
+}
+
 type config struct {
 	listener net.Listener
 	printf   func(format string, v ...any)
-	game     func() *ttt.Game
+	game     func() game
 }
 
 func runGames(ctx context.Context, conf config) {
