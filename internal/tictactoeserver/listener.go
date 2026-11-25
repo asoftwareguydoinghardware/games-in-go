@@ -76,6 +76,7 @@ func player1(ctx context.Context, info player1Info) {
 	c.Write([]byte(msg))
 	game := conf.game()
 	game.AssignPlayer(0, nil)
+	game.AssignPlayer(1, nil)
 	select {
 	case ready <- struct{}{}:
 	case <-ctx.Done():
