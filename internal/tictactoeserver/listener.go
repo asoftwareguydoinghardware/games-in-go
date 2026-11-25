@@ -11,7 +11,10 @@ type config struct {
 func runGames(conf config) {
 	accept := conf.listener.Accept
 
-	for _, err := accept(); err == nil; _, err = accept() {
-		// nothing for now
+	for {
+		_, err := accept()
+		if err != nil {
+			return
+		}
 	}
 }
