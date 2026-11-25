@@ -4,6 +4,7 @@ import (
 	"net"
 	"strings"
 	"testing"
+	"unicode"
 )
 
 func TestCreatePlayerConfirmsConnection(t *testing.T) {
@@ -61,5 +62,10 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	lastChar := rune(msg[len(msg)-3])
 	if have, want := lastChar, '.'; have != want {
 		t.Errorf("Want sentences in messages, msg %q does not end with %q", msg, want)
+	}
+
+	firstCharOfMsg := rune(msg[0])
+	if !unicode.IsSpace(firstCharOfMsg) {
+		t.Errorf("Want a whitespace character between response code and human readable message, first character is %q want a space character", firstCharOfMsg)
 	}
 }
