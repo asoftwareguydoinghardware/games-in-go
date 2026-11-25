@@ -28,7 +28,10 @@ func TestAddSecondPlayerExists(t *testing.T) {
 
 func TestRunGamesExists(t *testing.T) {
 	var mock mockListen
-	conf := config{listener: &mock}
+	conf := config{
+		listener: &mock,
+		fatal:    nullFatal,
+	}
 
 	runGames(conf)
 }
