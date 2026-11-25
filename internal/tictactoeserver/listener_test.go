@@ -31,6 +31,7 @@ func TestRunGamesAcceptsConnections(t *testing.T) {
 			if count > 2 {
 				t.Skip("skipping more than 2 connections")
 			}
+			t.Logf("testing %d connections", count)
 			listen := mockListen2{callsUntilShutdown: count}
 			conf := config{
 				listener: &listen,
@@ -235,6 +236,32 @@ func TestFirstConnectionClosed(t *testing.T) {
 	})
 }
 
+func TestSecondConnectionClosed(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		checkClosed := new(checkClosedNetConn)
+		checkClosed.sender, checkClosed.receiver = net.Pipe()
+
+		var null nullNetConn
+
+		listen := mockListen2{
+			connections: []net.Conn{null, checkClosed},
+		}
+		conf := config{
+			listener: &listen,
+		}
+
+		// needs to run in a seperate goroutine so that the
+		// Write() in checkClosedNetConn.Close() will not be
+		// blocked; the corresponding Read() occurs after
+		// the goroutine is started.
+		go runGames(context.Background(), conf)
+
+		// Would deadlock before change associated with this test
+		// was added.
+		checkClosed.receiver.Read(nil)
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
@@ -297,6 +324,7 @@ func (m *mockListen2) Accept() (c net.Conn, err error) {
 
 	m.acceptCount++
 
+	synctest.Wait()
 	if m.nextConnection < len(m.connections) {
 		c = m.connections[m.nextConnection]
 		m.nextConnection++
