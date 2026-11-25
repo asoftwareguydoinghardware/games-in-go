@@ -45,7 +45,7 @@ func TestAddSecondPlayerAnnounceEveryonePresent(t *testing.T) {
 	defer p2s.Close()
 
 	p1 := createPlayer(c1)
-	go p1.addSecondPlayer(p2s)
+	p1.addSecondPlayer(p2s)
 
 	buf := make([]byte, 100)
 	n, err := p2c.Read(buf)
