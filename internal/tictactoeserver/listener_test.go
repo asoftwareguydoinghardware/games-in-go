@@ -421,6 +421,34 @@ func TestAssignedPlayersAreUniqueAndNonNil(t *testing.T) {
 	})
 }
 
+func TestInitialPlayerIs0ForFirstGame(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var n1, n2 nullNetConn
+		listen := mockListen3{
+			connections: []net.Conn{n1, n2},
+		}
+		conf := newConfig(&listen)
+		var g gameObserver
+
+		conf.game = func() game {
+			return &g
+		}
+
+		runGames(context.Background(), conf)
+
+		synctest.Wait()
+
+		if have, want := len(g.initialPlayer), 1; have != want {
+			t.Errorf("InitialPlayer() called %d times, want %d", have, want)
+			return
+		}
+		if have, want := g.initialPlayer[0], 0; have != want {
+			t.Errorf("InitialPlayer() called with %d, want %d", have, want)
+		}
+
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int

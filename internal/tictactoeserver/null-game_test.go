@@ -6,3 +6,6 @@ type nullGame struct{}
 
 func (*nullGame) AssignPlayer(int, ttt.Player) {
 }
+
+func (*nullGame) InitialPlayer(int) {
+}

@@ -9,6 +9,7 @@ import (
 
 type game interface {
 	AssignPlayer(int, ttt.Player)
+	InitialPlayer(pn int)
 }
 
 type config struct {
@@ -79,8 +80,10 @@ func player1(ctx context.Context, info player1Info) {
 	var p0, p1 nullPlayer
 	p0.playerNumber = -3
 
+	game.InitialPlayer(0)
 	game.AssignPlayer(0, p0)
 	game.AssignPlayer(1, p1)
+
 	select {
 	case ready <- struct{}{}:
 	case <-ctx.Done():
