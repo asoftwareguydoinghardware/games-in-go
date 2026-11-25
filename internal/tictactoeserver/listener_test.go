@@ -9,8 +9,7 @@ import (
 )
 
 func TestRunGamesAcceptsAConnection(t *testing.T) {
-	t.Skip("bad test case; need to return net.ErrClosed")
-	var listen mockListen
+	var listen mockListen2
 	conf := config{
 		listener: &listen,
 		fatal:    nullFatal,
@@ -18,7 +17,7 @@ func TestRunGamesAcceptsAConnection(t *testing.T) {
 
 	runGames(context.Background(), conf)
 
-	if !listen.acceptCalled {
+	if listen.acceptCount == 0 {
 		t.Errorf("runGames() did not call listen.Accept(conf)")
 	}
 }
