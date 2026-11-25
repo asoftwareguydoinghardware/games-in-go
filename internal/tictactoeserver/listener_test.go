@@ -1,6 +1,7 @@
 package tictactoeserver
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"slices"
@@ -14,10 +15,10 @@ func TestRunGamesAcceptsAConnection(t *testing.T) {
 		fatal:    nullFatal,
 	}
 
-	runGamesOld(conf)
+	runGames(context.Background(), conf)
 
 	if !listen.acceptCalled {
-		t.Errorf("runGamesOld() did not call listen.Accept(conf)")
+		t.Errorf("runGames() did not call listen.Accept(conf)")
 	}
 }
 
