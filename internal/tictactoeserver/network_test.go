@@ -49,10 +49,6 @@ func TestCreatePlayerConfirmsConnection(t *testing.T) {
 	be three.  However, the underlying point remains:  I acknowledge
 	the checks should be better, but strict TDD prevents that.
 	*/
-	theRest := msg[len(msg)-2:]
-	if have, want := theRest, "\r\n"; have != want {
-		t.Errorf("Message %q does not end with %q", msg, want)
-	}
 
 	lastChar := rune(msg[len(msg)-3])
 	if have, want := lastChar, '.'; have != want {
@@ -75,6 +71,13 @@ func checkMessage(t *testing.T, response string, wantCode string) {
 	if have, want := response[:3], wantCode; have != want {
 		t.Errorf("client Read() returned (first 3 bytes) %q, want %q", have, want)
 	}
+
+	msg := response[3:]
+	theRest := msg[len(msg)-2:]
+	if have, want := theRest, "\r\n"; have != want {
+		t.Errorf("Message %q does not end with %q", msg, want)
+	}
+
 }
 
 func checkMessageContains(t *testing.T, msg string, wantList []string) {
