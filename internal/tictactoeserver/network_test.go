@@ -60,12 +60,7 @@ func TestAddSecondPlayerAnnounceEveryonePresent(t *testing.T) {
 	}
 
 	response := string(buf[:n])
-	checkResponse(t, response, "111")
-
-	wantList := []string{
-		"all players are present",
-	}
-	checkMessageContains(t, response, wantList)
+	checkResponse111(t, response)
 }
 
 func TestAddSecondPlayerAnnouncesEveryonePresentToFirstPlayer(t *testing.T) {
@@ -136,4 +131,13 @@ func set2SecondTimeout(c net.Conn) (err error) {
 	deadline := time.Now().Add(2 * time.Second)
 	err = c.SetDeadline(deadline)
 	return err
+}
+
+func checkResponse111(t *testing.T, response string) {
+	checkResponse(t, response, "111")
+
+	wantList := []string{
+		"all players are present",
+	}
+	checkMessageContains(t, response, wantList)
 }
