@@ -8,19 +8,18 @@ import (
 func TestCreatePlayerExists(t *testing.T) {
 	var p *player
 	var c net.Conn
+	var null nullNetConn
 
+	c = null
 	p = createPlayer(c)
 	_ = p
 }
 
 func TestAddSecondPlayerExists(t *testing.T) {
-	c1, c2 := net.Pipe()
-	defer c1.Close()
-	defer c2.Close()
+	var n1, n3 nullNetConn
+	var c1, c3 net.Conn
 
-	c3, c4 := net.Pipe()
-	defer c3.Close()
-	defer c4.Close()
+	c1, c3 = n1, n3
 
 	p := createPlayer(c1)
 	p.addSecondPlayer(c3)
