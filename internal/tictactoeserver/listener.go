@@ -26,6 +26,7 @@ func runGames(ctx context.Context, conf config) {
 		}
 		if first {
 			go func(ctx context.Context, c net.Conn) {
+				defer c.Close()
 				msg := "110 You are the initial player; waiting for opponent.\r\n"
 				c.Write([]byte(msg))
 				select {
@@ -38,7 +39,6 @@ func runGames(ctx context.Context, conf config) {
 				}
 				msg = "111 All players are present.\r\n"
 				c.Write([]byte(msg))
-				c.Close()
 			}(localCtx, c)
 		} else {
 			go func(ctx context.Context, c net.Conn) {

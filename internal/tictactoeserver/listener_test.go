@@ -262,6 +262,30 @@ func TestSecondConnectionClosed(t *testing.T) {
 	})
 }
 
+func TestFirstconnectionClosedIfContextCancelled(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		checkClosed := new(checkClosedNetConn2)
+
+		listen := mockListen3{
+			connections: []net.Conn{checkClosed},
+		}
+
+		conf := config{
+			listener: &listen,
+		}
+
+		ctx, cancel := context.WithCancel(context.Background())
+		go runGames(ctx, conf)
+		synctest.Wait()
+		cancel()
+		synctest.Wait()
+
+		if !checkClosed.closed {
+			t.Errorf("when context cancelled net.Conn not closed")
+		}
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
@@ -352,6 +376,34 @@ func (m *mockListen2) Close() (err error) {
 }
 
 func (m *mockListen2) Addr() (n net.Addr) {
+	return n
+}
+
+type mockListen3 struct {
+	connections    []net.Conn
+	nextConnection int
+	closed         bool
+}
+
+func (m *mockListen3) Accept() (c net.Conn, err error) {
+	if m.nextConnection < len(m.connections) {
+		c = m.connections[m.nextConnection]
+		m.nextConnection++
+		err = nil
+	} else {
+		c = nil
+		err = fmt.Errorf("%w", net.ErrClosed)
+	}
+
+	return c, err
+}
+
+func (m *mockListen3) Close() (err error) {
+	m.closed = true
+	return err
+}
+
+func (m *mockListen3) Addr() (n net.Addr) {
 	return n
 }
 
