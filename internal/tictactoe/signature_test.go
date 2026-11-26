@@ -37,6 +37,16 @@ func TestPlayExists(t *testing.T) {
 	g.Play()
 }
 
+func TestPlayContextExists(t *testing.T) {
+	g := ttt.New()
+	p0, p1 := newMockPlayer(0), newMockPlayer(1)
+	assignTracker(p0, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
+	g.InitialPlayer(0)
+	g.PlayContext(context.Background())
+}
+
 func TestRankingExists(t *testing.T) {
 	var results [][]int
 
