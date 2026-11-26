@@ -33,11 +33,12 @@ func New() (game *Game) {
 }
 
 func (g *Game) AssignPlayerContext(ctx context.Context, playerNum int, player Player) {
+	g.players[playerNum] = player
+	player.AssignPlayerNumber(playerNum)
 }
 
 func (g *Game) AssignPlayer(playerNum int, player Player) {
-	g.players[playerNum] = player
-	player.AssignPlayerNumber(playerNum)
+	g.AssignPlayerContext(context.Background(), playerNum, player)
 }
 
 func (g *Game) InitialPlayer(player int) {
