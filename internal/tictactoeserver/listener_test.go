@@ -13,7 +13,10 @@ func TestRunGamesAcceptsAConnection(t *testing.T) {
 		var listen mockListen2
 		conf := newConfig(&listen)
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		if listen.acceptCount == 0 {
 			t.Errorf("runGames() did not call listen.Accept(conf)")
@@ -33,7 +36,10 @@ func TestRunGamesAcceptsConnections(t *testing.T) {
 			listen := mockListen2{callsUntilShutdown: count}
 			conf := newConfig(&listen)
 
-			runGames(context.Background(), conf)
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+
+			runGames(ctx, conf)
 
 			if have, want := listen.acceptCount, count; have != want {
 				t.Errorf("with mock listener, have %d calls to Accept(), want %d", have, want)
@@ -53,7 +59,10 @@ func TestRunGamesContinuesAcceptingUntilNetErrClosed(t *testing.T) {
 		listen := mockListen2{callsUntilShutdown: callCount}
 		conf := newConfig(&listen)
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		if have, want := listen.acceptCount, callCount; have != want {
 			t.Errorf("With mock listner returning net.ErrClosed after %d calls to Accept(), have %d calls, want %d", callCount, have, want)
@@ -75,7 +84,10 @@ func TestRunGamesHandlesWrappedNetErrClosed(t *testing.T) {
 		}
 		conf := newConfig(&listen)
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		if have, want := listen.acceptCount, callCount; have != want {
 			t.Errorf("With mock listner returning net.ErrClosed after %d calls to Accept(), have %d calls, want %d", callCount, have, want)
@@ -95,7 +107,10 @@ func TestFirstConnectionGets110Response(t *testing.T) {
 		}
 		conf := newConfig(&listen)
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		buf := make([]byte, 100)
 		n, err := cs.Read(buf)
@@ -122,7 +137,10 @@ func TestSecondConnectionGets111Response(t *testing.T) {
 		}
 		conf := newConfig(&listen)
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		buf := make([]byte, 100)
 		n, err := cs.Read(buf)
@@ -156,7 +174,10 @@ func TestFirstConnectionGets111ResponseAfterSecondConnectionEstablished(t *testi
 		// so that its i/o on the net.Pipe does not block
 		// waiting for the corresponding read/write that occurs
 		// after runGames() returns.
-		go runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		go runGames(ctx, conf)
 
 		buf := make([]byte, 100)
 		cs.Read(buf) // discard 110 response
@@ -184,7 +205,10 @@ func TestFirstConnectionDoesNotGet111ResponseWhenThereIsNoSecondConnection(t *te
 		}
 		conf := newConfig(&listen)
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		buf := make([]byte, 100)
 		cs.Read(buf) // discard 110 response
@@ -210,7 +234,10 @@ func TestFirstConnectionClosed(t *testing.T) {
 		}
 		conf := newConfig(&listen)
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		// Would deadlock before change associated with this test
 		// was added.
@@ -234,7 +261,10 @@ func TestSecondConnectionClosed(t *testing.T) {
 		// Write() in checkClosedNetConn.Close() will not be
 		// blocked; the corresponding Read() occurs after
 		// the goroutine is started.
-		go runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		go runGames(ctx, conf)
 
 		// Would deadlock before change associated with this test
 		// was added.
@@ -283,7 +313,10 @@ func TestSecondConnectionGetsNewGame(t *testing.T) {
 		conf := newConfig(&listen)
 		conf.game = ng
 
-		go runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		go runGames(ctx, conf)
 
 		synctest.Wait()
 
@@ -319,7 +352,10 @@ func TestNewGameHappensAfterInitialResponse(t *testing.T) {
 			return &ng
 		}
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		synctest.Wait()
 
@@ -343,7 +379,10 @@ func TestFistPlayerAssigned(t *testing.T) {
 			return &g
 		}
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		synctest.Wait()
 
@@ -370,7 +409,10 @@ func TestSecondPlayerAssigned(t *testing.T) {
 			return &g
 		}
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		synctest.Wait()
 
@@ -397,7 +439,10 @@ func TestAssignedPlayersAreUniqueAndNonNil(t *testing.T) {
 			return &g
 		}
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		synctest.Wait()
 
@@ -434,7 +479,10 @@ func TestInitialPlayerIs0ForFirstGame(t *testing.T) {
 			return &g
 		}
 
-		runGames(context.Background(), conf)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
 
 		synctest.Wait()
 
