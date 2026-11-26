@@ -1,5 +1,6 @@
 package tictactoe
 
+import "context"
 import "fmt"
 import "io"
 
@@ -29,6 +30,9 @@ func New() (game *Game) {
 	var g Game
 
 	return &g
+}
+
+func (g *Game) AssignPlayerContext(ctx context.Context, playerNum int, player Player) {
 }
 
 func (g *Game) AssignPlayer(playerNum int, player Player) {

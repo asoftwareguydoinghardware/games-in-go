@@ -1,6 +1,7 @@
 package tictactoe_test
 
 import (
+	"context"
 	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
 	"testing"
 )
@@ -18,6 +19,15 @@ func TestAssignPlayerExists(t *testing.T) {
 	g := ttt.New()
 
 	g.AssignPlayer(playerNum, player)
+}
+
+func TestAssignPlayerContextExists(t *testing.T) {
+	playerNum := 0
+	player := newMockPlayer(0)
+	g := ttt.New()
+	ctx := context.Background()
+
+	g.AssignPlayerContext(ctx, playerNum, player)
 }
 
 func TestInitialPlayerExists(t *testing.T) {
