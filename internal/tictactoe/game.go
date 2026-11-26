@@ -23,7 +23,6 @@ type Player interface {
 	AnnounceMove(player int, move string)
 	AnnounceRanking(ranking [][]int)
 	Move() string
-	AssignPlayerNumber(pn int)
 	AssignPlayerNumberContext(ctx context.Context, pn int)
 }
 
