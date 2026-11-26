@@ -41,10 +41,6 @@ func (g *Game) InitialPlayer(player int) {
 	g.initialPlayer = player
 }
 
-func (g *Game) Play() {
-	g.PlayContext(context.TODO())
-}
-
 func (g *Game) PlayContext(ctx context.Context) {
 	g.players[0].AnnounceInitialPlayer(g.initialPlayer)
 	g.players[1].AnnounceInitialPlayer(g.initialPlayer)
