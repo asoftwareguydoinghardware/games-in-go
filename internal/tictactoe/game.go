@@ -38,10 +38,6 @@ func (g *Game) AssignPlayerContext(ctx context.Context, playerNum int, player Pl
 	player.AssignPlayerNumberContext(ctx, playerNum)
 }
 
-func (g *Game) AssignPlayer(playerNum int, player Player) {
-	g.AssignPlayerContext(context.Background(), playerNum, player)
-}
-
 func (g *Game) InitialPlayer(player int) {
 	g.initialPlayer = player
 }
