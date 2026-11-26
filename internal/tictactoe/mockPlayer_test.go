@@ -69,7 +69,7 @@ func (m *mockPlayer) AnnounceRanking(ranking [][]int) {
 	m.dataFromApp.announcedRanking = ranking
 }
 
-func (m *mockPlayer) AssignPlayerNumberContext(ctx context.Context, pn int) {
+func (m *mockPlayer) AssignPlayerNumber(ctx context.Context, pn int) {
 	m.dataFromApp.assignedPlayerNum = true
 	m.dataFromApp.playerNum = pn
 	m.dataFromApp.ctx = ctx

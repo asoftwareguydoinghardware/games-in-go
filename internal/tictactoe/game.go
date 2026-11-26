@@ -23,7 +23,7 @@ type Player interface {
 	AnnounceMove(player int, move string)
 	AnnounceRanking(ranking [][]int)
 	Move() string
-	AssignPlayerNumberContext(ctx context.Context, pn int)
+	AssignPlayerNumber(ctx context.Context, pn int)
 }
 
 func New() (game *Game) {
@@ -34,7 +34,7 @@ func New() (game *Game) {
 
 func (g *Game) AssignPlayer(ctx context.Context, playerNum int, player Player) {
 	g.players[playerNum] = player
-	player.AssignPlayerNumberContext(ctx, playerNum)
+	player.AssignPlayerNumber(ctx, playerNum)
 }
 
 func (g *Game) InitialPlayer(player int) {

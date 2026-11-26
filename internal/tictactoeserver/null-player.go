@@ -19,8 +19,5 @@ func (n nullPlayer) Move() string {
 	return ""
 }
 
-func (n nullPlayer) AssignPlayerNumber(pn int) {
-}
-
-func (n nullPlayer) AssignPlayerNumberContext(ctx context.Context, pn int) {
+func (n nullPlayer) AssignPlayerNumber(ctx context.Context, pn int) {
 }
