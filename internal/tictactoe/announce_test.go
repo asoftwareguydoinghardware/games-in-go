@@ -1,6 +1,7 @@
 package tictactoe_test
 
 import (
+	"context"
 	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
 	"slices"
 	"testing"
@@ -283,4 +284,19 @@ func rankingsEqual(r1, r2 [][]int) bool {
 	}
 
 	return true
+}
+
+func TestAssignPlayerPassesContext(t *testing.T) {
+	testAssignPlayerPassesContext(t, context.Background(), 0)
+}
+
+func testAssignPlayerPassesContext(t *testing.T, ctx context.Context, playerNum int) {
+	g := ttt.New()
+	player := newMockPlayer(0)
+
+	g.AssignPlayerContext(ctx, playerNum, player)
+
+	if have, want := player.dataFromApp.ctx, ctx; have != want {
+		t.Errorf("g.AssignPlayer() did not pass context through")
+	}
 }

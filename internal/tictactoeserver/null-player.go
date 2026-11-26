@@ -1,5 +1,7 @@
 package tictactoeserver
 
+import "context"
+
 type nullPlayer struct {
 	playerNumber int
 }
@@ -18,4 +20,7 @@ func (n nullPlayer) Move() string {
 }
 
 func (n nullPlayer) AssignPlayerNumber(pn int) {
+}
+
+func (n nullPlayer) AssignPlayerNumberContext(ctx context.Context, pn int) {
 }

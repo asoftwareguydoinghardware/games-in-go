@@ -1,5 +1,6 @@
 package tictactoe_test
 
+import "context"
 import "fmt"
 
 type appData struct {
@@ -8,6 +9,7 @@ type appData struct {
 
 	assignedPlayerNum bool
 	playerNum         int
+	ctx               context.Context
 
 	announcedInitialPlayer bool
 	initialPlayer          int
@@ -70,6 +72,12 @@ func (m *mockPlayer) AnnounceRanking(ranking [][]int) {
 func (m *mockPlayer) AssignPlayerNumber(pn int) {
 	m.dataFromApp.assignedPlayerNum = true
 	m.dataFromApp.playerNum = pn
+}
+
+func (m *mockPlayer) AssignPlayerNumberContext(ctx context.Context, pn int) {
+	m.dataFromApp.assignedPlayerNum = true
+	m.dataFromApp.playerNum = pn
+	m.dataFromApp.ctx = ctx
 }
 
 func (m *mockPlayer) AnnounceInitialPlayer(player int) {
