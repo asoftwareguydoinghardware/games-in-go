@@ -24,3 +24,7 @@ One downside is it may be "too easy" to accidentally disable/skip a test.
 Another downside may be that we lose the control we have with the
 XXX argument in the "go test -run XXX" command.
 
+Although the original tic tac toe game code was designed with the idea of
+being played on a server, the idea of using a context was not considered.
+It should have been; however, my experience with contexts was too limited
+to have properly understood the implications.
