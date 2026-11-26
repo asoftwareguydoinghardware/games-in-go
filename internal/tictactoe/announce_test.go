@@ -287,16 +287,17 @@ func rankingsEqual(r1, r2 [][]int) bool {
 }
 
 func TestAssignPlayerPassesContext(t *testing.T) {
-	testAssignPlayerPassesContext(t, context.Background(), 0)
+	testAssignPlayerPassesContext(t, context.Background(), 0, "Background")
+	testAssignPlayerPassesContext(t, context.TODO(), 0, "TODO")
 }
 
-func testAssignPlayerPassesContext(t *testing.T, ctx context.Context, playerNum int) {
+func testAssignPlayerPassesContext(t *testing.T, ctx context.Context, playerNum int, name string) {
 	g := ttt.New()
 	player := newMockPlayer(0)
 
 	g.AssignPlayerContext(ctx, playerNum, player)
 
 	if have, want := player.dataFromApp.ctx, ctx; have != want {
-		t.Errorf("g.AssignPlayer() did not pass context through")
+		t.Errorf("g.AssignPlayer() did not pass context (%s())through", name)
 	}
 }
