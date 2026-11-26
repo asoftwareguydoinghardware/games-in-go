@@ -1,6 +1,7 @@
 package tictactoe_test
 
 import (
+	"context"
 	ttt "github.com/ASoftwareGuyDoingHardware/games-in-go/internal/tictactoe"
 	"testing"
 )
@@ -18,8 +19,8 @@ func TestPlayAnnouncesInitialPlayer(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 	g.InitialPlayer(0)
 
 	failIfAnnounced(t, p0)
@@ -52,8 +53,8 @@ func testPlayAnnouncesCorrectInitialPlayer(t *testing.T, initialPlayerNum int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 	g.InitialPlayer(initialPlayerNum)
 
 	g.Play()
@@ -74,8 +75,8 @@ func TestDefaultInitialPlayerIsPlayer0(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 	// no assignment of initial player
 	g.Play()
 
@@ -87,8 +88,8 @@ func TestPlayCallsMoveForPlayer0(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 	g.Play()
 
 	if !p0.dataFromApp.moveCalled {
@@ -100,8 +101,8 @@ func TestPlayCallsMoveForPlayer1(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 	g.Play()
 
 	if !p1.dataFromApp.moveCalled {
@@ -118,8 +119,8 @@ func testPlayCallsMoveForInitialPlayer(t *testing.T, initialPlayer int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 	g.InitialPlayer(initialPlayer)
 	g.Play()
 
@@ -136,8 +137,8 @@ func testPlayAlternatesPlayers(t *testing.T, initialPlayer int) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 	g.InitialPlayer(initialPlayer)
 	g.Play()
 

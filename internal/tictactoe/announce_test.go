@@ -17,7 +17,7 @@ func testAssignPlayerNotifiesPlayerOfTheirNumber(t *testing.T, playerNum int) {
 	g := ttt.New()
 	player := newMockPlayer(0)
 
-	g.AssignPlayer(playerNum, player)
+	g.AssignPlayerContext(context.Background(), playerNum, player)
 
 	if !player.dataFromApp.assignedPlayerNum {
 		t.Errorf("g.AssignPlayer(%d, player) did not call player.AssignPlayerNumber", playerNum)
@@ -38,8 +38,8 @@ func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 
 	g.InitialPlayer(initialPlayer)
 	g.Play()
@@ -133,8 +133,8 @@ func testAllMovesAnnouncedCorrectly(t *testing.T, initialPlayer int) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 
@@ -157,8 +157,8 @@ func TestAnnounceRankingsCalled(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 
@@ -193,8 +193,8 @@ func TestAnnounceRankingCorrectWhenPlayer1Wins(t *testing.T) {
 	p0.moves, p1.moves = p1.moves, p0.moves
 
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 
@@ -241,8 +241,8 @@ func TestAnnounceRankingCorrectForDraw(t *testing.T) {
 	}
 
 	assignTracker(p0, p1)
-	g.AssignPlayer(0, p0)
-	g.AssignPlayer(1, p1)
+	g.AssignPlayerContext(context.Background(), 0, p0)
+	g.AssignPlayerContext(context.Background(), 1, p1)
 
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 
