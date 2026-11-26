@@ -50,7 +50,7 @@ func TestRankingReturnsCorrectValueForADraw(t *testing.T) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	results := g.Ranking()
 
@@ -105,7 +105,7 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsARow(t *testing.T) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	results := g.Ranking()
 
@@ -158,7 +158,7 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsAColumn(t *testing.T) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	results := g.Ranking()
 
@@ -211,7 +211,7 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsADiagonal(t *testing.T) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	results := g.Ranking()
 
@@ -264,7 +264,7 @@ func TestRankingReturnsCorrectValueWhenPlayer1OwnsARow(t *testing.T) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	results := g.Ranking()
 
@@ -321,7 +321,7 @@ func TestRankingReturnsCorrectValueWhenPlayer1OwnsAColumn(t *testing.T) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	results := g.Ranking()
 
@@ -378,7 +378,7 @@ func TestRankingReturnsCorrectValueWhenPlayer1OwnsADiagonal(t *testing.T) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	results := g.Ranking()
 

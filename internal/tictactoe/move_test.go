@@ -75,7 +75,7 @@ func testBadMove(t *testing.T, tc badMoveTestCase) {
 	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(tc.initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if p0.tracker.firstBadMove != -1 {
 		var firstList, secondList moveList
@@ -130,7 +130,7 @@ func TestGoodMoves(t *testing.T) {
 	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(0)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if p0.tracker.firstBadMove != -1 {
 		t.Errorf("for move sequences %v and %v play did not properly alternate on move %d", p0List, p1List, p0.tracker.firstBadMove)
@@ -176,7 +176,7 @@ func testMultipleBadMovesRepeatRequestForMove(t *testing.T, tc multipleBadMovesT
 	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(tc.initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if p0.tracker.firstBadMove != -1 {
 		var firstList, secondList moveList
@@ -215,7 +215,7 @@ func TestGameRunsUntilSimpleWin(t *testing.T) {
 	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(0)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if want := 5; p0.tracker.lastMove != want {
 		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
@@ -233,7 +233,7 @@ func TestGameRunsUntilSimpleWin2(t *testing.T) {
 	// If player 1 goes first, there will be six moves until
 	// the game is over
 	g.InitialPlayer(1)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if want := 6; p0.tracker.lastMove != want {
 		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
@@ -253,7 +253,7 @@ func TestGameRunsUntilSimpleWin3(t *testing.T) {
 	p0.moves[2], p0.moves[1] = p0.moves[1], p0.moves[2]
 
 	g.InitialPlayer(1)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if want := 6; p0.tracker.lastMove != want {
 		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
@@ -279,7 +279,7 @@ func TestGameRunsUntilThirdRowOwned(t *testing.T) {
 	}
 
 	g.InitialPlayer(0)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if want := 5; p0.tracker.lastMove != want {
 		t.Errorf("for move sequences %v and %v last move = %d, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
@@ -316,7 +316,7 @@ func TestCannotClaimOpponentsSquare(t *testing.T) {
 	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if p1.tracker.firstBadMove != -1 {
 		t.Errorf("for move sequences %v and %v play did not properly alternate on move %d", p0List, p1List, p0.tracker.firstBadMove)
@@ -362,7 +362,7 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(winningPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if want := 7; p0.tracker.lastMove != want {
 		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
@@ -432,7 +432,7 @@ func testSimpleColumnWin(t *testing.T, initialPlayer, winningPlayer int, column 
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	var want int
 	if winningPlayer == initialPlayer {
@@ -543,7 +543,7 @@ func testSimpleRowWin(t *testing.T, initialPlayer, winningPlayer int, row int) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	var want int
 	if winningPlayer == initialPlayer {
@@ -600,7 +600,7 @@ func testLeftToRighDownDiagnoalWin(t *testing.T, winningPlayer int) {
 	}
 
 	g.InitialPlayer(winningPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if want := 5; p0.tracker.lastMove != want {
 		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
@@ -650,7 +650,7 @@ func testDiagonalLeftToRightUpward(t *testing.T, winningPlayer int) {
 	}
 
 	g.InitialPlayer(winningPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if want := 5; p0.tracker.lastMove != want {
 		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)
@@ -707,7 +707,7 @@ func testGameOverOnDraw(t *testing.T, initialPlayer int) {
 	}
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if want := 9; p0.tracker.lastMove != want {
 		t.Errorf("For move sequences %v and %v play ended after %d moves, want %d", p0.moves, p1.moves, p0.tracker.lastMove, want)

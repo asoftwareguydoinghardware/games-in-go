@@ -42,7 +42,7 @@ func testAnnounceMoveCalled(t *testing.T, initialPlayer int) {
 	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 	if len(p0.dataFromApp.announcedMoves) == 0 {
@@ -139,7 +139,7 @@ func testAllMovesAnnouncedCorrectly(t *testing.T, initialPlayer int) {
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if !slices.Equal(p0.dataFromApp.announcedMoves, wantMoves) {
 		t.Errorf("*Player 0 have announced moves %v, want %v", p0.dataFromApp.announcedMoves, wantMoves)
@@ -163,7 +163,7 @@ func TestAnnounceRankingsCalled(t *testing.T) {
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if !p0.dataFromApp.announceRankingCalled {
 		t.Errorf("AnnounceRanking method not called for player 0")
@@ -199,7 +199,7 @@ func TestAnnounceRankingCorrectWhenPlayer1Wins(t *testing.T) {
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if !p0.dataFromApp.announceRankingCalled {
 		t.Errorf("AnnounceRanking method not called for player 0")
@@ -247,7 +247,7 @@ func TestAnnounceRankingCorrectForDraw(t *testing.T) {
 	t.Logf("Initial player = %d, player0 moves = %v, player1 moves = %v", initialPlayer, p0.moves, p1.moves)
 
 	g.InitialPlayer(initialPlayer)
-	g.PlayContext(context.TODO())
+	g.Play(context.TODO())
 
 	if !p1.dataFromApp.announceRankingCalled {
 		t.Errorf("AnnounceRanking method not called for player 1")
