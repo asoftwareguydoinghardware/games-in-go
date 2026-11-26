@@ -33,7 +33,7 @@ func New() (game *Game) {
 	return &g
 }
 
-func (g *Game) AssignPlayerContext(ctx context.Context, playerNum int, player Player) {
+func (g *Game) AssignPlayer(ctx context.Context, playerNum int, player Player) {
 	g.players[playerNum] = player
 	player.AssignPlayerNumberContext(ctx, playerNum)
 }

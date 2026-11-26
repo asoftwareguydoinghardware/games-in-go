@@ -71,8 +71,8 @@ func testBadMove(t *testing.T, tc badMoveTestCase) {
 	p1.moves = p1List
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(tc.initialPlayer)
 	g.Play()
@@ -126,8 +126,8 @@ func TestGoodMoves(t *testing.T) {
 	p1.moves = p1List
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(0)
 	g.Play()
@@ -172,8 +172,8 @@ func testMultipleBadMovesRepeatRequestForMove(t *testing.T, tc multipleBadMovesT
 	p1.moves = p1List
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(tc.initialPlayer)
 	g.Play()
@@ -211,8 +211,8 @@ func TestGameRunsUntilSimpleWin(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(0)
 	g.Play()
@@ -227,8 +227,8 @@ func TestGameRunsUntilSimpleWin2(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	// If player 1 goes first, there will be six moves until
 	// the game is over
@@ -245,8 +245,8 @@ func TestGameRunsUntilSimpleWin3(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	// it still takes 6 moves if player 0's last two moves are played
 	// in reverse order
@@ -265,8 +265,8 @@ func TestGameRunsUntilThirdRowOwned(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	p0.moves = moveList{
 		{move: "2,0", good: true},
@@ -293,8 +293,8 @@ func TestCannotClaimOpponentsSquare(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	p0.moves = moveList{
 		{move: "0,0", good: true},
@@ -312,8 +312,8 @@ func TestCannotClaimOpponentsSquare(t *testing.T) {
 	p1List := p1.moves
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(initialPlayer)
 	g.Play()
@@ -333,8 +333,8 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	winningMoves := moveList{
 		{move: "0,0", good: true},
@@ -358,8 +358,8 @@ func testGameContinuesIfThirdRowNotOwnedBySamePlayer(t *testing.T, winningPlayer
 	}
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	g.InitialPlayer(winningPlayer)
 	g.Play()
@@ -383,8 +383,8 @@ func testSimpleColumnWin(t *testing.T, initialPlayer, winningPlayer int, column 
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -503,8 +503,8 @@ func testSimpleRowWin(t *testing.T, initialPlayer, winningPlayer int, row int) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -567,8 +567,8 @@ func testLeftToRighDownDiagnoalWin(t *testing.T, winningPlayer int) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -617,8 +617,8 @@ func testDiagonalLeftToRightUpward(t *testing.T, winningPlayer int) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -666,8 +666,8 @@ func testGameOverOnDraw(t *testing.T, initialPlayer int) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 

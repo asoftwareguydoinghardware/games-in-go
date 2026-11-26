@@ -14,8 +14,8 @@ func TestRankingReturnsCorrectValueForADraw(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -73,8 +73,8 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsARow(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -126,8 +126,8 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsAColumn(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -179,8 +179,8 @@ func TestRankingReturnsCorrectValueWhenPlayer0OwnsADiagonal(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -232,8 +232,8 @@ func TestRankingReturnsCorrectValueWhenPlayer1OwnsARow(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -289,8 +289,8 @@ func TestRankingReturnsCorrectValueWhenPlayer1OwnsAColumn(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 
@@ -346,8 +346,8 @@ func TestRankingReturnsCorrectValueWhenPlayer1OwnsADiagonal(t *testing.T) {
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 
 	assignTracker(p0, p1)
 

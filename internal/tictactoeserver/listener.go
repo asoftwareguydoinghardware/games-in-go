@@ -8,7 +8,7 @@ import (
 )
 
 type game interface {
-	AssignPlayerContext(ctx context.Context, pn int, player ttt.Player)
+	AssignPlayer(ctx context.Context, pn int, player ttt.Player)
 	InitialPlayer(pn int)
 }
 
@@ -81,8 +81,8 @@ func player1(ctx context.Context, info player1Info) {
 	p0.playerNumber = -3
 
 	game.InitialPlayer(0)
-	game.AssignPlayerContext(context.Background(), 0, p0)
-	game.AssignPlayerContext(context.Background(), 1, p1)
+	game.AssignPlayer(context.Background(), 0, p0)
+	game.AssignPlayer(context.Background(), 1, p1)
 
 	select {
 	case ready <- struct{}{}:

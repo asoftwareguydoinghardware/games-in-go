@@ -13,7 +13,7 @@ type gameObserver struct {
 	initialPlayer []int
 }
 
-func (obs *gameObserver) AssignPlayerContext(ctx context.Context, pn int, player ttt.Player) {
+func (obs *gameObserver) AssignPlayer(ctx context.Context, pn int, player ttt.Player) {
 	args := assignPlayerArg{pn, player}
 	obs.assignPlayerArgs = append(obs.assignPlayerArgs, args)
 }

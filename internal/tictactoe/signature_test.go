@@ -19,7 +19,7 @@ func TestAssignPlayerContextExists(t *testing.T) {
 	g := ttt.New()
 	ctx := context.Background()
 
-	g.AssignPlayerContext(ctx, playerNum, player)
+	g.AssignPlayer(ctx, playerNum, player)
 }
 
 func TestInitialPlayerExists(t *testing.T) {
@@ -31,8 +31,8 @@ func TestPlayExists(t *testing.T) {
 	g := ttt.New()
 	p0, p1 := newMockPlayer(0), newMockPlayer(1)
 	assignTracker(p0, p1)
-	g.AssignPlayerContext(context.Background(), 0, p0)
-	g.AssignPlayerContext(context.Background(), 1, p1)
+	g.AssignPlayer(context.Background(), 0, p0)
+	g.AssignPlayer(context.Background(), 1, p1)
 	g.InitialPlayer(0)
 	g.Play()
 }
