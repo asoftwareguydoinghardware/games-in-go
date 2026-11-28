@@ -77,6 +77,9 @@ func player1(ctx context.Context, info player1Info) {
 	defer c.Close()
 	msg := "111 All players are present.\r\n"
 	c.Write([]byte(msg))
+	msg = "191 You are player 1.\r\n"
+	c.Write([]byte(msg))
+
 	game := conf.game()
 
 	var p0, p1 nullPlayer

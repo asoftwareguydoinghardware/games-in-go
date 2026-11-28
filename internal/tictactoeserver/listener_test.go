@@ -534,6 +534,41 @@ func TestFirstConnectionGets190Response(t *testing.T) {
 	})
 }
 
+func TestSecondConnectionGets191Response(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var ns nullNetConn
+		c2, s2 := net.Pipe()
+
+		listen := mockListen3{
+			connections:       []net.Conn{ns, s2},
+			sleepBeforeAccept: true,
+		}
+		conf := newConfig(&listen)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		go runGames(ctx, conf)
+
+		buf := make([]byte, 100)
+		c2.Read(buf) // ignored 111 response
+		n, err := c2.Read(buf)
+
+		if have := err; have != nil {
+			t.Errorf("Read on second connection of third response from server got err %v, want nil", have)
+		}
+
+		response := string(buf[:n])
+		checkResponse(t, response, "191")
+
+		wantList := []string{
+			"you are player 1",
+		}
+		checkMessageContains(t, response, wantList)
+
+		time.Sleep(2 * time.Second) // Allow Accept() to unblock and terminate
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
