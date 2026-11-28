@@ -87,9 +87,9 @@ func player1(ctx context.Context, info player1Info) {
 	p0.playerNumber = -3
 
 	game.InitialPlayer(0)
-	game.Play(context.TODO())
 	game.AssignPlayer(context.Background(), 0, p0)
 	game.AssignPlayer(context.Background(), 1, p1)
+	game.Play(context.TODO())
 
 	select {
 	case ready <- struct{}{}:

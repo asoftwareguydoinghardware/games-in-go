@@ -621,6 +621,34 @@ func TestPlayIsCalledAfterInitialPlayerIsCalled(t *testing.T) {
 	})
 }
 
+func TestPlayIsCalledAfterAllPlayersAssigned(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var n1, n2 nullNetConn
+		listen := mockListen3{
+			connections: []net.Conn{n1, n2},
+		}
+		conf := newConfig(&listen)
+		var g gameObserver
+
+		conf.game = func() game {
+			return &g
+		}
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
+
+		synctest.Wait()
+
+		// Note: other tests verify that the first and second calls
+		// to AssignPlayer() specify player number 0 and 1.
+		if have, want := len(g.playersAssignedBeforePlay), 2; have != want {
+			t.Errorf("Number of players assigned before Play() called = %d, want %d", have, want)
+		}
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int

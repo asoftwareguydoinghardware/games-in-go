@@ -14,6 +14,7 @@ type gameObserver struct {
 
 	playCalled                         bool
 	playCalledAfterInitialPlayerCalled bool
+	playersAssignedBeforePlay          map[int]bool
 }
 
 func (obs *gameObserver) AssignPlayer(ctx context.Context, pn int, player ttt.Player) {
@@ -35,4 +36,9 @@ func (obs *gameObserver) Play(ctx context.Context) {
 	}
 	obs.playCalled = true
 	obs.playCalledAfterInitialPlayerCalled = len(obs.initialPlayer) > 0
+
+	obs.playersAssignedBeforePlay = make(map[int]bool)
+	for _, args := range obs.assignPlayerArgs {
+		obs.playersAssignedBeforePlay[args.playerNum] = true
+	}
 }
