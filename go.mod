@@ -1,3 +1,3 @@
 module github.com/ASoftwareGuyDoingHardware/games-in-go
 
-go 1.24.9
+go 1.25.9
