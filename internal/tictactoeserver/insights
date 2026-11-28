@@ -11,6 +11,12 @@ and (potentially) panics because there are still goroutines associated
 with the bubble.  Another option appears to be synctest.Sleep(), but that
 apparently came in with go 1.27, and I am currently using go1.25.9.
 
+Should always pass a context.TODO() for a context when writing initial
+test code.  Later iterations of test functions can pass in a "real" context.
+For the early tests, the "production" code should hardcode context.TODO()
+instead of using the supplied context.  This will allow test to be written
+that verify that the context is appropriately passed down the call stack.
+
 The "server code" should probably be called in a goroutine.  This allows
 the TestXXX function to simulate the client(s) independently of the server
 goroutine.
