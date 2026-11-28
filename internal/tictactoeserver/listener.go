@@ -82,6 +82,8 @@ func player1(ctx context.Context, info player1Info) {
 	c.Write([]byte(msg))
 	msg = "191 You are player 1.\r\n"
 	c.Write([]byte(msg))
+	msg = "121 You get the second move.\r\n"
+	c.Write([]byte(msg))
 
 	game := conf.game()
 

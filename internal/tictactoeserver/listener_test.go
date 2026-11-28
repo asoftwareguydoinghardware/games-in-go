@@ -555,6 +555,7 @@ func TestSecondConnectionGets191Response(t *testing.T) {
 		buf := make([]byte, 100)
 		c2.Read(buf) // ignored 111 response
 		n, err := c2.Read(buf)
+		drainConn(c2)
 
 		if have := err; have != nil {
 			t.Errorf("Read on second connection of third response from server got err %v, want nil", have)
@@ -682,6 +683,42 @@ func TestFirstPlayerGets120Response(t *testing.T) {
 
 		wantList := []string{
 			"you get the initial move",
+		}
+		checkMessageContains(t, response, wantList)
+
+		time.Sleep(2 * time.Second) // Allow Accept() to unblock and terminate
+	})
+}
+
+func TestSecondPlayerGets121Response(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var ns nullNetConn
+		c2, s2 := net.Pipe()
+
+		listen := mockListen3{
+			connections:       []net.Conn{ns, s2},
+			sleepBeforeAccept: true,
+		}
+		conf := newConfig(&listen)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		go runGames(ctx, conf)
+
+		buf := make([]byte, 100)
+		c2.Read(buf) // ignored 111 response
+		c2.Read(buf) // ignored 191 response
+		n, err := c2.Read(buf)
+
+		if have := err; have != nil {
+			t.Errorf("Read on second connection of third response from server got err %v, want nil", have)
+		}
+
+		response := string(buf[:n])
+		checkResponse(t, response, "121")
+
+		wantList := []string{
+			"you get the second move",
 		}
 		checkMessageContains(t, response, wantList)
 
