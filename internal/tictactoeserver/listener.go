@@ -68,6 +68,8 @@ func player0(ctx context.Context, c net.Conn, ready <-chan struct{}) {
 	c.Write([]byte(msg))
 	msg = "190 You are player 0.\r\n"
 	c.Write([]byte(msg))
+	msg = "120 You get the initial move.\r\n"
+	c.Write([]byte(msg))
 }
 
 func player1(ctx context.Context, info player1Info) {

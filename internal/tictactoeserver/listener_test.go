@@ -2,7 +2,9 @@ package tictactoeserver
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
 	"net"
 	"testing"
 	"testing/synctest"
@@ -517,6 +519,7 @@ func TestFirstConnectionGets190Response(t *testing.T) {
 		c1.Read(buf) // ignored 110 response
 		c1.Read(buf) // ignored 111 response
 		n, err := c1.Read(buf)
+		defer drainConn(c1)
 
 		if have := err; have != nil {
 			t.Errorf("Read of third response from server got err %v, want nill", have)
@@ -646,6 +649,43 @@ func TestPlayIsCalledAfterAllPlayersAssigned(t *testing.T) {
 		if have, want := len(g.playersAssignedBeforePlay), 2; have != want {
 			t.Errorf("Number of players assigned before Play() called = %d, want %d", have, want)
 		}
+	})
+}
+
+func TestFirstPlayerGets120Response(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var ns nullNetConn
+		c1, s1 := net.Pipe()
+
+		listen := mockListen3{
+			connections:       []net.Conn{s1, ns},
+			sleepBeforeAccept: true,
+		}
+		conf := newConfig(&listen)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		go runGames(ctx, conf)
+
+		buf := make([]byte, 100)
+		c1.Read(buf) // ignored 110 response
+		c1.Read(buf) // ignored 111 response
+		c1.Read(buf) // ignored 190 response
+		n, err := c1.Read(buf)
+
+		if have := err; have != nil {
+			t.Errorf("Read on first connection of fourth response from server got err %v, want nil", have)
+		}
+
+		response := string(buf[:n])
+		checkResponse(t, response, "120")
+
+		wantList := []string{
+			"you get the initial move",
+		}
+		checkMessageContains(t, response, wantList)
+
+		time.Sleep(2 * time.Second) // Allow Accept() to unblock and terminate
 	})
 }
 
@@ -785,4 +825,20 @@ func (m *mockListen3) Addr() (n net.Addr) {
 }
 
 func nullFatal(v ...any) {
+}
+
+func drainConn(c net.Conn) {
+	readCount := 0
+
+	buf := make([]byte, 100)
+	for {
+		n, err := c.Read(buf)
+		if n == 0 && errors.Is(err, io.EOF) {
+			return
+		}
+		readCount++
+		if readCount > 100 {
+			panic("drainConn called read more than 100 times")
+		}
+	}
 }
