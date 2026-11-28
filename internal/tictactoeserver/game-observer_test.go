@@ -11,6 +11,8 @@ type gameObserver struct {
 	assignPlayerArgs []assignPlayerArg
 
 	initialPlayer []int
+
+	playCalled bool
 }
 
 func (obs *gameObserver) AssignPlayer(ctx context.Context, pn int, player ttt.Player) {
@@ -20,4 +22,8 @@ func (obs *gameObserver) AssignPlayer(ctx context.Context, pn int, player ttt.Pl
 
 func (obs *gameObserver) InitialPlayer(player int) {
 	obs.initialPlayer = append(obs.initialPlayer, player)
+}
+
+func (obs *gameObserver) Play(ctx context.Context) {
+	obs.playCalled = true
 }

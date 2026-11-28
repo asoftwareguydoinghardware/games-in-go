@@ -10,6 +10,7 @@ import (
 type game interface {
 	AssignPlayer(ctx context.Context, pn int, player ttt.Player)
 	InitialPlayer(pn int)
+	Play(ctx context.Context)
 }
 
 type config struct {
@@ -81,6 +82,7 @@ func player1(ctx context.Context, info player1Info) {
 	c.Write([]byte(msg))
 
 	game := conf.game()
+	game.Play(context.TODO())
 
 	var p0, p1 nullPlayer
 	p0.playerNumber = -3

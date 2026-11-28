@@ -10,3 +10,6 @@ func (*nullGame) InitialPlayer(int) {
 
 func (*nullGame) AssignPlayer(context.Context, int, ttt.Player) {
 }
+
+func (*nullGame) Play(context.Context) {
+}
