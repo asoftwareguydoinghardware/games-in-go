@@ -6,6 +6,7 @@ import (
 	"net"
 	"testing"
 	"testing/synctest"
+	"time"
 )
 
 func TestRunGamesAcceptsAConnection(t *testing.T) {
@@ -497,6 +498,42 @@ func TestInitialPlayerIs0ForFirstGame(t *testing.T) {
 	})
 }
 
+func TestFirstConnectionGets190Response(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var ns nullNetConn
+		c1, s1 := net.Pipe()
+
+		listen := mockListen3{
+			connections:       []net.Conn{s1, ns},
+			sleepBeforeAccept: true,
+		}
+		conf := newConfig(&listen)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		go runGames(ctx, conf)
+
+		buf := make([]byte, 100)
+		c1.Read(buf) // ignored 110 response
+		c1.Read(buf) // ignored 111 response
+		n, err := c1.Read(buf)
+
+		if have := err; have != nil {
+			t.Errorf("Read of third response from server got err %v, want nill", have)
+		}
+
+		response := string(buf[:n])
+		checkResponse(t, response, "190")
+
+		wantList := []string{
+			"you are player 0",
+		}
+		checkMessageContains(t, response, wantList)
+
+		time.Sleep(2 * time.Second) // Allow Accept() to unblock and terminate
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
@@ -594,9 +631,23 @@ type mockListen3 struct {
 	connections    []net.Conn
 	nextConnection int
 	closed         bool
+
+	// Setting sleepBeforeAccept forces Accept() to stall until all
+	// goroutines are durably blocked.  If this is not done, then it
+	// is possible that Accept() will return a wrapped net.ErrClosed
+	// which causes runGames() to cancel the context in which the
+	// other goroutines are running.  Cancelling the other goroutines
+	// early means that they may not handle all the i/o that they
+	// should have handled.
+	sleepBeforeAccept bool
 }
 
 func (m *mockListen3) Accept() (c net.Conn, err error) {
+
+	if m.sleepBeforeAccept {
+		time.Sleep(time.Second)
+		synctest.Wait()
+	}
 	if m.nextConnection < len(m.connections) {
 		c = m.connections[m.nextConnection]
 		m.nextConnection++

@@ -3,6 +3,14 @@ being called within some goroutine's call stack.  This should make the
 synchronization point more obvious; the "system" has stabilized and it is
 safe to examine data after synctest.Wait() returns.
 
+Tests may need to end with a time.Sleep(1*time.Second) or similar.  The
+synctest package will advance time to allow a goroutine to run once all
+the goroutines in the current bubble are durably blocked.  This should
+allow any sleeping goroutines to finish before the main goroutine returns
+and (potentially) panics because there are still goroutines associated
+with the bubble.  Another option appears to be synctest.Sleep(), but that
+apparently came in with go 1.27, and I am currently using go1.25.9.
+
 The "server code" should probably be called in a goroutine.  This allows
 the TestXXX function to simulate the client(s) independently of the server
 goroutine.

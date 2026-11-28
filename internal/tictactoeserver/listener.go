@@ -65,6 +65,8 @@ func player0(ctx context.Context, c net.Conn, ready <-chan struct{}) {
 	}
 	msg = "111 All players are present.\r\n"
 	c.Write([]byte(msg))
+	msg = "190 You are player 0.\r\n"
+	c.Write([]byte(msg))
 }
 
 func player1(ctx context.Context, info player1Info) {
