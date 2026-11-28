@@ -595,6 +595,32 @@ func TestPlayIsCalled(t *testing.T) {
 	})
 }
 
+func TestPlayIsCalledAfterInitialPlayerIsCalled(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var n1, n2 nullNetConn
+		listen := mockListen3{
+			connections: []net.Conn{n1, n2},
+		}
+		conf := newConfig(&listen)
+		var g gameObserver
+
+		conf.game = func() game {
+			return &g
+		}
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		runGames(ctx, conf)
+
+		synctest.Wait()
+
+		if !g.playCalledAfterInitialPlayerCalled {
+			t.Errorf("Play() method must be called after InitialPlayer()")
+		}
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
