@@ -87,7 +87,7 @@ func player1(ctx context.Context, info player1Info) {
 
 	game := conf.game()
 
-	var p0, p1 nullPlayer
+	var p0, p1 altPlayer
 	p0.playerNumber = -3
 
 	game.InitialPlayer(0)

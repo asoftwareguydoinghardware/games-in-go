@@ -726,6 +726,40 @@ func TestSecondPlayerGets121Response(t *testing.T) {
 	})
 }
 
+func TestAssignPlayerCalledWithPlayerType(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		var n1, n2 nullNetConn
+		listen := mockListen3{
+			connections:       []net.Conn{n1, n2},
+			sleepBeforeAccept: true,
+		}
+
+		conf := newConfig(&listen)
+		var g gameObserver
+
+		conf.game = func() game {
+			return &g
+		}
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		go runGames(ctx, conf)
+
+		time.Sleep(10 * time.Second)
+		synctest.Wait()
+
+		if len(g.assignPlayerArgs) < 2 {
+			t.Skip("Need at least 2 calls to AssignPlayer")
+		}
+
+		for i := 0; i < 2; i++ {
+			if _, isNull := g.assignPlayerArgs[i].player.(nullPlayer); isNull {
+				t.Errorf("Passed nullPlayer type to assign player(%d); need real type", i)
+			}
+		}
+	})
+}
+
 type mockListen struct {
 	acceptCalled        bool
 	numAcceptsRemaining int
